@@ -95,12 +95,1084 @@
       "relation": "analogy",
       "source": "primitive-element",
       "target": "mod-p-primitive-root"
+    },
+    {
+      "id": "fd-subgroup-quotient",
+      "label": "陪集",
+      "note": "商群由子群的陪集构成",
+      "relation": "depends_on",
+      "source": "subgroup",
+      "target": "quotient-group"
+    },
+    {
+      "id": "fd-quotient-lagrange",
+      "label": "陪集计数",
+      "note": "指数 [G:H] 即陪集个数；Lagrange 定理是陪集划分的计数公式",
+      "relation": "depends_on",
+      "source": "quotient-group",
+      "target": "lagrange-theorem"
+    },
+    {
+      "id": "fd-hom-firstiso-g",
+      "label": "核与像",
+      "note": "定理陈述即 G/ker φ ≅ im φ",
+      "relation": "depends_on",
+      "source": "group-homomorphism",
+      "target": "first-isomorphism-groups"
+    },
+    {
+      "id": "fd-quotient-firstiso-g",
+      "label": "商群",
+      "note": "左边的 G/ker φ 是商群",
+      "relation": "depends_on",
+      "source": "quotient-group",
+      "target": "first-isomorphism-groups"
+    },
+    {
+      "id": "fd-ideal-firstiso-r",
+      "label": "核是理想",
+      "note": "理想正是环同态的 kernel",
+      "relation": "depends_on",
+      "source": "ideal",
+      "target": "first-isomorphism-rings"
+    },
+    {
+      "id": "fd-quotientring-firstiso-r",
+      "label": "商环",
+      "note": "R/ker φ 是商环",
+      "relation": "depends_on",
+      "source": "quotient-ring",
+      "target": "first-isomorphism-rings"
+    },
+    {
+      "id": "fd-firstiso-analogy",
+      "label": "同一模式",
+      "note": "课程里讲的同构定理全是这个模式：商掉核 ≅ 像",
+      "relation": "analogy",
+      "source": "first-isomorphism-groups",
+      "target": "first-isomorphism-rings"
+    },
+    {
+      "id": "fd-principal-pid",
+      "label": "定义",
+      "note": "PID 的定义：每个理想都是主理想",
+      "relation": "depends_on",
+      "source": "principal-ideal",
+      "target": "pid"
+    },
+    {
+      "id": "fd-ed-edpid",
+      "label": "带余除法",
+      "note": "取理想中度量最小的非零元作生成元，用带余除法证明",
+      "relation": "depends_on",
+      "source": "euclidean-domain",
+      "target": "ed-implies-pid"
+    },
+    {
+      "id": "fd-edpid-chain",
+      "label": "第一环",
+      "note": "包含链中 ED ⊊ PID 一环",
+      "relation": "depends_on",
+      "source": "ed-implies-pid",
+      "target": "ed-pid-ufd-chain"
+    },
+    {
+      "id": "fd-ed-fxed",
+      "label": "实例",
+      "note": "F[x] 以 deg 为度量是 ED 的实例（多项式长除法）",
+      "relation": "generalizes",
+      "source": "euclidean-domain",
+      "target": "fx-euclidean-domain"
+    },
+    {
+      "id": "fd-edpid-fxpid",
+      "label": "ED ⟹ PID",
+      "note": "笔记关键推论：F[x] 是 ED ⟹ 是 PID",
+      "relation": "depends_on",
+      "source": "ed-implies-pid",
+      "target": "fx-pid"
+    },
+    {
+      "id": "fd-fxed-fxpid",
+      "label": "前提",
+      "note": "F[x] 是欧几里得整环是前提",
+      "relation": "depends_on",
+      "source": "fx-euclidean-domain",
+      "target": "fx-pid"
+    },
+    {
+      "id": "fd-fxpid-minpoly",
+      "label": "首一生成元",
+      "note": "零化理想 Ann 是主理想，取其首一生成元",
+      "relation": "depends_on",
+      "source": "fx-pid",
+      "target": "minimal-polynomial"
+    },
+    {
+      "id": "fd-pidbezout-bezout",
+      "label": "PID 版 Bézout",
+      "note": "PID 中 gcd 可写成 sa + tb；F[x] 是其特例",
+      "relation": "generalizes",
+      "source": "pid-bezout",
+      "target": "bezout-identity"
+    },
+    {
+      "id": "fd-pid-crt",
+      "label": "PID 前提",
+      "note": "定理假设 R 是 PID（比如 F[x]）",
+      "relation": "depends_on",
+      "source": "pid",
+      "target": "chinese-remainder-theorem"
+    },
+    {
+      "id": "fd-irrmax-fxmod",
+      "label": "极大理想",
+      "note": "PID 中不可约元生成极大理想，模极大理想得域",
+      "relation": "depends_on",
+      "source": "irreducible-maximal-ideal-field",
+      "target": "fx-mod-p-is-field"
+    },
+    {
+      "id": "fd-ideal-fieldcrit",
+      "label": "吸收性",
+      "note": "非零理想含单位元就被吸收性吞掉整个环",
+      "relation": "depends_on",
+      "source": "ideal",
+      "target": "field-iff-trivial-ideals"
+    },
+    {
+      "id": "fd-char-freshdream",
+      "label": "char p",
+      "note": "等式成立的前提是 char F = p",
+      "relation": "depends_on",
+      "source": "characteristic",
+      "target": "freshmans-dream"
+    },
+    {
+      "id": "fd-fieldext-extvec",
+      "label": "自动",
+      "note": "域扩张定义中「K 自动是 F 上向量空间」的严格验证",
+      "relation": "implies",
+      "source": "field-extension",
+      "target": "extension-is-vector-space"
+    },
+    {
+      "id": "fd-extvec-tower",
+      "label": "维数武器",
+      "note": "线性代数全部武器（维数、基、塔定律）可以免费搬进域论",
+      "relation": "depends_on",
+      "source": "extension-is-vector-space",
+      "target": "tower-law"
+    },
+    {
+      "id": "fd-extvec-finitealg",
+      "label": "维数论证",
+      "note": "d+1 个幂在 d 维 F-空间中必线性相关",
+      "relation": "depends_on",
+      "source": "extension-is-vector-space",
+      "target": "finite-extension-algebraic"
+    },
+    {
+      "id": "fd-extvec-psp",
+      "label": "扩张=线性空间+数元素",
+      "note": "工具清单：B.1 = 扩张 ⟹ 线性空间 + 计数",
+      "relation": "depends_on",
+      "source": "extension-is-vector-space",
+      "target": "finite-field-order-prime-power"
+    },
+    {
+      "id": "fd-primesub-psp",
+      "label": "素子域作底域",
+      "note": "F 是 {0,1,…,(p−1)·1} ≅ 𝔽_p 上的 n 维线性空间",
+      "relation": "depends_on",
+      "source": "prime-subfield",
+      "target": "finite-field-order-prime-power"
+    },
+    {
+      "id": "fd-domain-psp",
+      "label": "无零因子",
+      "note": "char = ab 合数则 (a·1)(b·1) = 0 与无零因子矛盾，故 char 必为素数",
+      "relation": "depends_on",
+      "source": "integral-domain",
+      "target": "finite-field-order-prime-power"
+    },
+    {
+      "id": "fd-charorder-psp",
+      "label": "(F,+)=(ℤ/p)ⁿ",
+      "note": "每个非零元加法阶都是 p ⟹ 加法群天生是 𝔽_p-线性空间，有限时只能是 (ℤ/p)ⁿ",
+      "relation": "depends_on",
+      "source": "char-additive-order",
+      "target": "finite-field-order-prime-power"
+    },
+    {
+      "id": "fd-char-charorder",
+      "label": "p·1=0 放大",
+      "note": "p·a = (p·1)·a = 0·a = 0",
+      "relation": "depends_on",
+      "source": "characteristic",
+      "target": "char-additive-order"
+    },
+    {
+      "id": "fd-lagrange-xpn",
+      "label": "Lagrange",
+      "note": "Lagrange 定理用于 F^×（阶 pⁿ−1）得 a^{pⁿ−1} = 1",
+      "relation": "depends_on",
+      "source": "lagrange-theorem",
+      "target": "xpn-minus-x-factorization"
+    },
+    {
+      "id": "fd-rootbound-xpn",
+      "label": "根数≤次数",
+      "note": "次数恰为 pⁿ 且根数 ≤ 次数 ⟹ F 恰为全部根集",
+      "relation": "depends_on",
+      "source": "root-count-bound",
+      "target": "xpn-minus-x-factorization"
+    },
+    {
+      "id": "ff-factor-subfield",
+      "label": "完全分裂",
+      "note": "右边在 F_{p^n} 中完全分裂（推论 4.3），故 x^{p^d}−x 的 p^d 个根落在 F_{p^n}",
+      "relation": "depends_on",
+      "source": "xpn-minus-x-factorization",
+      "target": "finite-field-subfield-structure"
+    },
+    {
+      "id": "fd-extvec-subfield",
+      "label": "必要性",
+      "note": "F 是 F′ 上的线性空间：pⁿ = (pᵐ)ᵈ ⟹ m | n",
+      "relation": "depends_on",
+      "source": "extension-is-vector-space",
+      "target": "finite-field-subfield-structure"
+    },
+    {
+      "id": "ff-root-subfield",
+      "label": "至多 p^d 个根",
+      "note": "唯一性：x^{p^d}−x 在域中至多 p^d 个根，故子域与根集重合",
+      "relation": "depends_on",
+      "source": "root-count-bound",
+      "target": "finite-field-subfield-structure"
+    },
+    {
+      "id": "ff-dream-subfield",
+      "label": "根集成域",
+      "note": "用定理 4.1 第二步同样的论证（加法封闭靠 freshman's dream 等）",
+      "relation": "depends_on",
+      "source": "freshmans-dream",
+      "target": "finite-field-subfield-structure"
+    },
+    {
+      "id": "fd-primitive-simple",
+      "label": "生成元=本原元",
+      "note": "取 F^× 的生成元（本原元）α 得 F = 𝔽_p(α)",
+      "relation": "depends_on",
+      "source": "primitive-element",
+      "target": "finite-field-simple-extension"
+    },
+    {
+      "id": "fd-simple-quotientiso",
+      "label": "满射",
+      "note": "F = 𝔽_p(α) 保证赋值同态满射",
+      "relation": "depends_on",
+      "source": "finite-field-simple-extension",
+      "target": "finite-field-quotient-isomorphism"
+    },
+    {
+      "id": "fd-eval-quotientiso",
+      "label": "赋值",
+      "note": "φ_α: g ↦ g(α)，核 = (f)",
+      "relation": "depends_on",
+      "source": "evaluation-homomorphism",
+      "target": "finite-field-quotient-isomorphism"
+    },
+    {
+      "id": "fd-firstiso-quotientiso",
+      "label": "第一同构定理",
+      "note": "第一同构定理给出 𝔽_p[x]/(f) ≅ F",
+      "relation": "depends_on",
+      "source": "first-isomorphism-rings",
+      "target": "finite-field-quotient-isomorphism"
+    },
+    {
+      "id": "fd-xpn-quotientiso",
+      "label": "根的存在",
+      "note": "f, g 都整除 x^{pⁿ}−x 且在 F 中分裂 ⟹ g 在 F 中有根 β",
+      "relation": "depends_on",
+      "source": "xpn-minus-x-factorization",
+      "target": "finite-field-quotient-isomorphism"
+    },
+    {
+      "id": "fd-fieldcrit-quotientiso",
+      "label": "单射",
+      "note": "域同态核为理想，域只有平凡理想 ⟹ 同态自动单射",
+      "relation": "depends_on",
+      "source": "field-iff-trivial-ideals",
+      "target": "finite-field-quotient-isomorphism"
+    },
+    {
+      "id": "fd-eval-algiff",
+      "label": "Tool 1",
+      "note": "代数 ⟺ 有限次数：赋值同态 f ↦ f(α) + 第一同构定理",
+      "relation": "depends_on",
+      "source": "evaluation-homomorphism",
+      "target": "algebraic-iff-finite-degree"
+    },
+    {
+      "id": "fd-firstiso-algiff",
+      "label": "Tool 1",
+      "note": "C 节 Tool 1 的两个工具之一",
+      "relation": "depends_on",
+      "source": "first-isomorphism-rings",
+      "target": "algebraic-iff-finite-degree"
+    },
+    {
+      "id": "fd-tower-algclosed",
+      "label": "Tool 2",
+      "note": "Step 1–2：逐层有限，finite × finite = finite",
+      "relation": "depends_on",
+      "source": "tower-law",
+      "target": "algebraic-closure-algebraically-closed"
+    },
+    {
+      "id": "fd-algiff-algclosed",
+      "label": "Tool 1",
+      "note": "Step 1–2：每次添加代数元贡献有限次数",
+      "relation": "depends_on",
+      "source": "algebraic-iff-finite-degree",
+      "target": "algebraic-closure-algebraically-closed"
+    },
+    {
+      "id": "fd-finitealg-algclosed",
+      "label": "Tool 3",
+      "note": "Step 3：维数论证迫使 α 在 F 上代数",
+      "relation": "depends_on",
+      "source": "finite-extension-algebraic",
+      "target": "algebraic-closure-algebraically-closed"
+    },
+    {
+      "id": "fd-kronecker-algclosed",
+      "label": "Tool 4",
+      "note": "Step 0：Kronecker 定理给出根存在于某扩张",
+      "relation": "depends_on",
+      "source": "fx-mod-p-is-field",
+      "target": "algebraic-closure-algebraically-closed"
+    },
+    {
+      "id": "fd-structure-canonical",
+      "label": "代回 F[x]-模",
+      "note": "torsion 分解代回 F[x]-模就是 rational canonical form；代数闭域上进一步裂解就是 Jordan form",
+      "relation": "implies",
+      "source": "pid-structure-theorem",
+      "target": "canonical-forms-from-structure-theorem"
+    },
+    {
+      "id": "ff-deriv-leibniz",
+      "label": "定义直接验证",
+      "note": "先对单项式验证，一般情形由双线性展开（引理 1.2 的证明）",
+      "relation": "depends_on",
+      "source": "formal-derivative",
+      "target": "formal-derivative-leibniz"
+    },
+    {
+      "id": "ff-leibniz-repeated",
+      "label": "乘积法则",
+      "note": "命题 1.3 的证明对 f(x)=(x−α)g(x) 求导即用了 Leibniz 法则",
+      "relation": "depends_on",
+      "source": "formal-derivative-leibniz",
+      "target": "repeated-root-criterion"
+    },
+    {
+      "id": "ff-char-order",
+      "label": "特征为素数",
+      "note": "定理 2.2 证明：特征不为 0，由定理 2.1 特征为素数 p",
+      "relation": "depends_on",
+      "source": "integral-domain-characteristic",
+      "target": "finite-field-order-prime-power"
+    },
+    {
+      "id": "ff-order-primesub",
+      "label": "存在且唯一",
+      "note": "定理 2.2 证明中由第一同构定理构造出唯一的素子域",
+      "relation": "implies",
+      "source": "finite-field-order-prime-power",
+      "target": "prime-subfield"
+    },
+    {
+      "id": "ff-order-cor",
+      "label": "直接推论",
+      "note": "推论 2.3：6, 10, 12, … 元域不存在",
+      "relation": "implies",
+      "source": "finite-field-order-prime-power",
+      "target": "field-order-must-be-prime-power"
+    },
+    {
+      "id": "ff-root-claim",
+      "label": "x^d−1 根数 ≤ d",
+      "note": "⟨a⟩ 的 d 个元素已占满 x^d−1 的全部根（引理 3.2）",
+      "relation": "depends_on",
+      "source": "root-count-bound",
+      "target": "order-count-phi-bound"
+    },
+    {
+      "id": "ff-claim-cyclic",
+      "label": "关键断言",
+      "note": "ψ(d) ≤ φ(d) 迫使求和各项取等，特别地 ψ(n) ≥ 1",
+      "relation": "depends_on",
+      "source": "order-count-phi-bound",
+      "target": "cyclic-multiplicative-group"
+    },
+    {
+      "id": "ff-euler-cyclic",
+      "label": "∑φ(d)=n",
+      "note": "末步比较 n = ∑ψ(d) ≤ ∑φ(d) = n（引理 3.1）",
+      "relation": "depends_on",
+      "source": "euler-phi-divisor-sum",
+      "target": "cyclic-multiplicative-group"
+    },
+    {
+      "id": "ff-cyclic-simple",
+      "label": "取生成元",
+      "note": "推论 3.5：F_q^× 循环，取生成元 α 即得 F_q = F_p(α)",
+      "relation": "implies",
+      "source": "cyclic-multiplicative-group",
+      "target": "finite-field-simple-extension"
+    },
+    {
+      "id": "ff-splitexist-fqexist",
+      "label": "取分裂域",
+      "note": "定理 4.1：由定理 0.1 取 x^q−x 在 F_p 上的分裂域 K",
+      "relation": "depends_on",
+      "source": "splitting-field-existence",
+      "target": "finite-field-existence"
+    },
+    {
+      "id": "ff-sep-fqexist",
+      "label": "f′=−1 无重根",
+      "note": "第一步：gcd(f, f′)=gcd(f, −1)=1，由推论 1.4 得 q 个互异根",
+      "relation": "depends_on",
+      "source": "separable-criterion",
+      "target": "finite-field-existence"
+    },
+    {
+      "id": "ff-dream-fqexist",
+      "label": "加法封闭",
+      "note": "第二步：(a+b)^q = a^q+b^q 反复用 freshman's dream（笔记明确前向引用 §6）",
+      "relation": "depends_on",
+      "source": "freshmans-dream",
+      "target": "finite-field-existence"
+    },
+    {
+      "id": "ff-splituniq-fquniq",
+      "label": "分裂域唯一",
+      "note": "F 是 x^q−x 的分裂域，由定理 0.2 同构唯一",
+      "relation": "depends_on",
+      "source": "splitting-field-uniqueness",
+      "target": "finite-field-uniqueness"
+    },
+    {
+      "id": "ff-fquniq-factor",
+      "label": "a^q=a",
+      "note": "推论 4.3：左边以 F_q 全体元素为根，由定理 4.2 的证明",
+      "relation": "depends_on",
+      "source": "finite-field-uniqueness",
+      "target": "xpn-minus-x-factorization"
+    },
+    {
+      "id": "ff-divlemma-classify",
+      "label": "整除性小引理",
+      "note": "定理 4.4 证明开头：x^{p^d}−x | x^{p^n}−x ⟺ d|n",
+      "relation": "depends_on",
+      "source": "xpnd-divisibility-lemma",
+      "target": "irreducible-classification-xpn"
+    },
+    {
+      "id": "ff-fqexist-classify",
+      "label": "无重根",
+      "note": "x^{p^n}−x 无重根（定理 4.1 第一步），故等于全体首一不可约因子之积",
+      "relation": "depends_on",
+      "source": "finite-field-existence",
+      "target": "irreducible-classification-xpn"
+    },
+    {
+      "id": "ff-classify-count",
+      "label": "比较次数",
+      "note": "推论 4.5：p^n = ∑_{d|n} d·N_p(d)",
+      "relation": "implies",
+      "source": "irreducible-classification-xpn",
+      "target": "irreducible-count-formula"
+    },
+    {
+      "id": "ff-count-example",
+      "label": "p=2, n=4",
+      "note": "16 = 1·2+2·1+4·3 给出 N_2(4)=3",
+      "relation": "generalizes",
+      "source": "irreducible-count-formula",
+      "target": "x16-minus-x-factorization-example"
+    },
+    {
+      "id": "ff-classify-example",
+      "label": "n=4 实例",
+      "note": "x^16−x 的不可约因子次数恰为 4 的因子 1, 2, 4",
+      "relation": "generalizes",
+      "source": "irreducible-classification-xpn",
+      "target": "x16-minus-x-factorization-example"
+    },
+    {
+      "id": "ff-divlemma-subfield",
+      "label": "小引理",
+      "note": "存在性：由 §4 小引理 x^{p^d}−x | x^{p^n}−x",
+      "relation": "depends_on",
+      "source": "xpnd-divisibility-lemma",
+      "target": "finite-field-subfield-structure"
+    },
+    {
+      "id": "ff-order-subfield",
+      "label": "|K|=p^d",
+      "note": "仅有这些：子域 K 必含素子域，由定理 2.2 阶为 p^d，再数元素得 d|n",
+      "relation": "depends_on",
+      "source": "finite-field-order-prime-power",
+      "target": "finite-field-subfield-structure"
+    },
+    {
+      "id": "ff-fquniq-subfield",
+      "label": "a^{p^d}=a",
+      "note": "唯一性：由定理 4.2 的证明，p^d 元子域的元素都满足 a^{p^d}=a",
+      "relation": "depends_on",
+      "source": "finite-field-uniqueness",
+      "target": "finite-field-subfield-structure"
+    },
+    {
+      "id": "ff-subfield-example",
+      "label": "n=12",
+      "note": "12 的因子给出全部子域；F_4 ⊄ F_8 因为 2∤3",
+      "relation": "generalizes",
+      "source": "finite-field-subfield-structure",
+      "target": "f4096-subfield-lattice-example"
+    },
+    {
+      "id": "ff-dream-frob",
+      "label": "加法性",
+      "note": "σ(a+b)=(a+b)^p=a^p+b^p 正是 freshman's dream",
+      "relation": "depends_on",
+      "source": "freshmans-dream",
+      "target": "frobenius-endomorphism"
+    },
+    {
+      "id": "ff-frob-aut",
+      "label": "σ 是自同构",
+      "note": "定理 6.2 在定理 6.1 建立的 Frobenius 自同构 σ 上计算固定域、阶与自同构群",
+      "relation": "depends_on",
+      "source": "frobenius-endomorphism",
+      "target": "finite-field-automorphism-group"
+    },
+    {
+      "id": "ff-root-aut",
+      "label": "根数估计",
+      "note": "第 1、2 步两次用引理 3.2：x^p−x 至多 p 个根；σ^d=id 迫使 p^d ≥ p^n",
+      "relation": "depends_on",
+      "source": "root-count-bound",
+      "target": "finite-field-automorphism-group"
+    },
+    {
+      "id": "ff-cyclic-aut",
+      "label": "取本原元",
+      "note": "第 3 步：取本原元 α（定理 3.3）",
+      "relation": "depends_on",
+      "source": "cyclic-multiplicative-group",
+      "target": "finite-field-automorphism-group"
+    },
+    {
+      "id": "ff-simple-aut",
+      "label": "F=F_p(α)",
+      "note": "由推论 3.5，τ 由 τ(α) 唯一决定，而 τ(α) 是极小多项式的根",
+      "relation": "depends_on",
+      "source": "finite-field-simple-extension",
+      "target": "finite-field-automorphism-group"
+    },
+    {
+      "id": "ff-root-polyfunc",
+      "label": "至多 deg f 个根",
+      "note": "无限情形：非零多项式只有至多 deg f 个根（引理 3.2），不可能零化无限域",
+      "relation": "depends_on",
+      "source": "root-count-bound",
+      "target": "polynomial-vs-function"
+    },
+    {
+      "id": "ff-fquniq-polyfunc",
+      "label": "a^q=a",
+      "note": "有限情形：定理 4.2 的证明表明每个 a∈F_q 满足 a^q=a",
+      "relation": "depends_on",
+      "source": "finite-field-uniqueness",
+      "target": "polynomial-vs-function"
+    },
+    {
+      "id": "ff-root-funcpoly",
+      "label": "差多项式根数 < q",
+      "note": "两两多项式给出不同函数：非零差多项式次数 < q，不可能有 q 个根",
+      "relation": "depends_on",
+      "source": "root-count-bound",
+      "target": "functions-on-fq-are-polynomial"
+    },
+    {
+      "id": "ff-bilin-def",
+      "label": "定义展开",
+      "note": "命题 7.2 讨论的正是对称/反对称/交错三个定义之间的关系",
+      "relation": "depends_on",
+      "source": "bilinear-form-symmetry-types",
+      "target": "alternating-vs-skew-symmetric"
+    },
+    {
+      "id": "ff-gln-apps",
+      "label": "逐列计数",
+      "note": "推论 8.2：有序基总数相同；由此得 PGL 与旗簇的计数",
+      "relation": "implies",
+      "source": "gln-fq-order",
+      "target": "gln-fq-order-applications"
+    },
+    {
+      "id": "le-div-factor",
+      "label": "带余除法",
+      "note": "L03(i) 证明中\"若 α 是根，带余除法给出 f(x)=(x−α)g(x)\"正是因式定理；Week 2 把它列为基本事实 1)",
+      "relation": "depends_on",
+      "source": "division-algorithm",
+      "target": "factor-theorem"
+    },
+    {
+      "id": "le-factor-root",
+      "label": "剥一次因子",
+      "note": "L03(i)：每找到一个根就分解出 (x−α)，次数降 1，对次数归纳即得根数上界",
+      "relation": "depends_on",
+      "source": "factor-theorem",
+      "target": "root-count-bound"
+    },
+    {
+      "id": "le-ed-ufd",
+      "label": "ED ⟹ UFD",
+      "note": "L03 一页纸逻辑图：带余除法（F[x] 是 ED）⟹ Bézout、唯一分解",
+      "relation": "depends_on",
+      "source": "fx-euclidean-domain",
+      "target": "unique-factorization-theorem"
+    },
+    {
+      "id": "le-prime-ufd",
+      "label": "素元性质",
+      "note": "Week 2：唯一性的 Keypt 是 prime property（claim t₁=l₁，留作练习，重排后即一致）",
+      "relation": "depends_on",
+      "source": "zx-fx-prime-equals-irreducible",
+      "target": "unique-factorization-theorem"
+    },
+    {
+      "id": "le-div-prime-irr",
+      "label": "极小反例 + ED",
+      "note": "Week 2：不可约 ⟹ 素的极小反例论证中，用带余除法 m₁ = mq + r 造出更小的反例得矛盾",
+      "relation": "depends_on",
+      "source": "division-algorithm",
+      "target": "zx-fx-prime-equals-irreducible"
+    },
+    {
+      "id": "le-coprime-repeated",
+      "label": "底层逻辑",
+      "note": "L03(iii)：逆否命题\"有公共根 ⟹ gcd 非常数\"是 §1 重根判据（gcd(f,f′)=1 ⟺ 无重根）的底层逻辑",
+      "relation": "depends_on",
+      "source": "coprime-no-common-root",
+      "target": "repeated-root-criterion"
+    },
+    {
+      "id": "le-frob-split",
+      "label": "根的循环链",
+      "note": "证明思路：σ: x↦x^p 把 d 个根串成长度 d 的循环链；σⁿ 作用把它断成 gcd(d,n) 条小链（轨道）",
+      "relation": "depends_on",
+      "source": "frobenius-automorphism",
+      "target": "irreducible-splitting-over-extension"
+    },
+    {
+      "id": "le-split-stays",
+      "label": "取 gcd=1",
+      "note": "因子个数为 gcd(d,n)；gcd(d,n)=1 的情形即 f 保持不可约",
+      "relation": "implies",
+      "source": "irreducible-splitting-over-extension",
+      "target": "irreducible-stays-iff-gcd-1"
+    },
+    {
+      "id": "le-split-x4",
+      "label": "同一套理论",
+      "note": "L01：\"同一套理论（自同构作用在根上、不可约因子 ⟺ 轨道）也解释 x⁴+1 在 ℚ 上不可约但 mod 任何 p 可约\"",
+      "relation": "depends_on",
+      "source": "irreducible-splitting-over-extension",
+      "target": "x4-plus-1-example"
+    },
+    {
+      "id": "le-acl-fta",
+      "label": "特例 F=ℝ",
+      "note": "代数闭包存在性用于 F=ℝ 即 R̄=ℂ（代数基本定理）；L03 明确标为特例",
+      "relation": "generalizes",
+      "source": "algebraic-closure-existence",
+      "target": "fundamental-theorem-of-algebra"
+    },
+    {
+      "id": "le-zpz-fxf-analogy",
+      "label": "取商构造",
+      "note": "L02：\"we mimic the example Fp=Z/pZ by taking quotient\"——(Z,+,·)~Z/nZ 与 (F[x],+,·)~F[x]/(f) 两例并列",
+      "relation": "analogy",
+      "source": "zpz-is-field",
+      "target": "fx-mod-p-is-field"
+    },
+    {
+      "id": "le-fid-zpz",
+      "label": "有限整环的特例",
+      "note": "ℤ/pℤ（p 素）是有限整环的特例；L02 两处都用乘法映射 [x]↦[ax] 的单射论证",
+      "relation": "generalizes",
+      "source": "finite-integral-domain-is-field",
+      "target": "zpz-is-field"
+    },
+    {
+      "id": "le-id-field",
+      "label": "加强公理",
+      "note": "L02 RM：域 ⊆ 整环 ⊆ 交换环 ⊆ 环——整环补上逆元即域",
+      "relation": "generalizes",
+      "source": "integral-domain",
+      "target": "field-definition"
+    },
+    {
+      "id": "le-quotient-ffc",
+      "label": "商环构造",
+      "note": "L01：F_{p^n} = F_p[x]/(f)（f 为 n 次不可约），用的正是\"不可约 f 商出域\"的构造",
+      "relation": "depends_on",
+      "source": "fx-mod-p-is-field",
+      "target": "finite-field-existence"
+    },
+    {
+      "id": "le-bezout-fxf",
+      "label": "逆元来源",
+      "note": "L01：f 不可约且 f∤g ⟹ ag+bf=1 ⟹ a = g⁻¹ mod f——商环中逆元由 Bézout/辗转相除给出",
+      "relation": "depends_on",
+      "source": "bezout-identity",
+      "target": "fx-mod-p-is-field"
+    },
+    {
+      "id": "le-primeirr-fxf",
+      "label": "素 = 不可约",
+      "note": "L02：\"是域 ⟺ f 素\"配合\"F[x] 中素 = 不可约\"，而不可约易判，构造方可行",
+      "relation": "depends_on",
+      "source": "zx-fx-prime-equals-irreducible",
+      "target": "fx-mod-p-is-field"
+    },
+    {
+      "id": "ll-extdeg-fflemma",
+      "label": "扩张=线性空间",
+      "note": "L04 §5 背景：引理第 1 条（|F|=p^n ⟺ [F:F_p]=n）与扩张次数同源——那里就已经在用“扩张 = 线性空间”。",
+      "relation": "depends_on",
+      "source": "field-extension",
+      "target": "finite-field-classification-lemma"
+    },
+    {
+      "id": "ll-fflemma-algcl",
+      "label": "子域判据",
+      "note": "沿 n! 取并正是因为 F_{p^m} ⊆ F_{p^n} ⟺ m|n（引理第 2 条），直接并不封闭。",
+      "relation": "depends_on",
+      "source": "finite-field-classification-lemma",
+      "target": "algebraic-closure-of-fp"
+    },
+    {
+      "id": "ll-frob-conj",
+      "label": "σ 保持根",
+      "note": "f(β)=0 ⟹ f(β^p)=σ(f(β))=0，依此类推。",
+      "relation": "depends_on",
+      "source": "frobenius-automorphism",
+      "target": "frobenius-conjugate-roots"
+    },
+    {
+      "id": "ll-tower-ex",
+      "label": "典型用法",
+      "note": "L04 §5.4 Remark 3：多元扩张的次数拆成两层逐层计算。",
+      "relation": "depends_on",
+      "source": "tower-law",
+      "target": "degree-q-sqrt2-sqrt3"
+    },
+    {
+      "id": "ll-se-ex",
+      "label": "每层次数",
+      "note": "每层次数 = 极小多项式次数 = 2；第二层需验证 √3 ∉ Q(√2)。",
+      "relation": "depends_on",
+      "source": "simple-extension-basis",
+      "target": "degree-q-sqrt2-sqrt3"
+    },
+    {
+      "id": "ll-se-layer",
+      "label": "极小多项式",
+      "note": "系数域变大，极小多项式只短不长，故逐层次数有上界。",
+      "relation": "depends_on",
+      "source": "simple-extension-basis",
+      "target": "layer-degree-bound"
+    },
+    {
+      "id": "ll-tower-layer",
+      "label": "乘积上界",
+      "note": "各层在 F 上的次数之积是总次数的上界；检查“新元素是否已在旧域里”是把上界变成等号的关键。",
+      "relation": "depends_on",
+      "source": "tower-law",
+      "target": "layer-degree-bound"
+    },
+    {
+      "id": "ll-rsd-tower",
+      "label": "同构版本",
+      "note": "V 是 K-线性空间的版本，V = L 即塔定律；证法一字不差。",
+      "relation": "generalizes",
+      "source": "restriction-of-scalars-dimension",
+      "target": "tower-law"
+    },
+    {
+      "id": "ll-repl-exists",
+      "label": "解出 v",
+      "note": "关键观察中“v 系数非零 ⟹ 除环里可逆 ⟹ 解出 v ∈ Span(S)”正是替换引理的手法；L05 开头交叉引用 L04 §4（含替换引理）。",
+      "relation": "depends_on",
+      "source": "replacement-lemma",
+      "target": "basis-existence-division-ring"
+    },
+    {
+      "id": "ll-krull-red",
+      "label": "提供 m",
+      "note": "商模构造需要先取到极大理想 m ⊊ R（Krull 定理）。",
+      "relation": "depends_on",
+      "source": "maximal-ideal-exists",
+      "target": "mod-maximal-ideal-reduction"
+    },
+    {
+      "id": "ll-mif-red",
+      "label": "R/m 是域",
+      "note": "F := R/m 是域正是“商极大理想得域”（L04 §3 回顾，群环域速成 §3）。",
+      "relation": "depends_on",
+      "source": "maximal-ideal-field",
+      "target": "mod-maximal-ideal-reduction"
+    },
+    {
+      "id": "ll-basis-red",
+      "label": "表达唯一",
+      "note": "Claim (ii) 无关性证明：合并相同基元素后由基的表达唯一逐项比较系数。",
+      "relation": "depends_on",
+      "source": "basis-of-module",
+      "target": "mod-maximal-ideal-reduction"
+    },
+    {
+      "id": "ll-red-ibn",
+      "label": "Step 2",
+      "note": "商掉一个极大理想，把模压成域上的线性空间，让 Step 1 的线性代数接手。",
+      "relation": "depends_on",
+      "source": "mod-maximal-ideal-reduction",
+      "target": "invariant-basis-number"
+    },
+    {
+      "id": "ll-basis-linext",
+      "label": "唯一表达",
+      "note": "自由 ⟹ 每个 m 有唯一表达 m = Σ r_i e_i，保证 f̃ 良定义。",
+      "relation": "depends_on",
+      "source": "basis-of-module",
+      "target": "linear-extension"
+    },
+    {
+      "id": "ll-linext-ri",
+      "label": "",
+      "note": "e_i ↦ 第 i 个标准向量给出同态 M → R^I；唯一表达 ⟹ 双射。",
+      "relation": "depends_on",
+      "source": "linear-extension",
+      "target": "free-module-isomorphic-to-ri"
+    },
+    {
+      "id": "ll-ibn-rankdef",
+      "label": "良定义",
+      "note": "rank(M) := |B| 与基的选取无关，正是 IBN 定理保证的。",
+      "relation": "depends_on",
+      "source": "invariant-basis-number",
+      "target": "rank-of-free-module"
+    },
+    {
+      "id": "ll-ibn-invrank",
+      "label": "两组基",
+      "note": "同构把基映成基，M_2 有了 S_2 与 f(S_1) 两组基，由 IBN 等势。",
+      "relation": "depends_on",
+      "source": "invariant-basis-number",
+      "target": "invariant-rank"
+    },
+    {
+      "id": "ll-linext-class",
+      "label": "⇐",
+      "note": "双射 I → J 由线性延拓诱导同构 R^I ≅ R^J。",
+      "relation": "depends_on",
+      "source": "linear-extension",
+      "target": "free-module-classification"
+    },
+    {
+      "id": "ll-invrank-class",
+      "label": "⇒",
+      "note": "R^I ≅ R^J ⟹ rank 相等 ⟹ |I| = |J|。",
+      "relation": "depends_on",
+      "source": "invariant-rank",
+      "target": "free-module-classification"
+    },
+    {
+      "id": "ll-fflemma-ffex",
+      "label": "引理第 4 条",
+      "note": "存在性：$F \\cong \\mathbb{F}_p[x]/(f)$（$f$ 为 $n$ 次不可约多项式）",
+      "relation": "depends_on",
+      "source": "finite-field-classification-lemma",
+      "target": "finite-field-existence"
+    },
+    {
+      "id": "ll-fflemma-ffun",
+      "label": "引理第 4 条",
+      "note": "唯一性：任意两个这样的域之间的同构由根的对应给出",
+      "relation": "depends_on",
+      "source": "finite-field-classification-lemma",
+      "target": "finite-field-uniqueness"
+    },
+    {
+      "id": "cr-1",
+      "label": "Kronecker 构造",
+      "note": "定理 0.1 证明思路：$K_1 = F[x]/(g)$ 是域，$\\alpha = x+(g)$ 是 $g$ 的根；亦是分裂域讨论的起点",
+      "relation": "depends_on",
+      "source": "fx-mod-p-is-field",
+      "target": "splitting-field-existence"
+    },
+    {
+      "id": "cr-2",
+      "label": "第一同构定理",
+      "note": "定理 2.2 证明：$\\mathbb{Z} \\to F$ 的核是 $p\\mathbb{Z}$，由环的第一同构定理得素子域 $\\cong \\mathbb{F}_p$",
+      "relation": "depends_on",
+      "source": "first-isomorphism-rings",
+      "target": "finite-field-order-prime-power"
+    },
+    {
+      "id": "cr-3",
+      "label": "Lagrange",
+      "note": "定理 3.3 证明：Lagrange 定理保证阶整除 $n$；定理 4.2 证明（$a^{q-1} = 1$）同样用它",
+      "relation": "depends_on",
+      "source": "lagrange-theorem",
+      "target": "cyclic-multiplicative-group"
+    },
+    {
+      "id": "cr-4",
+      "label": "极小多项式",
+      "note": "定理 4.4 证明：$\\alpha$ 的极小多项式整除一切以 $\\alpha$ 为根的多项式；次数 = 扩张次数（定理 6.2 证明亦用）",
+      "relation": "depends_on",
+      "source": "minimal-polynomial",
+      "target": "irreducible-classification-xpn"
+    },
+    {
+      "id": "cr-5",
+      "label": "定理 2.2",
+      "note": "引理第 1 条（$|F| = p^n$）的证明出处",
+      "relation": "depends_on",
+      "source": "finite-field-order-prime-power",
+      "target": "finite-field-classification-lemma"
+    },
+    {
+      "id": "cr-6",
+      "label": "定理 4.2",
+      "note": "引理第 2 条：每元皆 $x^{p^n} - x$ 的根（定理 4.2 的证明）",
+      "relation": "depends_on",
+      "source": "finite-field-uniqueness",
+      "target": "finite-field-classification-lemma"
+    },
+    {
+      "id": "cr-7",
+      "label": "定理 5.1",
+      "note": "引理第 2 条：$p^m$ 元子域存在 $\\iff m \\mid n$（定理 5.1）",
+      "relation": "depends_on",
+      "source": "finite-field-subfield-structure",
+      "target": "finite-field-classification-lemma"
+    },
+    {
+      "id": "cr-8",
+      "label": "取极大元",
+      "note": "L03：链的并仍在 $S$ 中，用 Zorn 引理取极大元，再验证封闭性",
+      "relation": "depends_on",
+      "source": "zorn-lemma",
+      "target": "algebraic-closure-existence"
+    },
+    {
+      "id": "cr-9",
+      "label": "取极大无关组",
+      "note": "L05 §1：对线性无关子集族用 Zorn 引理得极大无关组，即基",
+      "relation": "depends_on",
+      "source": "zorn-lemma",
+      "target": "basis-existence-division-ring"
+    },
+    {
+      "id": "cr-10",
+      "label": "Step 1",
+      "note": "L05 §3：对「部分交换」结构 $\\Sigma$ 用 Zorn 引理取极大元",
+      "relation": "depends_on",
+      "source": "zorn-lemma",
+      "target": "invariant-basis-number"
+    },
+    {
+      "id": "cr-11",
+      "label": "选择公理",
+      "note": "L05：Krull 定理依赖选择公理；Zorn 引理是其等价形式（笔记未展开）",
+      "relation": "depends_on",
+      "source": "zorn-lemma",
+      "target": "maximal-ideal-exists"
+    },
+    {
+      "id": "cr-12",
+      "label": "极小多项式",
+      "note": "$m$ 整除一切以 $c$ 为根的多项式；$[F(c):F] = \\deg m$",
+      "relation": "depends_on",
+      "source": "minimal-polynomial",
+      "target": "simple-extension-basis"
+    },
+    {
+      "id": "cr-13",
+      "label": "模极大理想得域",
+      "note": "L04 §3 回顾：证明见群环域速成 §3（不可约元生成极大理想，模极大理想得域）",
+      "relation": "depends_on",
+      "source": "irreducible-maximal-ideal-field",
+      "target": "maximal-ideal-field"
+    },
+    {
+      "id": "cr-14",
+      "label": "char ≠ 2",
+      "note": "特征决定双线性型的分叉：char $\\ne 2$ 时 $2$ 可逆、反对称 ⟺ 交错；char $= 2$ 时对称 ⟺ 反对称且不蕴含交错",
+      "relation": "depends_on",
+      "source": "characteristic",
+      "target": "alternating-vs-skew-symmetric"
+    },
+    {
+      "id": "cr-15",
+      "label": "映射的性质",
+      "note": "L04 总结：$\\sigma$ 是 $\\mathbb{F}_{p^n}$ 的自同构、在 $\\mathbb{F}_p$ 上恒等、不动域为 $\\mathbb{F}_p$——证明见定理 6.1/6.2",
+      "relation": "depends_on",
+      "source": "frobenius-automorphism",
+      "target": "frobenius-endomorphism"
+    },
+    {
+      "id": "cr-16",
+      "label": "R = ℤ",
+      "note": "$R = \\mathbb{Z}$ 时模 = 阿贝尔群（abelian group 的分类 = $\\mathbb{Z}$-模的分类）",
+      "relation": "generalizes",
+      "source": "r-module",
+      "target": "group-definition"
+    },
+    {
+      "id": "mg-pidirr-zxfx",
+      "label": "PID 的特例",
+      "note": "$\\mathbb{Z}$ 与 $F[x]$ 都是 PID，「PID 中不可约元 = 素元」给出二者等价",
+      "relation": "generalizes",
+      "source": "pid-irreducible-is-prime",
+      "target": "zx-fx-prime-equals-irreducible"
+    },
+    {
+      "id": "mg-fxmod-z4z",
+      "label": "𝔽₄ 的构造",
+      "note": "$\\mathbb{F}_4 = \\mathbb{F}_2[x]/(x^2+x+1)$ 是「不可约 ⟹ 商环是域」的实例；整数同余只能到素域，$\\mathbb{Z}/4\\mathbb{Z}$ 有零因子不是域",
+      "relation": "generalizes",
+      "source": "fx-mod-p-is-field",
+      "target": "z4z-not-f4"
     }
   ],
   "meta": {
     "course": "MAT3042",
     "title": "MAT3042 知识网络",
-    "updated": "2026-09-22T00:10:53"
+    "updated": "2026-09-22T00:55:21"
   },
   "nodes": [
     {
@@ -108,12 +1180,9 @@
       "id": "division-algorithm",
       "kind": "lemma",
       "name": "多项式带余除法",
-      "position": {
-        "x": 63,
-        "y": 292
-      },
-      "proof": "存在性：对 $\\deg f$ 作归纳（多项式长除法）。若 $\\deg f < \\deg g$，取 $q = 0, r = f$；否则用 $g$ 的首项消去 $f$ 的首项，把问题归结到次数更低的多项式。\n唯一性：若 $qg + r = q'g + r'$，则 $(q - q')g = r' - r$。若 $q \\ne q'$，左边次数 $\\ge \\deg g$，右边次数 $< \\deg g$，矛盾。故 $q = q'$，进而 $r = r'$。",
-      "statement": "设 $F$ 是域，$f, g \\in F[x]$ 且 $g \\ne 0$。则存在唯一的 $q, r \\in F[x]$ 使得\n$$f = qg + r, \\qquad r = 0 \\ \\text{或}\\ \\deg r < \\deg g.$$",
+      "position": null,
+      "proof": "存在性：对 $\\deg f$ 作归纳（多项式长除法）。若 $\\deg f < \\deg g$，取 $q = 0, r = f$；否则用 $g$ 的首项消去 $f$ 的首项，把问题归结到次数更低的多项式。\n唯一性：若 $qg + r = q'g + r'$，则 $(q - q')g = r' - r$。若 $q \\ne q'$，左边次数 $\\ge \\deg g$，右边次数 $< \\deg g$，矛盾。故 $q = q'$，进而 $r = r'$。\n（Week 2 课堂把整数版与多项式版都留作练习。）",
+      "statement": "设 $F$ 是域，$f, g \\in F[x]$ 且 $g \\ne 0$。则存在唯一的 $q, r \\in F[x]$ 使得\n$$f = qg + r, \\qquad r = 0\\ \\text{或}\\ \\deg r < \\deg g.$$\nWeek 2 速记把整数版与多项式版并列（La）：(i) 任意 $n, m \\in \\mathbb{Z}$，存在 $q, r$ 使 $n = qm + r$；(ii) 任意 $f(x)$ 与 $m(x) \\ne 0$，存在 $q(x), r(x)$ 使 $f = qm + r$。$q$ 称为商（quotient），$r$ 称为余式（remainder）。",
       "tags": [
         "多项式"
       ]
@@ -123,11 +1192,8 @@
       "id": "fx-euclidean-domain",
       "kind": "theorem",
       "name": "F[x] 是欧几里得整环",
-      "position": {
-        "x": 112,
-        "y": 244
-      },
-      "proof": "$F[x]$ 是整环：$F$ 无零因子，首项系数相乘仍非零。带余除法（见「多项式带余除法」）恰给出以 $\\deg$ 为度量的欧几里得性质。\nED $\\Rightarrow$ PID：取理想 $I \\ne 0$ 中次数最小的非零元 $p$。对任意 $f \\in I$ 作带余除法 $f = qp + r$，则 $r = f - qp \\in I$ 且 $\\deg r < \\deg p$，由最小性得 $r = 0$，故 $I = (p)$。\nPID $\\Rightarrow$ UFD 与 Bézout 为标准事实。",
+      "position": null,
+      "proof": "$F[x]$ 是整环：$F$ 无零因子，首项系数相乘仍非零。带余除法（见「多项式带余除法」）恰给出以 $\\deg$ 为度量的欧几里得性质。\nED $\\Rightarrow$ PID：取理想 $I \\ne 0$ 中次数最小的非零元 $p$。对任意 $f \\in I$ 作带余除法 $f = qp + r$，则 $r = f - qp \\in I$ 且 $\\deg r < \\deg p$，由最小性得 $r = 0$，故 $I = (p)$。\nPID $\\Rightarrow$ UFD 与 Bézout 为标准事实。\n（L03 一页纸逻辑图把本周成果概括为：带余除法（$F[x]$ 是 ED）$\\Rightarrow$ Bézout、唯一分解 $\\Rightarrow$ 四个推论。）",
       "statement": "对任意域 $F$，多项式环 $F[x]$ 以 $d(f) = \\deg f$ 为度量为欧几里得整环（ED）。特别地 $F[x]$ 是 PID 从而是 UFD：每个非零多项式在相差单位与次序的意义下唯一分解为不可约多项式之积，且 $\\gcd$ 总存在并可写成 Bézout 组合。",
       "tags": [
         "多项式"
@@ -138,11 +1204,8 @@
       "id": "bezout-identity",
       "kind": "lemma",
       "name": "Bézout 恒等式",
-      "position": {
-        "x": 165,
-        "y": 191
-      },
-      "proof": "辗转相除（Euclid 算法）：反复作带余除法 $f = q_1 g + r_1$，$g = q_2 r_1 + r_2$，……次数严格下降，有限步后余式为 $0$，最后一个非零余式即 $\\gcd$；逐步回代便把 $d$ 表成 $f, g$ 的组合。",
+      "position": null,
+      "proof": "辗转相除（Euclid 算法）：反复作带余除法 $f = q_1 g + r_1$，$g = q_2 r_1 + r_2$，……次数严格下降，有限步后余式为 $0$，最后一个非零余式即 $\\gcd$；逐步回代便把 $d$ 表成 $f, g$ 的组合。\n（Week 2 速记要点：关键是取最小的 $ax + by = 1$——最小正/最低次的组合。）",
       "statement": "设 $f, g \\in F[x]$ 不全为零，$d = \\gcd(f, g)$。则存在 $u, v \\in F[x]$ 使\n$$uf + vg = d.$$\n特别地，$\\gcd(f, g) = 1 \\iff$ 存在 $u, v$ 使 $uf + vg = 1$。",
       "tags": [
         "多项式"
@@ -153,10 +1216,7 @@
       "id": "root-count-bound",
       "kind": "corollary",
       "name": "根的个数上界",
-      "position": {
-        "x": 21,
-        "y": 334
-      },
+      "position": null,
       "proof": "对次数 $n$ 归纳。若 $\\alpha$ 是根，带余除法给出 $f(x) = (x - \\alpha)g(x)$，$\\deg g = n - 1$。$F$ 无零因子，故 $f$ 的其他根都是 $g$ 的根；由归纳假设 $g$ 至多有 $n - 1$ 个根，合计至多 $n$ 个。\n⚠️ 这是域特有的：一般环上不成立（如 $\\mathbb{Z}/8\\mathbb{Z}$ 上 $x^2 - 1$ 有 $4$ 个根），关键就是无零因子。",
       "statement": "域 $F$ 上 $n$ 次非零多项式 $f(x) \\in F[x]$ 在 $F$ 中至多有 $n$ 个根（计重数）。",
       "tags": [
@@ -168,11 +1228,8 @@
       "id": "coprime-no-common-root",
       "kind": "corollary",
       "name": "互素 ⟹ 无公共根",
-      "position": {
-        "x": 204,
-        "y": 150
-      },
-      "proof": "一行：由 Bézout，存在 $u, v$ 使 $uf_1 + vf_2 = 1$；若 $\\alpha$ 是公共根，代入得 $0 = 1$，矛盾。",
+      "position": null,
+      "proof": "一行：由 Bézout，存在 $u, v$ 使 $uf_1 + vf_2 = 1$；若 $\\alpha$ 是公共根，代入得 $0 = 1$，矛盾。（见 [[3042week2]] §6(3)。）\n逆否命题很好用：有公共根 $\\implies \\gcd$ 非常数——这是 [[MAT3042-有限域]] §1 重根判据（$\\gcd(f, f') = 1 \\iff$ 无重根）的底层逻辑（L03）。",
       "statement": "若 $\\gcd(f_1, f_2) = 1$，则 $f_1$ 与 $f_2$（在 $F$ 的任何扩张中）没有公共根。逆否形式：有公共根 $\\implies \\gcd$ 非常数。",
       "tags": [
         "多项式"
@@ -183,10 +1240,7 @@
       "id": "formal-derivative",
       "kind": "definition",
       "name": "形式导数",
-      "position": {
-        "x": 266,
-        "y": 21
-      },
+      "position": null,
       "proof": "这是纯代数定义，不依赖极限，在任意域（任意特征）上有效。可直接验证它满足 $(f + g)' = f' + g'$ 与 Leibniz 法则 $(fg)' = f'g + fg'$：先对 $f = x^m, g = x^n$ 验证，一般情形由双线性展开即得。",
       "statement": "对 $f(x) = \\sum_{k=0}^{n} a_k x^k \\in F[x]$，定义其形式导数为\n$$f'(x) = \\sum_{k=1}^{n} k\\, a_k x^{k-1},$$\n其中 $k a_k$ 意为 $a_k$ 自加 $k$ 次。",
       "tags": [
@@ -198,10 +1252,7 @@
       "id": "repeated-root-criterion",
       "kind": "proposition",
       "name": "重根判据",
-      "position": {
-        "x": 235,
-        "y": 62
-      },
+      "position": null,
       "proof": "在 $K[x]$ 中写 $f(x) = (x - \\alpha)g(x)$。由 Leibniz 法则求导：$f'(x) = g(x) + (x - \\alpha)g'(x)$，故 $f'(\\alpha) = g(\\alpha)$。于是 $\\alpha$ 是重根 $\\iff (x - \\alpha) \\mid g \\iff g(\\alpha) = 0 \\iff f'(\\alpha) = 0$。",
       "statement": "设 $K/F$ 是含 $f$ 的根 $\\alpha$ 的扩张。则 $\\alpha$ 是 $f$ 的重根（即 $(x - \\alpha)^2 \\mid f$）当且仅当 $f(\\alpha) = f'(\\alpha) = 0$。",
       "tags": [
@@ -214,10 +1265,7 @@
       "id": "separable-criterion",
       "kind": "corollary",
       "name": "可分性判据 gcd(f,f′)=1",
-      "position": {
-        "x": 194,
-        "y": 100
-      },
+      "position": null,
       "proof": "（$\\Longleftarrow$）若 $\\alpha$ 是重根，由重根判据 $f(\\alpha) = f'(\\alpha) = 0$，即 $f$ 与 $f'$ 有公共根，故其 $\\gcd$ 非常数（由「互素 ⟹ 无公共根」的逆否）。注意 $\\gcd$ 由辗转相除算出，整个过程不离开 $F$，域扩张不改变 $\\gcd$。\n（$\\Longrightarrow$）若 $\\gcd(f, f') = d$ 非常数，在分裂域中取 $d$ 的根 $\\alpha$，则 $f(\\alpha) = f'(\\alpha) = 0$，由重根判据 $\\alpha$ 是重根。",
       "statement": "$f$ 在 $F$ 的任意扩张中无重根 $\\iff \\gcd(f, f') = 1$。满足条件时称 $f$ 可分（separable）。",
       "tags": [
@@ -230,11 +1278,8 @@
       "id": "separable-polynomial",
       "kind": "definition",
       "name": "可分多项式",
-      "position": {
-        "x": 151,
-        "y": 77
-      },
-      "proof": "概念说明：可分性是保证一般域上多项式行为「不出岔子」的技术条件（有限域上的不可约多项式恒可分）。等价刻画见「可分性判据 gcd(f,f′)=1」：$f$ 可分 $\\iff \\gcd(f, f') = 1$。",
+      "position": null,
+      "proof": "概念说明：可分性是保证一般域上多项式行为「不出岔子」的技术条件（有限域上的不可约多项式恒可分）。等价刻画见「可分性判据 gcd(f,f′)=1」：$f$ 可分 $\\iff \\gcd(f, f') = 1$。\n有限域理论的关键用例：$x^q - x$ 的形式导数为 $-1$，故 $\\gcd(f, f') = 1$，$f$ 可分（有限域存在性定理证明的第一步）。",
       "statement": "称 $f \\in F[x]$ 可分（separable），如果它在 $F$ 的任意扩张（等价地，在分裂域或代数闭包）中没有重根，即每个根的重数都是 $1$。",
       "tags": [
         "域论"
@@ -245,15 +1290,13 @@
       "id": "cyclic-multiplicative-group",
       "kind": "theorem",
       "name": "乘法群有限子群必循环",
-      "position": {
-        "x": 61,
-        "y": 516
-      },
-      "proof": "设 $|G| = n$，记 $\\psi(d)$ 为 $G$ 中阶恰为 $d$ 的元素个数。关键断言：$\\psi(d) \\le \\varphi(d)$。若 $a \\in G$ 阶为 $d$，循环子群 $\\langle a \\rangle$ 的 $d$ 个元素都满足 $x^d = 1$；由根的个数上界，$x^d - 1$ 在 $F$ 中至多 $d$ 个根，故 $\\langle a \\rangle$ 恰为 $x^d - 1$ 的全部根集，其中阶恰为 $d$ 者（生成元 $a^k$，$\\gcd(k, d) = 1$）恰 $\\varphi(d)$ 个。断言得证。\n于是由 Euler 恒等式 $\\sum_{d \\mid n} \\varphi(d) = n$：\n$$n = \\sum_{d \\mid n} \\psi(d) \\le \\sum_{d \\mid n} \\varphi(d) = n,$$\n首尾相等迫使逐项取等，$\\psi(n) = \\varphi(n) \\ge 1$，即存在阶为 $n$ 的元素，$G$ 循环。",
-      "statement": "设 $F$ 是任意域，$G \\le F^\\times$ 是其乘法群的有限子群，则 $G$ 是循环群。特别地 $\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$。",
+      "position": null,
+      "proof": "课堂速记证法（L03）：设 $m$ 为 $G$ 中元素阶的最大值，可证每个元素的阶整除 $m$；则 $G$ 的所有元素都是 $x^m - 1$ 的根，由根的个数上界至多 $m$ 个根，故 $|G| \\le m$，从而 $|G| = m$，阶为 $m$ 的元素就是生成元。\n（Week 2 速记另有 sketch：取 $\\langle g \\rangle$ 极大，断言它就是 $G$；若有 $g' \\in G \\setminus \\langle g \\rangle$，则由阶的 gcd 论证推出矛盾，$\\langle g \\rangle = \\langle g' \\rangle$。）\n另一证法（Euler 函数计数，见 [[MAT3042-有限域]] 定理 3.3）：设 $|G| = n$，记 $\\psi(d)$ 为 $G$ 中阶恰为 $d$ 的元素个数。关键断言：$\\psi(d) \\le \\varphi(d)$。若 $a \\in G$ 阶为 $d$，循环子群 $\\langle a \\rangle$ 的 $d$ 个元素都满足 $x^d = 1$；由根的个数上界，$x^d - 1$ 在 $F$ 中至多 $d$ 个根，故 $\\langle a \\rangle$ 恰为 $x^d - 1$ 的全部根集，其中阶恰为 $d$ 者（生成元 $a^k$，$\\gcd(k, d) = 1$）恰 $\\varphi(d)$ 个。断言得证。\n于是由 Euler 恒等式 $\\sum_{d \\mid n} \\varphi(d) = n$：\n$$n = \\sum_{d \\mid n} \\psi(d) \\le \\sum_{d \\mid n} \\varphi(d) = n,$$\n首尾相等迫使逐项取等，$\\psi(n) = \\varphi(n) \\ge 1$，即存在阶为 $n$ 的元素，$G$ 循环。\n推论：$\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$，生成元即本原元；数论里\"模 $p$ 原根存在\"也是这条的特例。\n注意 (i) 是 (iv) 的前提：根的个数上界正是从 (i) 来的（L03）。\n注（有限域笔记 §3）：这个证明只用到了「域中 $x^d - 1$ 根数 $\\le d$」，所以它同时证明了：$\\mathbb{C}$ 中 $n$ 次单位根成群 $\\cong \\mathbb{Z}/n\\mathbb{Z}$，$\\mathbb{F}_p^\\times$ 循环（数论中原根的存在性）等等。",
+      "statement": "设 $F$ 是任意域，$G \\le F^\\times$ 是其乘法群的有限子群，则 $G$ 是循环群，即存在 $g \\in G$ 使 $G = \\langle g \\rangle$。特别地 $\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$。",
       "tags": [
         "有限域",
-        "域论"
+        "域论",
+        "群论"
       ]
     },
     {
@@ -261,11 +1304,8 @@
       "id": "primitive-element",
       "kind": "definition",
       "name": "本原元",
-      "position": {
-        "x": 82,
-        "y": 419
-      },
-      "proof": "存在性由「乘法群有限子群必循环」保证：$\\mathbb{F}_q^\\times$ 循环，生成元恰有 $\\varphi(q - 1)$ 个。推论：取本原元 $\\alpha$ 得 $\\mathbb{F}_q = \\mathbb{F}_p(\\alpha)$，即有限域是其素子域的单扩张。",
+      "position": null,
+      "proof": "存在性由「乘法群有限子群必循环」保证：$\\mathbb{F}_q^\\times$ 循环，生成元恰有 $\\varphi(q - 1)$ 个。\n推论：取本原元 $\\alpha$ 得 $\\mathbb{F}_q = \\mathbb{F}_p(\\alpha)$，即有限域是其素子域的单扩张。\n（L03 推论表述：$\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$，生成元即本原元。）",
       "statement": "$\\mathbb{F}_q^\\times$ 的生成元称为本原元（primitive element）。即 $\\alpha \\in \\mathbb{F}_q$ 满足 $\\mathbb{F}_q^\\times = \\langle \\alpha \\rangle$：每个非零元都是 $\\alpha$ 的幂，等价地 $\\operatorname{ord}(\\alpha) = q - 1$。",
       "tags": [
         "有限域"
@@ -276,14 +1316,1621 @@
       "id": "mod-p-primitive-root",
       "kind": "example",
       "name": "模 p 原根",
-      "position": {
-        "x": 41,
-        "y": 419
-      },
-      "proof": "存在性是「乘法群有限子群必循环」的特例：$\\mathbb{F}_p = \\mathbb{Z}/p\\mathbb{Z}$ 是域，故 $\\mathbb{F}_p^\\times$ 循环，其生成元的任一整数代表即原根。\n例：模 $7$ 的原根为 $3, 5$——$3$ 的各次幂 mod $7$ 为 $3, 2, 6, 4, 5, 1$，恰遍历全部非零剩余类。",
+      "position": null,
+      "proof": "存在性是「乘法群有限子群必循环」的特例（L03 明确点出）：$\\mathbb{F}_p = \\mathbb{Z}/p\\mathbb{Z}$ 是域，故 $\\mathbb{F}_p^\\times$ 循环，其生成元的任一整数代表即原根。\n例：模 $7$ 的原根为 $3, 5$——$3$ 的各次幂 mod $7$ 为 $3, 2, 6, 4, 5, 1$，恰遍历全部非零剩余类。",
       "statement": "数论中的模 $p$ 原根：整数 $g$ 使 $g^0, g^1, \\dots, g^{p-2}$ 跑遍 $1, 2, \\dots, p-1$ 的全部剩余类（mod $p$），即 $g$ 在 $(\\mathbb{Z}/p\\mathbb{Z})^\\times$ 中的阶为 $p - 1$。",
       "tags": [
         "有限域"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "group-definition",
+      "kind": "definition",
+      "name": "群（group）",
+      "position": null,
+      "proof": "例子（记住这几个就够用）：$(\\mathbb{Z}, +)$；$(\\mathbb{Z}/n\\mathbb{Z}, +)$（abelian、有限）；$(F \\setminus \\{0\\}, \\times)$（域的非零元乘法群，abelian）；$\\mathrm{GL}_n(F)$（可逆 $n \\times n$ 矩阵，非 abelian）；向量空间 $V$ 在 $+$ 下是 abelian group——所以「模」的加法部分永远是 abelian group。\n补充（L02）：$(n\\mathbb{Z}, +)$；$F[x]/(f)$ 的加法群；$\\mathrm{SL}_n(F)$（特殊线性群）。",
+      "statement": "集合 $G$ 配一个二元运算 $\\cdot$，满足：\n1. 封闭性（closure）：$a, b \\in G \\implies a \\cdot b \\in G$；\n2. 结合律（associativity）：$(a \\cdot b) \\cdot c = a \\cdot (b \\cdot c)$；\n3. 单位元（identity）：存在 $e$，$a \\cdot e = e \\cdot a = a$；\n4. 逆元（inverse）：每个 $a$ 有 $a^{-1}$，$a \\cdot a^{-1} = e$。\n若再满足交换律（commutativity）$a \\cdot b = b \\cdot a$，叫阿贝尔群（abelian group），此时运算常写成 $+$，单位元写 $0$，逆元写 $-a$。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "subgroup",
+      "kind": "definition",
+      "name": "子群（subgroup）",
+      "position": null,
+      "proof": "",
+      "statement": "$H \\le G$：$H$ 是 $G$ 的子集，且对运算封闭、含单位元 $e$、含每个元素的逆元。例：$n\\mathbb{Z} \\le \\mathbb{Z}$。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "group-homomorphism",
+      "kind": "definition",
+      "name": "群同态、核与像",
+      "position": null,
+      "proof": "这和线性映射的 kernel/image 是完全平行的语言，线性代数的直觉直接搬过来。",
+      "statement": "同态（homomorphism）$\\varphi: G \\to H$ 是保持运算的映射：$\\varphi(ab) = \\varphi(a)\\varphi(b)$。\n核（kernel）$\\ker \\varphi = \\{g : \\varphi(g) = e_H\\}$，是 $G$ 的子群；像（image）$\\operatorname{im} \\varphi$ 是 $H$ 的子群。\n双射的同态叫同构（isomorphism），记 $G \\cong H$。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "quotient-group",
+      "kind": "definition",
+      "name": "陪集与商群",
+      "position": null,
+      "proof": "类比商空间 $V/W$。",
+      "statement": "对 abelian group（或更一般的 normal subgroup）：陪集（coset）$a + H = \\{a + h : h \\in H\\}$；所有陪集构成商群（quotient group）$G/H$，运算 $(a+H) + (b+H) = (a+b) + H$。有自然的商同态 $\\pi: G \\to G/H$，$a \\mapsto a + H$，$\\ker \\pi = H$。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "lagrange-theorem",
+      "kind": "theorem",
+      "name": "Lagrange 定理",
+      "position": null,
+      "proof": "",
+      "statement": "（有限群）$|G| = |H| \\cdot [G:H]$，其中 $[G:H]$ 是陪集个数（index，指数）。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "first-isomorphism-groups",
+      "kind": "theorem",
+      "name": "第一同构定理（群）",
+      "position": null,
+      "proof": "这就是 rank-nullity 的群论祖先。课程里讲的「同构定理」全是这个模式。",
+      "statement": "$\\varphi: G \\to H$ 同态 $\\implies G / \\ker \\varphi \\cong \\operatorname{im} \\varphi$。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "cyclic-group",
+      "kind": "definition",
+      "name": "循环群（cyclic group）",
+      "position": null,
+      "proof": "",
+      "statement": "由单个元素生成的群：$G = \\langle a \\rangle = \\{a^n\\}$。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "cyclic-subgroup-cyclic",
+      "kind": "proposition",
+      "name": "循环群的子群仍循环",
+      "position": null,
+      "proof": "⚠️ 注意：这一条在环论里会变成「$\\mathbb{Z}$ 是 PID」。",
+      "statement": "循环群的子群仍是循环群；$\\mathbb{Z}$ 的子群恰为 $n\\mathbb{Z}$。",
+      "tags": [
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "ring-definition",
+      "kind": "definition",
+      "name": "环（交换含幺环）",
+      "position": null,
+      "proof": "例子：$\\mathbb{Z}$（整数）；$F[x]$（域 $F$ 上的多项式环——模论部分的主角）；$\\mathbb{Z}/n\\mathbb{Z}$；$F$ 本身（域是特殊的环）；$M_n(F)$（矩阵环，非交换——是好反例来源）。",
+      "statement": "环 $(R, +, \\cdot)$：$(R, +)$ 是 abelian group；$\\times$ 结合、有单位元，且对 $+$ 有分配律 $a(b+c) = ab+ac$。乘法也交换时称交换环（commutative ring）。\nMAT3042 里基本只关心交换含幺环（commutative ring with identity）：$ab = ba$，且存在 $1 \\ne 0$。下文默认。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "unit",
+      "kind": "definition",
+      "name": "单位与单位群 Rˣ",
+      "position": null,
+      "proof": "",
+      "statement": "单位（unit）是有乘法逆元的元素。记 $R^\\times = \\{u \\in R \\mid \\exists v,\\ uv = vu = 1\\}$ 为全体单位，它在乘法下成群（单位群）。\n例：$\\mathbb{Z}$ 的单位只有 $\\pm 1$；$F[x]$ 的单位是非零常数。",
+      "tags": [
+        "环论",
+        "群论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "zero-divisor",
+      "kind": "definition",
+      "name": "零因子（zero divisor）",
+      "position": null,
+      "proof": "",
+      "statement": "$a \\ne 0$ 但存在 $b \\ne 0$ 使 $ab = 0$，则称 $a$ 为零因子。例：$\\mathbb{Z}/6\\mathbb{Z}$ 中 $2 \\cdot 3 = 0$。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "integral-domain",
+      "kind": "definition",
+      "name": "整环（integral domain）",
+      "position": null,
+      "proof": "RM（L02 课堂层级关系）：域 $\\subseteq$ 整环 $\\subseteq$ 交换环 $\\subseteq$ 环。",
+      "statement": "整环 = 无零因子的交换含幺环，等价于消去律成立：$ab = ac,\\ a \\ne 0 \\implies b = c$。$\\mathbb{Z}$ 和 $F[x]$ 都是。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "ideal",
+      "kind": "definition",
+      "name": "理想（ideal）",
+      "position": null,
+      "proof": "⚠️ 注意：理想一般不是子环（比如 $2\\mathbb{Z}$ 不含 $1$）。类比：子群之于群，理想之于环，子空间之于向量空间。",
+      "statement": "理想 $I \\subseteq R$：加法子群，且吸收乘法（$r \\in R,\\ a \\in I \\implies ra \\in I$）。理想正是环同态的 kernel。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "quotient-ring",
+      "kind": "definition",
+      "name": "商环（quotient ring）",
+      "position": null,
+      "proof": "关键事实：同态 $\\varphi: R \\to S$ 的核 $\\ker \\varphi$ 必是理想——这就是「商环只能模理想」的原因。商结构的想法：$(R, +, \\cdot) \\to (R/{\\sim}, +, \\cdot)$ 要成为环，需要这个映射是同态——这迫使 $\\sim$ 由理想给出。",
+      "statement": "商环 $R/I$：元素为陪集 $a+I$，运算 $(a+I)(b+I) = ab + I$。良定义性依赖理想的吸收性。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "principal-ideal",
+      "kind": "definition",
+      "name": "主理想（principal ideal）",
+      "position": null,
+      "proof": "",
+      "statement": "主理想：$(a) = aR = \\{ar : r \\in R\\}$，由单元素生成。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "first-isomorphism-rings",
+      "kind": "theorem",
+      "name": "第一同构定理（环）",
+      "position": null,
+      "proof": "",
+      "statement": "环同态 $\\varphi$ 给出 $R / \\ker \\varphi \\cong \\operatorname{im} \\varphi$。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "euclidean-domain",
+      "kind": "definition",
+      "name": "欧几里得整环（ED）",
+      "position": null,
+      "proof": "",
+      "statement": "欧几里得整环（Euclidean domain）是有「带余除法」的整环：存在度量 $d$，任意 $a, b \\ne 0$ 可写 $a = qb + r$ 且 $r = 0$ 或 $d(r) < d(b)$。\n$\\mathbb{Z}$ 用 $|\\cdot|$；$F[x]$ 用 $\\deg$——这就是多项式长除法。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "pid",
+      "kind": "definition",
+      "name": "主理想整环（PID）",
+      "position": null,
+      "proof": "",
+      "statement": "主理想整环（PID）：每个理想都是主理想。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "ufd",
+      "kind": "definition",
+      "name": "唯一分解整环（UFD）",
+      "position": null,
+      "proof": "",
+      "statement": "唯一分解整环（UFD）：每个元素唯一分解成不可约元乘积（类比算术基本定理；$F[x]$ 中即唯一因式分解）。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "ed-implies-pid",
+      "kind": "theorem",
+      "name": "ED ⟹ PID",
+      "position": null,
+      "proof": "取理想中度量最小的非零元作为生成元，用带余除法证明。",
+      "statement": "每个欧几里得整环都是主理想整环：$\\mathrm{ED} \\implies \\mathrm{PID}$。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "ed-pid-ufd-chain",
+      "kind": "proposition",
+      "name": "整环层级包含链",
+      "position": null,
+      "proof": "一条必须背下来的包含链。其中 ED ⟹ PID 一环用带余除法证明（取理想中度量最小的非零元作生成元）。",
+      "statement": "$$\\text{Euclidean domain} \\subsetneq \\text{PID} \\subsetneq \\text{UFD} \\subsetneq \\text{integral domain} \\subsetneq \\text{commutative ring}$$",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "pid-irreducible-is-prime",
+      "kind": "proposition",
+      "name": "PID 中不可约元 = 素元",
+      "position": null,
+      "proof": "",
+      "statement": "在 PID 中：irreducible（不可约元）= prime（素元）。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "pid-bezout",
+      "kind": "proposition",
+      "name": "PID 中 gcd 的 Bézout 形式",
+      "position": null,
+      "proof": "",
+      "statement": "在 PID 中，gcd 存在且能写成 Bézout 形式 $sa + tb$。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "fx-pid",
+      "kind": "corollary",
+      "name": "F[x] 是 PID，理想形如 (p(x))",
+      "position": null,
+      "proof": "关键推论：由 $F[x]$ 以 $\\deg$ 为度量是欧几里得整环，再用 ED ⟹ PID 立得。",
+      "statement": "$F[x]$ 是 ED $\\implies$ 是 PID $\\implies$ 每个理想形如 $(p(x))$。",
+      "tags": [
+        "多项式",
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "minimal-polynomial",
+      "kind": "definition",
+      "name": "极小多项式（PID 语言）",
+      "position": null,
+      "proof": "因为 $F[x]$ 是 PID，零化理想是主理想，取其首一生成元。你在 Friedberg 里学的 minimal polynomial 本质就是 PID 语言。",
+      "statement": "算子 $T$ 的极小多项式（minimal polynomial）的严格定义：$T$ 的零化理想 $\\mathrm{Ann}$ 的首一生成元。",
+      "tags": [
+        "线性代数",
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "chinese-remainder-theorem",
+      "kind": "theorem",
+      "name": "中国剩余定理（CRT）",
+      "position": null,
+      "proof": "这正是「primary decomposition / 准素分解」的引擎：把 minimal polynomial 分解成互素因子幂，空间就分解为广义特征子空间的直和。Jordan 标准形的存在性证明里你会再见到它。",
+      "statement": "$R$ 是 PID（比如 $F[x]$），$p_1, \\dots, p_k$ 两两互素，则\n$$R/(p_1\\cdots p_k) \\;\\cong\\; R/(p_1) \\times \\cdots \\times R/(p_k)$$",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "field-definition",
+      "kind": "definition",
+      "name": "域（field）",
+      "position": null,
+      "proof": "例子：$\\mathbb{Q}, \\mathbb{R}, \\mathbb{C}$，$\\mathbb{Z}/p\\mathbb{Z}$（$p$ 素数），记作 $\\mathbb{F}_p$。反例：$\\mathbb{Z}$ 不是域（$2$ 没有逆）。",
+      "statement": "域 $(F, +, \\cdot)$：存在两个二元运算 $+, \\cdot$，对任意 $x, y, z \\in F$ 满足：\n(1) 交换律：$x + y = y + x$，$x \\cdot y = y \\cdot x$；\n(2) 结合律：$x + (y + z) = (x + y) + z$，$x \\cdot (y \\cdot z) = (x \\cdot y) \\cdot z$；\n(3) 单位元：存在 $0, 1$，使 $x + 0 = x$，$1 \\cdot x = x$；\n(4) 逆元：任意 $x$ 有 $-x$ 使 $x + (-x) = 0$；任意 $x \\ne 0$ 有 $x^{-1}$ 使 $x \\cdot x^{-1} = 1$；\n(5) 分配律：$x \\cdot (y + z) = x \\cdot y + x \\cdot z$。\n等价地（速成语言）：域 = 交换含幺环且每个非零元都是 unit，即 $(F, +)$ 和 $(F \\setminus \\{0\\}, \\times)$ 都是 abelian group。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "field-iff-trivial-ideals",
+      "kind": "proposition",
+      "name": "域 ⟺ 只有平凡理想",
+      "position": null,
+      "proof": "因为非零理想含单位元就吞掉整个环。",
+      "statement": "$F$ 是域 $\\iff F$ 的理想只有 $\\{0\\}$ 和 $F$。",
+      "tags": [
+        "域论",
+        "环论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "characteristic",
+      "kind": "definition",
+      "name": "域的特征（characteristic）",
+      "position": null,
+      "proof": "char $0$：$\\mathbb{Q}, \\mathbb{R}, \\mathbb{C}$；char $p$：$\\mathbb{F}_p$。⚠️ 注意 char $p$ 时 $(a+b)^p = a^p + b^p$（freshman's dream），这一系列坑会出现在作业里。\nMAT3042 讲「vector spaces over general fields」意味着：所有 Friedberg 里对 $\\mathbb{R}/\\mathbb{C}$ 证的定理都要重新审视——哪些依赖 char $\\ne 2$（双线性型部分！），哪些依赖代数封闭（Jordan 形式要求特征多项式分裂；在 $\\mathbb{C}$ 上自动成立，一般域上只有 rational canonical form 是无条件的）。\nRM（L02）：若 $\\operatorname{char} F = 0$，则 $\\mathbb{Q} \\subseteq F$；若 $\\operatorname{char} F = p$，则 $\\mathbb{F}_p \\subseteq F$——它们是最小的域（素域）。",
+      "statement": "$1+1+\\cdots+1$ 加到第几次变 $0$？若 $n \\cdot 1 = 0$ 的最小正整数是 $p$，则 $\\operatorname{char} F = p$（必为素数）；若永不为 $0$，$\\operatorname{char} F = 0$。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "freshmans-dream",
+      "kind": "lemma",
+      "name": "Freshman's dream（特征 p 幂次公式）",
+      "position": null,
+      "proof": "由二项式定理 $(a+b)^p = \\sum_{k=0}^{p} \\binom{p}{k} a^{p-k} b^k$。对 $0 < k < p$，$\\binom{p}{k} = \\frac{p!}{k!(p-k)!}$：分子被 $p$ 整除，分母不被 $p$ 整除（$p$ 素，$k, p-k < p$），故 $p \\mid \\binom{p}{k}$，在特征 $p$ 下这些项全为 $0$，只剩 $a^p + b^p$。\n笔记强调：⚠️ 特征 $p$ 的这一系列坑会出现在作业里。典型用途：有限域 $p^m$ 元子域的加法封闭性验证（定理 4.1 / 5.1 中「根集成域」的论证）。",
+      "statement": "设 $F$ 是特征 $p$ 的域，则对任意 $a, b \\in F$，\n$$(a+b)^p = a^p + b^p.$$\n迭代得 $(a+b)^{p^n} = a^{p^n} + b^{p^n}$。（定理 6.1 证明中的关键恒等式，笔记称之为 **freshman's dream**）",
+      "tags": [
+        "有限域",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "field-extension",
+      "kind": "definition",
+      "name": "域扩张与扩张次数",
+      "position": null,
+      "proof": "线性空间公理是域公理的子集，自动成立（逐条验证见「域扩张 ⟹ 线性空间（免费得到）」）。与有限域分类引理第 1 条（$|F| = p^n \\iff [F:\\mathbb{F}_p] = n$）同源——那里就已经在用「扩张 = 线性空间」。",
+      "statement": "域扩张 $K/F$：$K$ 是包含 $F$ 的域。此时 $K$ 天然是 $F$ 上的线性空间（向量 = $K$ 的元素，标量 = $F$ 的元素，数乘就是 $K$ 里的乘法）。定义\n$$[K:F] := \\dim_F K,$$\n称为 $K$ 在 $F$ 上的次数（degree），取值正整数或 $\\infty$。例：$[\\mathbb{C}:\\mathbb{R}] = 2$（基 $\\{1, i\\}$）；$[\\mathbb{Q}(\\sqrt2):\\mathbb{Q}] = 2$（基 $\\{1, \\sqrt2\\}$）；$[F:F] = 1$；$[\\mathbb{R}:\\mathbb{Q}] = \\infty$。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "fx-mod-p-is-field",
+      "kind": "theorem",
+      "name": "F[x]/(f) 是域 ⟺ f 不可约（Kronecker 构造）",
+      "position": null,
+      "proof": "PID 中不可约元生成极大理想，模极大理想得域。例：$\\mathbb{R}[x]/(x^2+1) \\cong \\mathbb{C}$；$\\mathbb{F}_2[x]/(x^2+x+1) \\cong \\mathbb{F}_4$。\n这是「给多项式强行造根」的标准机器，也是 splitting field 和 Jordan 形式在一般域上讨论的起点。\n商环中逆元的具体来源（L01/L02）：$f$ 不可约且 $f \\nmid g$ ⟹ 由 Bézout 存在 $a, b$ 使 $ag + bf = 1$，故 $a = g^{-1} \\bmod f$。构造动机：模仿 $\\mathbb{F}_p = \\mathbb{Z}/p\\mathbb{Z}$ 取商；素元难找而不可约易判。",
+      "statement": "$p(x) \\in F[x]$ 不可约 $\\implies F[x]/(p(x))$ 是域，且 $p$ 在这个新域里有根（陪集 $x + (p)$ 就是根）。\n等价表述（Kronecker 定理）：任何域上的非常数多项式在某扩张域中有根，扩张构造为 $E[x]/(p)$，$p$ 不可约。\n反向亦真（L02）：$f$ 可约时商环有零因子、不是域，故「$F[x]/(f)$ 是域 $\\iff f$ 不可约」（在 $F[x]$ 中素元 = 不可约元）。",
+      "tags": [
+        "域论",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "module-special-cases",
+      "kind": "example",
+      "name": "模的三大特例",
+      "position": null,
+      "proof": "关键观察：给定向量空间 $V$ 上的线性算子 $T$，$V$ 自然变成一个 $F[x]$-模——多项式 $p(x)$ 作用在向量 $v$ 上定义为 $p(T)v$。于是「研究算子 $T$ 的结构」=「研究 $F[x]$-模 $V$ 的结构」。",
+      "statement": "$R = $ field $\\implies$ module = 向量空间（你学过的全部）；\n$R = \\mathbb{Z}$ $\\implies$ module = abelian group（所以 abelian group 的分类 = $\\mathbb{Z}$-模的分类）；\n$R = F[x]$ $\\implies$ module = $(V, T)$，一个向量空间加一个选定的算子——linear algebra II 的主战场。",
+      "tags": [
+        "模论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "pid-structure-theorem",
+      "kind": "theorem",
+      "name": "PID 上有限生成模结构定理",
+      "position": null,
+      "proof": "笔记只给表述（开学后老师证明）。Smith normal form 只是证明过程中对「表示矩阵」做的行列变换。",
+      "statement": "PID 上有限生成模（finitely generated module over a PID）同构于 free part $\\oplus$ torsion part 的直和分解。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "canonical-forms-from-structure-theorem",
+      "kind": "claim",
+      "name": "标准形是结构定理的推论",
+      "position": null,
+      "proof": "这就是课程大纲说的「the theorems in MAT2040/41/42 can be generalized to modules over PIDs」——Friedberg 第七章辛苦算出来的东西，会被重写成模论的一个推论。⚠️ Jordan 形式要求特征多项式分裂（在 $\\mathbb{C}$ 上自动成立）；一般域上只有 rational canonical form 是无条件的。",
+      "statement": "结构定理代回 $F[x]$-模：torsion 分解就是 rational canonical form；在代数闭域上进一步裂解就是 Jordan form。",
+      "tags": [
+        "模论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "必备知识",
+      "id": "extension-is-vector-space",
+      "kind": "proposition",
+      "name": "域扩张 ⟹ 线性空间（免费得到）",
+      "position": null,
+      "proof": "线性空间的每条公理都是 $K$ 的域公理的特例：加法交换/结合、零向量、负元 ↔ $K$ 的加法群公理；$1 \\cdot u = u$ ↔ $K$ 的乘法单位元（$1 \\in F$）；$(ab)u = a(bu)$ ↔ 乘法结合律；$a(u+v) = au+av$ 与 $(a+b)u = au+bu$ ↔ 两条分配律。无需验证任何新东西，唯一条件是 $F \\subseteq K$（标量必须能和向量相乘）。\n⚠️ 方向不可逆：$F$-线性空间一般不是域（如 $\\mathbb{R}^2$ 分量相乘有零因子）。域比线性空间「多」了向量间乘法；忘掉多余部分就得到线性空间——所以线性代数全部武器（维数、基、塔定律）可以免费搬进域论。",
+      "statement": "设 $F \\subseteq K$ 是域扩张。把 $K$ 看成 $F$-线性空间：向量加法 = $K$ 的加法，数乘 = $K$ 的乘法限制在 $F \\times K$ 上。",
+      "tags": [
+        "域论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "必备知识",
+      "id": "char-additive-order",
+      "kind": "proposition",
+      "name": "特征 p 主宰加法结构",
+      "position": null,
+      "proof": "唯一环同态 $\\mathbb{Z} \\to F$，$k \\mapsto k \\cdot 1$。每个素数在 $F$ 里只有两种命运：$p \\cdot 1 = 0$（死了，变成零）；其他 $q \\cdot 1 \\ne 0$ 皆可逆（活着，且泯然众人）。关键放大：$p \\cdot a = (p \\cdot 1) \\cdot a = 0 \\cdot a = 0$；而 $q \\cdot a = 0$ 两边乘 $(q \\cdot 1)^{-1}$ 逼出 $a = 0$。\n「数乘」不是外加的：$\\bar{k} \\cdot a$ 就是重复加法（$k$ 次），良定义性恰好靠 $p$ 死掉：$(k+p) \\cdot a = k \\cdot a + p \\cdot a = k \\cdot a$。为什么 $q$ 造不出平行结构：把 $F$ 看成 $\\mathbb{F}_q$-线性空间需要 $q \\cdot a = 0$ 对所有 $a$ 成立，但这逼出 $a = 0$——自相矛盾，不是没选它，是它不存在。\n一句话：char $F = p$ 不是 $F$ 的众多属性之一，而是 $F$ 加法结构的完整基因；「把 $F$ 看成 $\\mathbb{F}_p$-线性空间」不是我们的选择，而是认出它本来如此。",
+      "statement": "char $F = p$ 时每个非零元的加法阶都是 $p$：$p \\cdot a = 0$ 对所有 $a \\in F$ 成立；而其他素数 $q$ 在加法群里没有 $q$-阶元素（$q \\cdot a = 0 \\implies a = 0$）。「每个非零元加法阶都是 $p$」的交换群 = 一堆 $\\mathbb{Z}/p$ 的直和 = 天生就是 $\\mathbb{F}_p$-线性空间。",
+      "tags": [
+        "域论",
+        "群论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "prime-subfield",
+      "kind": "definition",
+      "name": "素子域 (prime subfield)",
+      "position": null,
+      "proof": "存在性：映射 $\\mathbb{Z} \\to F$，$k \\mapsto k\\cdot 1$ 的核是 $p\\mathbb{Z}$，由环的第一同构定理，其像 $\\cong \\mathbb{Z}/p\\mathbb{Z} = \\mathbb{F}_p$。唯一性：任何子域都含 $1$，故含 $1$ 生成的这一切。",
+      "statement": "有限域 $F$ 包含唯一一个同构于 $\\mathbb{F}_p$ 的子域，称为 $F$ 的**素子域（prime subfield）**；即由 $1$ 生成的子域 $\\{0, 1, \\dots, (p-1)\\cdot 1\\}$。（定理 2.2 中定义）",
+      "tags": [
+        "域论",
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "xpn-minus-x-factorization",
+      "kind": "corollary",
+      "name": "x^{p^n} − x 的完全分解",
+      "position": null,
+      "proof": "$|F^\\times| = q - 1$，Lagrange 定理 $\\implies a^{q-1} = 1$（$a \\ne 0$）$\\implies a^q = a$；$a = 0$ 显然。于是 $F$ 的 $q$ 个元素都是 $x^q - x$ 的根；该多项式次数恰为 $q$，而根数 $\\le$ 次数（根的个数上界），故 $F$ 恰为全部根集。两边首一、次数 $q$、根集相同，故相等。",
+      "statement": "设 $F$ 是特征 $p$ 的有限域，$|F| = q = p^n$。则每个 $a \\in F$ 都是 $x^q - x$ 的根，且在 $F[x]$ 中\n$$x^q - x = \\prod_{a \\in F}(x-a).$$\n（推论 4.3；「每元皆根」出自定理 4.2 的证明。）",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "finite-field-simple-extension",
+      "kind": "corollary",
+      "name": "有限域是单扩张 F = 𝔽_p(α)",
+      "position": null,
+      "proof": "取本原元 $\\alpha$（乘法群循环性保证其存在，即有限域笔记定理 3.3），每个非零元都是 $\\alpha$ 的幂，故 $\\mathbb{F}_q = \\mathbb{F}_p(\\alpha)$。$\\alpha$ 的极小多项式次数 = 扩张次数，给出基与多项式表示。这将在 §6 证明自同构群结构（定理 6.2）时用到。",
+      "statement": "设 $|F| = p^n$。$F^\\times$ 循环，取生成元 $\\alpha$ 使 $F = \\mathbb{F}_p(\\alpha)$——有限域是单扩张。$\\alpha$ 的极小多项式次数 $= [F:\\mathbb{F}_p] = n$，基 $\\{1, \\alpha, \\dots, \\alpha^{n-1}\\}$，故每元 $= a_0 + a_1\\alpha + \\dots + a_{n-1}\\alpha^{n-1}$：元素可用 $\\mathbb{F}_p$ 上次数 $< n$ 的多项式表示。（有限域笔记推论 3.5。）",
+      "tags": [
+        "有限域",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "必备知识",
+      "id": "evaluation-homomorphism",
+      "kind": "definition",
+      "name": "赋值同态",
+      "position": null,
+      "proof": "",
+      "statement": "赋值同态 $\\varphi_\\alpha: \\mathbb{F}_p[x] \\to F$，$g \\mapsto g(\\alpha)$。当 $F = \\mathbb{F}_p(\\alpha)$ 时 $\\varphi_\\alpha$ 满射，核 $= (f)$，$f$ 为 $\\alpha$ 的极小多项式（$n$ 次不可约）。",
+      "tags": [
+        "域论",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "必备知识",
+      "id": "finite-field-quotient-isomorphism",
+      "kind": "theorem",
+      "name": "F ≅ 𝔽_p[x]/(f)，同构由根的对应给出",
+      "position": null,
+      "proof": "1. 赋值同态 $\\varphi_\\alpha: \\mathbb{F}_p[x] \\to F$，$g \\mapsto g(\\alpha)$；$F = \\mathbb{F}_p(\\alpha)$ ⟹ 满射，核 $= (f)$；\n2. 第一同构定理：$\\mathbb{F}_p[x]/(f) \\cong F$；\n3. 同构 = 根的对应：$f, g$ 都整除 $x^{p^n} - x$ 且在 $F$ 中分裂 ⟹ $g$ 在 $F$ 中有根 $\\beta$；映射 $\\bar{x} \\mapsto \\beta$ 良定义（$g(\\beta) = 0$）、单射（域同态核为理想，域只有平凡理想）、两边同为 $p^n$ 元故双射。",
+      "statement": "设 $|F| = p^n$，$F = \\mathbb{F}_p(\\alpha)$，$f$ 为 $\\alpha$ 的极小多项式（$n$ 次不可约）。则 $\\mathbb{F}_p[x]/(f) \\cong F$。\n若 $g$ 是另一个 $n$ 次不可约多项式，$F' = \\mathbb{F}_p[x]/(g)$，则 $g$ 在 $F$ 中有根 $\\beta$，映射 $\\bar{x} \\mapsto \\beta$ 给出同构 $F' \\cong F$——同构由根的对应给出。",
+      "tags": [
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "tower-law",
+      "kind": "theorem",
+      "name": "塔定律 (tower law)",
+      "position": null,
+      "proof": "**（i）张成**：任取 $x \\in L$，两步“剥壳”：1. 用外层基 $x = \\sum_j c_j v_j$（$c_j \\in K$）；2. 用内层基展开每个系数 $c_j = \\sum_i a_{ij} u_i$（$a_{ij} \\in F$）。合起来 $x = \\sum_{i,j} a_{ij}\\, u_i v_j$。**（ii）线性无关**：设 $\\sum_{i,j} a_{ij} u_i v_j = 0$。关键手法：按 $j$ 归并，$\\sum_j \\bigl(\\sum_i a_{ij} u_i\\bigr) v_j = 0$，括号记为 $c_j \\in K$；由 $\\{v_j\\}$ 在 $K$ 上无关得所有 $c_j = 0$，再由 $\\{u_i\\}$ 在 $F$ 上无关得所有 $a_{ij} = 0$。⚠️ 两次无关性必须**从外到内嵌套使用**。Remarks：无限情形公式作为基数等式也成立；特别地 $[L:F]$ 有限 ⟺ 两层都有限。",
+      "statement": "设 $F \\subseteq K \\subseteq L$，$[K:F] = m$，$[L:K] = n$ 均有限。则 $$[L:F] = [L:K]\\cdot[K:F] = mn.$$ 更精确地：若 $\\{u_1,\\dots,u_m\\}$ 是 $K$ 在 $F$ 上的基，$\\{v_1,\\dots,v_n\\}$ 是 $L$ 在 $K$ 上的基，则 $\\{u_i v_j\\}$ 这 $mn$ 个元素是 $L$ 在 $F$ 上的基。",
+      "tags": [
+        "域论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "必备知识",
+      "id": "algebraic-iff-finite-degree",
+      "kind": "proposition",
+      "name": "代数元 ⟺ 有限次数",
+      "position": null,
+      "proof": "工具：赋值同态 $f \\mapsto f(\\alpha)$ + 第一同构定理（详见 [[3042L04]]）。",
+      "statement": "$c$ 在 $F$ 上代数 $\\iff [F(c):F] < \\infty$，且该次数等于 $c$ 的极小多项式的次数。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "必备知识",
+      "id": "finite-extension-algebraic",
+      "kind": "proposition",
+      "name": "有限扩张的元素皆代数（维数论证）",
+      "position": null,
+      "proof": "维数论证：$d+1$ 个幂 $1, \\gamma, \\dots, \\gamma^d$ 在 $d$ 维空间中必线性相关，该相关关系就是一个在 $\\gamma$ 处取零的非零 $F$-多项式。",
+      "statement": "若 $[L:F] = d < \\infty$，则 $L$ 中每个 $\\gamma$ 都在 $F$ 上代数。",
+      "tags": [
+        "域论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "必备知识",
+      "id": "algebraic-closure-algebraically-closed",
+      "kind": "theorem",
+      "name": "代数闭包是代数封闭的",
+      "position": null,
+      "proof": "证明（系数的下降，descent of coefficients）：任取非常数 $g(x) = c_0 + c_1 x + \\dots + c_n x^n \\in E[x]$，证 $g$ 在 $E$ 中有根。\nStep 0（根存在于某处）：由 Kronecker 定理（用于基域 $E$），存在含 $E$ 的扩张及其中元素 $\\alpha$ 使 $g(\\alpha) = 0$；全部任务是证 $\\alpha \\in E$。\nStep 1（把系数装进小域）：令 $K = F(c_0, c_1, \\dots, c_n)$——关键隐藏点：多项式只有有限多个系数。每个 $c_i \\in E$ 在 $F$ 上代数，由「代数 ⟺ 有限次数」每次添加贡献有限次数，塔定律逐层给出 $[K:F] < \\infty$。\nStep 2（添加 $\\alpha$，次数仍有限）：$g$ 的系数全在 $K$ 中，$g(\\alpha) = 0$ 说明 $\\alpha$ 在 $K$ 上代数，$[K(\\alpha):K] \\le \\deg g < \\infty$，塔定律给 $[K(\\alpha):F] = [K(\\alpha):K] \\cdot [K:F] < \\infty$。\nStep 3（$\\alpha$ 在 $F$ 上代数）：$\\alpha \\in K(\\alpha)$ 而 $K(\\alpha)/F$ 有限，维数论证迫使 $\\alpha$ 在 $F$ 上代数。\nStep 4（$\\alpha \\in E$）：$E$ 恰由 $F$ 上代数元组成，故 $\\alpha \\in E$。$g$ 任意，故 $E$ 代数封闭。$\\blacksquare$\n点睛：难点在于只知道 $\\alpha$ 在巨大的 $E$ 上代数；「系数下降」利用 $g$ 只有有限个系数、个个在 $F$ 上代数，把问题从无限扩张 $E$ 降到有限扩张 $K$，塔定律与维数论证得以施展。",
+      "statement": "设 $F$ 是域，$E = \\{\\alpha : \\alpha \\text{ 是某个非零 } f(x) \\in F[x] \\text{ 的根}\\}$（在某个取定的外围扩张中）是 $F$ 上全体代数元。则 $E$ 代数封闭（algebraically closed）：系数在 $E$ 中的每个非常数多项式在 $E$ 中有根。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "群环域速成",
+      "id": "irreducible-maximal-ideal-field",
+      "kind": "claim",
+      "name": "不可约元生成极大理想，模极大理想得域",
+      "position": null,
+      "proof": "笔记未给证明，作为「$p$ 不可约 ⟹ $F[x]/(p)$ 是域」的核心依据引用。",
+      "statement": "PID 中不可约元生成极大理想；环模去极大理想是域。",
+      "tags": [
+        "环论",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "splitting-field",
+      "kind": "definition",
+      "name": "分裂域 (splitting field)",
+      "position": null,
+      "proof": "存在性见「Splitting field 的存在性 (Kronecker)」（定理 0.1），同构意义下的唯一性见「Splitting field 的唯一性」（定理 0.2）。$x^q - x$ 在 $\\mathbb{F}_p$ 上的分裂域是构造有限域的核心用例（定理 4.1）。",
+      "statement": "设 $F$ 是域，$f(x) \\in F[x]$，$\\deg f \\ge 1$。若域扩张 $K/F$ 使 $f$ 在 $K[x]$ 中完全分解为一次因子之积，且 $K$ 由 $F$ 和 $f$ 的全部根生成，则称 $K$ 为 $f$ 在 $F$ 上的**分裂域（splitting field）**。（定理 0.1 中定义）",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "splitting-field-existence",
+      "kind": "theorem",
+      "name": "Splitting field 的存在性 (Kronecker)",
+      "position": null,
+      "proof": "证明思路：对次数归纳。取 $f$ 的一个不可约因子 $g$，则 $K_1 = F[x]/(g(x))$ 是域（速成文档 §3），且 $\\alpha = x + (g)$ 是 $g$ 的根。于是在 $K_1[x]$ 中 $f(x) = (x-\\alpha)h(x)$，对 $h$ 用归纳假设即可。\n⚠️ 笔记只叙述并给出证明思路：完整证明属于域扩张理论。",
+      "statement": "设 $F$ 是域，$f(x) \\in F[x]$，$\\deg f \\ge 1$。则存在域扩张 $K/F$，使 $f$ 在 $K[x]$ 中完全分解为一次因子之积，且 $K$ 由 $F$ 和 $f$ 的全部根生成（这样的 $K$ 叫 $f$ 在 $F$ 上的分裂域）。（定理 0.1）",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "splitting-field-uniqueness",
+      "kind": "theorem",
+      "name": "Splitting field 的唯一性",
+      "position": null,
+      "proof": "证明思路：对根的个数归纳，逐步把 $F$ 上的恒等同构扩张到逐个添加根的域上；关键是“不可约多项式的任意两个根生成的扩张同构”：$F(\\alpha) \\cong F[x]/(p) \\cong F(\\beta)$。\n⚠️ 同样只给证明思路。",
+      "statement": "同一多项式在同一域上的任意两个分裂域同构，且同构可取为在 $F$ 上恒等。（定理 0.2）",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "formal-derivative-leibniz",
+      "kind": "lemma",
+      "name": "形式导数的 Leibniz 法则",
+      "position": null,
+      "proof": "对 $f = x^m, g = x^n$ 直接验证 $(x^{m+n})' = (m+n)x^{m+n-1} = m x^{m-1} x^n + x^m n x^{n-1}$，一般情形由双线性性展开即得。",
+      "statement": "对 $f, g \\in F[x]$：$(fg)' = f'g + fg'$；$(f+g)' = f' + g'$。（引理 1.2）",
+      "tags": [
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "integral-domain-characteristic",
+      "kind": "theorem",
+      "name": "整环的特征是 0 或素数",
+      "position": null,
+      "proof": "设 $\\operatorname{char} R = n > 0$ 且 $n = ab$（$1 < a, b < n$）。则 $(a\\cdot 1)(b \\cdot 1) = n \\cdot 1 = 0$。$R$ 无零因子，故 $a\\cdot 1 = 0$ 或 $b \\cdot 1 = 0$，与 $n$ 的最小性矛盾。",
+      "statement": "整环（特别地，任何域）的特征要么是 $0$，要么是素数 $p$。（定理 2.1）",
+      "tags": [
+        "环论",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "finite-field-order-prime-power",
+      "kind": "theorem",
+      "name": "有限域的阶是素数幂",
+      "position": null,
+      "proof": "$F$ 有限，故 $1, 1+1, 1+1+1, \\dots$ 必重复，特征不为 $0$；由定理 2.1 特征为素数 $p$。映射 $\\mathbb{Z} \\to F$，$k \\mapsto k\\cdot 1$ 的核是 $p\\mathbb{Z}$，由环的第一同构定理，其像 $\\{0, 1, \\dots, (p-1)\\cdot 1\\} \\cong \\mathbb{Z}/p\\mathbb{Z} = \\mathbb{F}_p$，这就是素子域。\n接着，$F$ 是其素子域 $\\mathbb{F}_p$ 上的向量空间（域扩张自动是底域上的向量空间，验证即向量空间公理）。$F$ 有限 $\\Rightarrow$ 维数有限，设 $\\dim_{\\mathbb{F}_p} F = n$。取一组基后 $F \\cong \\mathbb{F}_p^n$（作为向量空间），数元素个数：$|F| = p^n$。",
+      "statement": "有限域 $F$ 的特征是某个素数 $p$；$F$ 包含唯一一个同构于 $\\mathbb{F}_p$ 的子域（称为素子域）；且 $|F| = p^n$ 对某个 $n \\ge 1$ 成立。（定理 2.2）",
+      "tags": [
+        "有限域",
+        "域论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "field-order-must-be-prime-power",
+      "kind": "corollary",
+      "name": "域的阶只能是素数幂",
+      "position": null,
+      "proof": "由定理 2.2 立得。§4 将证明反向：每个素数幂 $q = p^n$ 确实给出一个（且本质唯一的）域 $\\mathbb{F}_q$。",
+      "statement": "元素个数为 $6, 10, 12, 14, \\dots$ 的域不存在。有限域的阶只能是素数幂。（推论 2.3）",
+      "tags": [
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "euler-phi-divisor-sum",
+      "kind": "lemma",
+      "name": "Euler 函数的因子和恒等式",
+      "position": null,
+      "proof": "把集合 $\\{1, 2, \\dots, n\\}$ 按“与 $n$ 的 gcd”分类。$\\gcd(k, n) = d$ 当且仅当 $d \\mid k$ 且 $\\gcd(k/d,\\, n/d) = 1$，故第 $d$ 类恰有 $\\varphi(n/d)$ 个元素。各类不相交且覆盖全体，所以 $n = \\sum_{d\\mid n} \\varphi(n/d) = \\sum_{d \\mid n} \\varphi(d)$（$d$ 跑遍 $n$ 的因子时 $n/d$ 也跑遍）。",
+      "statement": "$\\displaystyle\\sum_{d \\mid n} \\varphi(d) = n$，其中 $\\varphi$ 是 Euler 函数（$\\varphi(d) = |\\{1 \\le k \\le d : \\gcd(k,d)=1\\}|$）。（引理 3.1）",
+      "tags": [
+        "数论",
+        "群论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "order-count-phi-bound",
+      "kind": "claim",
+      "name": "阶恰为 d 的元素个数上界 ψ(d) ≤ φ(d)",
+      "position": null,
+      "proof": "若 $G$ 中没有阶为 $d$ 的元素，$\\psi(d) = 0$，成立。否则取 $a \\in G$，$\\operatorname{ord}(a) = d$。循环子群 $\\langle a \\rangle$ 的 $d$ 个元素都满足 $x^d = 1$；由引理 3.2，$x^d - 1$ 在 $F$ 中至多 $d$ 个根，故 $\\langle a \\rangle$ **就是** $x^d - 1$ 的全部根集。于是 $G$ 中一切阶整除 $d$ 的元素都在 $\\langle a \\rangle$ 里，其中阶恰为 $d$ 者即 $\\langle a \\rangle$ 的生成元 $a^k$（$\\gcd(k,d)=1$），恰 $\\varphi(d)$ 个。",
+      "statement": "设 $F$ 是域，$G \\le F^\\times$ 为 $n$ 阶有限子群，$\\psi(d)$ 为 $G$ 中阶恰为 $d$ 的元素个数（$d \\mid n$）。则 $\\psi(d) \\le \\varphi(d)$。（定理 3.3 证明中的断言）",
+      "tags": [
+        "群论",
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "finite-field-existence",
+      "kind": "theorem",
+      "name": "有限域的存在性",
+      "position": null,
+      "proof": "考虑 $f(x) = x^q - x \\in \\mathbb{F}_p[x]$。由定理 0.1，$f$ 在 $\\mathbb{F}_p$ 上有分裂域 $K$。\n**第一步：$f$ 无重根。** 形式导数 $f'(x) = qx^{q-1} - 1 = -1$（因为 $\\operatorname{char} = p \\mid q$，$q = 0$）。$\\gcd(f, f') = \\gcd(f, -1) = 1$，由推论 1.4，$f$ 在 $K$ 中有 $q$ 个**互不相同的**根。\n**第二步：根集 $S = \\{\\alpha \\in K : \\alpha^q = \\alpha\\}$ 本身是域。** $0, 1 \\in S$，显然。加法封闭：反复用 freshman's dream（$(a+b)^p = a^p + b^p$，见 §6 定理 6.1 的证明），得 $(a+b)^q = (a+b)^{p^n} = a^{p^n} + b^{p^n} = a + b$。乘法封闭：$(ab)^q = a^q b^q = ab$。加法逆：若 $p$ 为奇素数则 $q$ 为奇数，$(-a)^q = -a^q = -a$；若 $p = 2$ 则 $-a = a$。乘法逆：$a \\ne 0 \\Rightarrow (a^{-1})^q = (a^q)^{-1} = a^{-1}$。故 $S$ 是 $K$ 的子域，且 $|S| = q$。\n**第三步：$K = S$。** $S$ 包含 $f$ 的全部根；又 $\\mathbb{F}_p \\subseteq S$（$a \\in \\mathbb{F}_p$ 时 $a^p = a$，迭代得 $a^{p^n} = a$）。而 $K$ 是由 $\\mathbb{F}_p$ 和这些根生成的最小域，故 $K \\subseteq S$，即 $K = S$，$|K| = q$。",
+      "statement": "对每个素数幂 $q = p^n$，存在恰有 $q$ 个元素的域。（定理 4.1）",
+      "tags": [
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "finite-field-uniqueness",
+      "kind": "theorem",
+      "name": "有限域的唯一性",
+      "position": null,
+      "proof": "设 $|F| = q$。乘法群 $F^\\times$ 的阶为 $q-1$，由 Lagrange 定理，每个 $a \\ne 0$ 满足 $a^{q-1} = 1$，从而每个 $a \\in F$（含 $0$）满足 $a^q = a$。即 $F$ 的全部 $q$ 个元素都是 $x^q - x$ 的根；该多项式次数恰为 $q$，所以它在 $F$ 中完全分裂，$F$ 正是它的根集、是 $x^q - x$ 在 $\\mathbb{F}_p$ 上的分裂域。由定理 0.2，分裂域在同构意义下唯一。",
+      "statement": "任意两个 $q$ 元域同构。故可记作 $\\mathbb{F}_q$（或 $GF(q)$）。（定理 4.2）",
+      "tags": [
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "xpnd-divisibility-lemma",
+      "kind": "lemma",
+      "name": "x^{p^d}−x 的整除性判据",
+      "position": null,
+      "proof": "第二步：$p^n - 1 = (p^d)^m - 1 \\equiv 0 \\pmod{p^d - 1}$ 当且仅当 $n = dm$；第一步：$x^M - 1 = (x^m - 1)(x^{M-m} + x^{M-2m} + \\cdots)$ 当 $m \\mid M$。",
+      "statement": "对 $d, n \\ge 1$，\n$$x^{p^d} - x \\;\\mid\\; x^{p^n} - x \\iff p^d - 1 \\mid p^n - 1 \\iff d \\mid n.$$（§4 整除性小引理，定理 4.4 证明内；自测题 4）",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "irreducible-classification-xpn",
+      "kind": "theorem",
+      "name": "x^{p^n}−x 的不可约因子分类",
+      "position": null,
+      "proof": "由于 $x^{p^n} - x$ 无重根（定理 4.1 第一步），它等于其全体首一不可约因子之积，每个只出现一次。设 $f$ 首一不可约，$\\deg f = d$。\n$f \\mid x^{p^n} - x$ ⟺ $f$ 在 $\\mathbb{F}_{p^n}$ 中有根 $\\alpha$（⇒：$x^{p^n}-x$ 在 $\\mathbb{F}_{p^n}$ 中分裂，$f$ 的根都在其中；⇐：$\\alpha$ 在 $\\mathbb{F}_p$ 上的极小多项式整除一切以 $\\alpha$ 为根的多项式）。\n而 $f$ 在 $\\mathbb{F}_{p^n}$ 中有根 ⟺ $d \\mid n$：若 $\\alpha \\in \\mathbb{F}_{p^n}$ 且极小多项式次数为 $d$，则 $\\mathbb{F}_p(\\alpha)$ 有 $p^d$ 个元素，$\\mathbb{F}_{p^n}$ 是其上向量空间，故 $d \\mid n$；反之若 $d \\mid n$，由小引理 $x^{p^d} - x \\mid x^{p^n} - x$，而 $f \\mid x^{p^d} - x$（$f$ 的根 $\\beta$ 满足 $\\beta^{p^d} = \\beta$，因为 $\\mathbb{F}_p[x]/(f) \\cong \\mathbb{F}_{p^d}$），故 $f \\mid x^{p^n} - x$。",
+      "statement": "在 $\\mathbb{F}_p[x]$ 中，\n$$x^{p^n} - x = \\prod_{\\substack{f \\text{ 首一不可约} \\\\ \\deg f \\,\\mid\\, n}} f(x).$$\n即 $x^{p^n} - x$ 恰好是“所有次数整除 $n$ 的首一不可约多项式”之积（每个出现一次）。（定理 4.4，选读）",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "irreducible-count-formula",
+      "kind": "corollary",
+      "name": "不可约多项式的计数公式",
+      "position": null,
+      "proof": "比较定理 4.4 两边的次数即得 $p^n = \\sum_{d \\mid n} d\\, N_p(d)$；再作 Möbius 反演即得显式公式，其正性给出任意次数不可约多项式的存在性。",
+      "statement": "记 $N_p(d)$ 为 $\\mathbb{F}_p[x]$ 中 $d$ 次首一不可约多项式的个数，比较定理 4.4 两边的次数得\n$$p^n = \\sum_{d \\mid n} d\\, N_p(d).$$\n用 Möbius 反演可得 $N_p(n) = \\frac{1}{n}\\sum_{d\\mid n} \\mu(d)\\, p^{n/d} > 0$。**推论：任意次数的不可约多项式在 $\\mathbb{F}_p[x]$ 中都存在**（这给出了定理 4.1 的另一条构造路线：$\\mathbb{F}_{p^n} = \\mathbb{F}_p[x]/(f)$）。（推论 4.5）",
+      "tags": [
+        "有限域",
+        "多项式",
+        "数论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "x16-minus-x-factorization-example",
+      "kind": "example",
+      "name": "x^{16}−x 在 F_2[x] 中的分解",
+      "position": null,
+      "proof": "出现的不可约因子次数 $1, 2, 4$ 恰为 $4$ 的全部因子，与定理 4.4 的分类吻合；计数 $16 = 1\\cdot 2 + 2\\cdot 1 + 4\\cdot 3$ 与推论 4.5 的公式吻合。",
+      "statement": "$p = 2, n = 4$：$2^4 = 16 = 1\\cdot 2 + 2\\cdot 1 + 4\\cdot 3$，即 $N_2(4) = 3$。验证：\n$$x^{16} - x = x(x+1)(x^2+x+1)(x^4+x+1)(x^4+x^3+1)(x^4+x^3+x^2+x+1).$$（§4 例）",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "finite-field-subfield-structure",
+      "kind": "theorem",
+      "name": "有限域的子域结构",
+      "position": null,
+      "proof": "**（存在）** 设 $d \\mid n$。由 §4 的小引理，$x^{p^d} - x \\mid x^{p^n} - x$。右边在 $\\mathbb{F}_{p^n}$ 中完全分裂（推论 4.3），故左边的 $p^d$ 个根都落在 $\\mathbb{F}_{p^n}$ 中。用定理 4.1 第二步同样的论证（加法封闭靠 freshman's dream 等），这 $p^d$ 个根构成子域，即 $\\mathbb{F}_{p^d}$。\n**（仅有这些）** 设 $K$ 是 $\\mathbb{F}_{p^n}$ 的子域。$K$ 必含素子域 $\\mathbb{F}_p$，故 $|K| = p^d$ 对某个 $d$（定理 2.2）。$\\mathbb{F}_{p^n}$ 是 $K$ 上的向量空间，设维数为 $m$，数元素：$p^n = (p^d)^m = p^{dm}$，故 $d \\mid n$。\n**（唯一性）** 若 $K$ 是 $p^d$ 元子域，由定理 4.2 的证明，$K$ 的每个元素满足 $a^{p^d} = a$；而 $x^{p^d} - x$ 在域中至多 $p^d$ 个根，所以 $K$ 与上面构造的根集**重合**。",
+      "statement": "$\\mathbb{F}_{p^n}$ 的子域恰好是 $\\mathbb{F}_{p^d}$（$d \\mid n$），每个 $d \\mid n$ 对应**唯一一个**子域，即 $\\sigma^d$ 的固定域 $\\{a : a^{p^d} = a\\}$。子域格与 $n$ 的因子格同构。（定理 5.1）",
+      "tags": [
+        "有限域",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "f4096-subfield-lattice-example",
+      "kind": "example",
+      "name": "F_{2^{12}} 的子域格",
+      "position": null,
+      "proof": "注意 $\\mathbb{F}_4 \\not\\subset \\mathbb{F}_8$，因为 $2 \\nmid 3$——包含关系完全由次数的整除关系决定（定理 5.1：子域格与因子格同构）。",
+      "statement": "$\\mathbb{F}_{2^{12}}$ 的子域对应 $12$ 的因子 $1,2,3,4,6,12$：$\\mathbb{F}_2 \\subset \\mathbb{F}_4 \\subset \\mathbb{F}_{64} \\subset \\mathbb{F}_{4096}$ 与 $\\mathbb{F}_2 \\subset \\mathbb{F}_8 \\subset \\mathbb{F}_{4096}$ 等。（§5 例）",
+      "tags": [
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "frobenius-endomorphism",
+      "kind": "theorem",
+      "name": "Frobenius 自同态",
+      "position": null,
+      "proof": "乘法性 $(ab)^p = a^p b^p$ 与 $\\sigma(1) = 1$ 显然。加法性由二项式定理：对 $0 < k < p$ 有 $p \\mid \\binom{p}{k}$，特征 $p$ 下只剩 $a^p + b^p$——这就是 freshman's dream。\n域同态的核是真理想，而域只有 $\\{0\\}$ 和自身两个理想，$\\sigma(1) = 1 \\ne 0$，故 $\\ker \\sigma = 0$，$\\sigma$ 单射。$F$ 有限时单射即双射，$\\sigma \\in \\operatorname{Aut}(F)$。",
+      "statement": "设 $F$ 是特征 $p$ 的域。映射 $\\sigma: F \\to F$，$\\sigma(a) = a^p$（称为 **Frobenius endomorphism，Frobenius 自同态**）是域同态。当 $F$ 有限时，$\\sigma$ 是自同构。（定理 6.1）",
+      "tags": [
+        "有限域",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "finite-field-automorphism-group",
+      "kind": "theorem",
+      "name": "有限域的自同构群",
+      "position": null,
+      "proof": "1. 固定域 = $x^p - x$ 的根集。由引理 3.2 至多 $p$ 个根；$\\mathbb{F}_p$ 的 $p$ 个元素都满足（Fermat 小定理），故恰好是 $\\mathbb{F}_p$。\n2. $\\sigma^n(a) = a^{p^n} = a$ 对所有 $a \\in F$ 成立（定理 4.2 的证明），故 $\\sigma^n = \\mathrm{id}$。若 $\\sigma^d = \\mathrm{id}$ 对某 $d \\ge 1$ 成立，则 $F$ 的全部 $p^n$ 个元素都是 $x^{p^d} - x$ 的根，由引理 3.2 得 $p^d \\ge p^n$，即 $d \\ge n$。故阶恰为 $n$。\n3. 任何自同构 $\\tau$ 固定 $1$，从而固定 $1$ 生成的素子域 $\\mathbb{F}_p$ 的每个元素，故 $\\operatorname{Aut}(F) = \\operatorname{Aut}(F/\\mathbb{F}_p)$。取本原元 $\\alpha$（定理 3.3），由推论 3.5，$F = \\mathbb{F}_p(\\alpha)$，所以 $\\tau$ 由 $\\tau(\\alpha)$ 唯一决定。$\\tau(\\alpha)$ 必是 $\\alpha$ 在 $\\mathbb{F}_p$ 上极小多项式 $m(x)$ 的根（$\\tau$ 保持多项式关系：$m(\\tau\\alpha) = \\tau(m(\\alpha)) = 0$）。而 $\\deg m = [\\mathbb{F}_p(\\alpha) : \\mathbb{F}_p] = n$，$m$ 至多 $n$ 个根，故 $|\\operatorname{Aut}(F)| \\le n$。但由 (2)，$\\langle \\sigma \\rangle$ 已给出 $n$ 个不同的自同构，所以 $\\operatorname{Aut}(F) = \\langle \\sigma \\rangle$。\n注：$\\sigma$ 的各次幂的固定域恰好给出全部子域，这与定理 5.1 互相印证。“自同构群 ↔ 子域格”的反变对应就是 **Galois 理论**的雏形：$\\mathbb{F}_{p^n}/\\mathbb{F}_p$ 是 Galois 扩张，Galois 群为 $\\mathbb{Z}/n\\mathbb{Z}$。",
+      "statement": "设 $q = p^n$，$F = \\mathbb{F}_q$，$\\sigma$ 为 Frobenius 自同构。则\n1. $\\sigma$ 的固定域 $\\{a : a^p = a\\}$ 恰为 $\\mathbb{F}_p$；\n2. $\\sigma$ 在 $\\operatorname{Aut}(F)$ 中的阶恰为 $n$；\n3. $\\operatorname{Aut}(F/\\mathbb{F}_p) = \\langle \\sigma \\rangle \\cong \\mathbb{Z}/n\\mathbb{Z}$。（定理 6.2）",
+      "tags": [
+        "有限域",
+        "域论",
+        "Galois理论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "frobenius-power-fixed-field",
+      "kind": "claim",
+      "name": "σ^d 的固定域是 F_{p^{gcd(d,n)}}",
+      "position": null,
+      "proof": "笔记未给证明（自测题 6：证明定理 6.2 注中的此断言）。它与定理 5.1 互相印证：$\\sigma$ 的各次幂的固定域恰好给出全部子域。",
+      "statement": "在 $\\mathbb{F}_{p^n}$ 上，$\\sigma^d$ 的固定域是 $\\mathbb{F}_{p^{\\gcd(d,n)}}$。于是 $\\sigma$ 的各次幂的固定域恰好给出全部子域。（定理 6.2 注中的断言；自测题 6）",
+      "tags": [
+        "有限域",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "polynomial-vs-function",
+      "kind": "proposition",
+      "name": "多项式 ≠ 多项式函数",
+      "position": null,
+      "proof": "无限情形：$f \\ne 0$ 时由引理 3.2 只有至多 $\\deg f$ 个根，不可能零化无限域。有限情形：定理 4.2 的证明表明每个 $a \\in \\mathbb{F}_q$ 满足 $a^q = a$。",
+      "statement": "若 $F$ 是**无限域**，$f \\in F[x]$ 满足 $f(a) = 0$ 对所有 $a \\in F$，则 $f = 0$（零多项式）。若 $F = \\mathbb{F}_q$，则 $f(x) = x^q - x$ 是**非零**多项式，但作为函数 $\\mathbb{F}_q \\to \\mathbb{F}_q$ 恒等于 $0$。（命题 7.1）",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "functions-on-fq-are-polynomial",
+      "kind": "proposition",
+      "name": "F_q 上每个函数都是多项式函数",
+      "position": null,
+      "proof": "计数：函数共 $q^q$ 个，次数 $< q$ 的多项式也是 $q^q$ 个，两两不同函数因为差多项式根数 $< q$。所以“有限域上区分多项式与多项式函数”是硬性需求，不是洁癖。",
+      "statement": "$\\mathbb{F}_q$ 上的**每个**函数 $\\mathbb{F}_q \\to \\mathbb{F}_q$ 都由唯一一个次数 $< q$ 的多项式给出。（§7“事实上可以证明”）",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "bilinear-form-symmetry-types",
+      "kind": "definition",
+      "name": "对称 / 反对称 / 交错双线性型",
+      "position": null,
+      "proof": "",
+      "statement": "对双线性型 $B$：**symmetric**（对称）指 $B(x,y) = B(y,x)$；**skew-symmetric**（反对称）指 $B(x,y) = -B(y,x)$；**alternating**（交错）指 $B(x,x) = 0$ 对所有 $x$。（§7）",
+      "tags": [
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "alternating-vs-skew-symmetric",
+      "kind": "proposition",
+      "name": "交错与反对称的关系（char 2 的陷阱）",
+      "position": null,
+      "proof": "1. $0 = B(x+y, x+y) = B(x,x) + B(x,y) + B(y,x) + B(y,y) = B(x,y) + B(y,x)$。\n2. 反对称时 $B(x,x) = -B(x,x)$，即 $2B(x,x) = 0$；char $\\ne 2$ 时 $2$ 可逆，故 $B(x,x) = 0$。\n3. char $2$ 时 $1 = -1$，两个条件逐字相同。反例：$\\mathbb{F}_2$ 上的点积 $B(x,y) = x \\cdot y$ 对称（故反对称），但 $B(e_1, e_1) = 1 \\ne 0$，不交错。\nMAT3042 分类 bilinear/sesquilinear forms 时会反复遇到这个分叉：char $\\ne 2$ 的世界里对称双线性型与二次型一一对应（$Q(x) = B(x,x)$，$B(x,y) = \\frac{1}{2}(Q(x+y) - Q(x) - Q(y))$），char $2$ 时这套对应整个垮掉，需要单独的理论。",
+      "statement": "1. 交错 ⟹ 反对称（任意特征）；\n2. char $\\ne 2$ 时，反对称 ⟺ 交错；\n3. char $= 2$ 时，对称 ⟺ 反对称，且反对称**不**蕴含交错。（命题 7.2）",
+      "tags": [
+        "线性代数",
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "gln-fq-order",
+      "kind": "theorem",
+      "name": "GL_n(F_q) 的阶",
+      "position": null,
+      "proof": "可逆矩阵 ⟺ 列向量构成 $\\mathbb{F}_q^n$ 的一组基 ⟺ 第 $i+1$ 列不在前 $i$ 列的张成空间中。逐列计数：第 1 列可取任意非零向量，$q^n - 1$ 种；选定前 $i$ 列（线性无关）后，其张成空间含 $q^i$ 个向量，故第 $i+1$ 列有 $q^n - q^i$ 种取法。各列选择独立，相乘即得。",
+      "statement": "$$|\\mathrm{GL}_n(\\mathbb{F}_q)| = \\prod_{i=0}^{n-1} (q^n - q^i) = (q^n - 1)(q^n - q)\\cdots(q^n - q^{n-1}).$$（定理 8.1）",
+      "tags": [
+        "线性代数",
+        "有限域",
+        "群论"
+      ]
+    },
+    {
+      "chapter": "有限域专题",
+      "id": "gln-fq-order-applications",
+      "kind": "corollary",
+      "name": "有序基 / PGL / 旗簇的计数",
+      "position": null,
+      "proof": "有序基与可逆矩阵的列向量组一一对应，故计数与定理 8.1 相同。",
+      "statement": "$\\mathbb{F}_q^n$ 的（有序）基总数也是 $\\prod_{i=0}^{n-1}(q^n - q^i)$；由此可得 $|\\mathrm{GL}_n(\\mathbb{F}_q)| / |\\mathbb{F}_q^\\times| = |\\mathrm{PGL}_n(\\mathbb{F}_q)|$ 之类的计数，以及旗簇（flag variety）的点的计数。（推论 8.2）",
+      "tags": [
+        "线性代数",
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "equivalence-relation",
+      "kind": "definition",
+      "name": "等价关系",
+      "position": null,
+      "proof": "",
+      "statement": "集合 $X$ 上的关系 $\\sim$ 称为等价关系（equivalence relation），若满足：\n(1) 自反性：$a \\sim a$（任意 $a$）；\n(2) 对称性：$a \\sim b \\implies b \\sim a$；\n(3) 传递性：$a \\sim b,\\ b \\sim c \\implies a \\sim c$。\n记 $[a] := \\{\\text{所有与 } a \\text{ 相关的 } b\\}$ 为 $a$ 的等价类（其中任一 $b$ 都称为代表元 representative），$X/{\\sim} := \\{[a] : a \\in X\\}$ 称为商集（quotient set）。",
+      "tags": [
+        "集合论"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "equivalence-partition-correspondence",
+      "kind": "theorem",
+      "name": "等价关系基本定理",
+      "position": null,
+      "proof": "",
+      "statement": "（Th1, fundamental）三者一一对应：\n$$\\{X \\text{ 上的等价关系}\\} \\longleftrightarrow \\{X \\text{ 的划分（partition：不相交且并为 } X\\text{）}\\} \\longleftrightarrow \\{\\text{投影映射 } X \\to X/{\\sim}\\}.$$",
+      "tags": [
+        "集合论"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "quotient-map-factorization",
+      "kind": "proposition",
+      "name": "商映射分解命题",
+      "position": null,
+      "proof": "证明要点：只需验证 $[a] \\mapsto f(a)$ 良定义（routine）。关于双射部分：由 $g$ 的定义，$g$ 是满射；单射性由 $g^{-1}(y) = [a]$ 给出（速记甚略）。\n应用：有理数、实数的构造。",
+      "statement": "（Prop, factorization）给定函数 $f: X \\to Y$ 与 $X$ 上的等价关系 $\\sim$。若 $a \\sim b \\implies f(a) = f(b)$，则存在函数 $g: X/{\\sim} \\to Y$ 使得 $f = g \\circ p$，其中 $p: X \\to X/{\\sim}$ 为投影。",
+      "tags": [
+        "集合论"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "irreducible-splitting-over-extension",
+      "kind": "theorem",
+      "name": "不可约多项式在扩域中的分解（gcd 定理）",
+      "position": null,
+      "proof": "证明思路（根的循环链）：\n1) $f$ 不可约、次数 $d$ ⟹ $d$ 个根全在 $\\mathbb{F}_{p^d}$ 里；\n2) Frobenius 自同构 $\\sigma: x \\mapsto x^p$ 把 $d$ 个根串成一条长度 $d$ 的循环链 $\\alpha \\mapsto \\alpha^p \\mapsto \\alpha^{p^2} \\mapsto \\cdots \\mapsto$ 回到 $\\alpha$；\n3) 在 $\\mathbb{F}_{p^n}$ 上有效的操作是 $\\sigma^n$（每次跳 $n$ 步）；$d$ 环链跳 $n$ 步 ⟹ 断成 $\\gcd(d, n)$ 条小链；\n4) 每条小链 = 一个不可约因子（轨道乘积的系数被 $\\sigma^n$ 固定 ⟹ 落在 $\\mathbb{F}_{p^n}$）。\n例：$d = 4, n = 2$：4 环链跳 2 步 → 2 条长度 2 的小链，故 $f$ 在 $\\mathbb{F}_{p^2}$ 上分成 2 个二次因子（$\\gcd(4, 2) = 2$）。",
+      "statement": "（Office hour 定理）设 $f$ 在 $\\mathbb{F}_p$ 上不可约，$\\deg f = d$。则在 $\\mathbb{F}_{p^n}$ 上，$f$ 恰好分解为 $\\gcd(d, n)$ 个不可约因子，每个因子的次数为 $d / \\gcd(d, n)$。",
+      "tags": [
+        "有限域",
+        "多项式",
+        "Galois理论"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "irreducible-stays-iff-gcd-1",
+      "kind": "corollary",
+      "name": "扩域上保持不可约的判据",
+      "position": null,
+      "proof": "由「不可约多项式在扩域中的分解」取 $\\gcd(d, n) = 1$ 的情形即得。\n应用（office hour 问答）：总存在 $n$ 使 $\\gcd(d, n) = 1$（例如 $n \\equiv 1 \\pmod d$），故\"$f$ 在所有 $\\mathbb{F}_{p^n}$（$n \\ge 2$）上都可约\"不可能发生——\"没有 $d$ 能被所有 $n$ 整除\"。",
+      "statement": "（推论）设 $f$ 在 $\\mathbb{F}_p$ 上不可约，$\\deg f = d$。则 $f$ 在 $\\mathbb{F}_{p^n}$ 上仍不可约 $\\iff \\gcd(d, n) = 1$。",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "frobenius-automorphism",
+      "kind": "definition",
+      "name": "Frobenius 自同构",
+      "position": null,
+      "proof": "它是「不可约多项式在扩域中的分解」证明的核心：$\\sigma$ 把不可约多项式的 $d$ 个根串成一条长度 $d$ 的循环链。\n大图景：有限域的 Galois 群 $= \\langle \\text{Frobenius} \\rangle$ 是循环群，所以一切都能算出来。\n作为映射的性质（是域同态；$F$ 有限时是自同构；固定域恰为 $\\mathbb{F}_p$）见「Frobenius 自同态」（定理 6.1）与「有限域的自同构群」（定理 6.2）。",
+      "statement": "有限域上的 Frobenius 自同构 $\\sigma: x \\mapsto x^p$。在 $\\mathbb{F}_{p^n}$ 上有效的操作是 $\\sigma^n$（每次跳 $n$ 步）。",
+      "tags": [
+        "有限域",
+        "Galois理论"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "mod-p-reduction-test",
+      "kind": "technique",
+      "name": "模 p 判别法",
+      "position": null,
+      "proof": "L02 课堂以 \"TFAE\" 问题引出：(i) $f$ 在 $\\mathbb{Z}[x]$ 不可约；(ii) $f$ 在某个 $\\mathbb{F}_p[x]$ 不可约；(iii) $f$ 在任意 $\\mathbb{F}_p[x]$ 不可约——并记下 (ii) ⟹ (i)：否则 $f = h_1 h_2$ 在 $\\mathbb{Z}[x]$ 中可约，模 $p$ 后仍给出 $\\mathbb{F}_p[x]$ 中的分解（首项系数不被 $p$ 整除保证次数不塌）。",
+      "statement": "（单向！）设 $f \\in \\mathbb{Z}[x]$，素数 $p$ 不整除 $f$ 的首项系数。若 $f \\bmod p$ 在 $\\mathbb{F}_p[x]$ 中不可约，则 $f$ 在 $\\mathbb{Z}[x]$（从而在 $\\mathbb{Q}[x]$）中不可约。\n反向不成立：$x^4 + 1$ 在 $\\mathbb{Z}$ 上不可约，但在每个 $\\mathbb{F}_p$（甚至每个有限域）上可约。",
+      "tags": [
+        "多项式",
+        "数论"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "z4z-not-f4",
+      "kind": "example",
+      "name": "ℤ/4ℤ ≠ 𝔽₄",
+      "position": null,
+      "proof": "",
+      "statement": "$\\mathbb{Z}/4\\mathbb{Z} \\ne \\mathbb{F}_4$：$\\mathbb{Z}/4\\mathbb{Z}$ 有零因子，根本不是域。整数同余只能到达素域 $\\mathbb{F}_p$；$\\mathbb{F}_4$ 必须经 $\\mathbb{F}_2[x]/(f)$（$f$ 二次不可约）构造。",
+      "tags": [
+        "有限域",
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L01",
+      "id": "x4-plus-1-example",
+      "kind": "example",
+      "name": "x⁴+1：ℚ 上不可约但 mod 任何 p 可约",
+      "position": null,
+      "proof": "大图景解释（office hour）：其 Galois 群 = Klein 四元群，无 4 阶循环元 ⟹ 没有素数能保住 4 次不可约因子。与「不可约多项式在扩域中的分解」是同一套\"自同构作用在根上、不可约因子 ⟺ 轨道\"的理论。",
+      "statement": "$x^4 + 1$ 在 $\\mathbb{Z}[x]$（$\\mathbb{Q}$）上不可约，但在每个 $\\mathbb{F}_p$（甚至每个有限域）上可约。因此它是模 $p$ 判别法\"反向不成立\"的反例。",
+      "tags": [
+        "多项式",
+        "有限域",
+        "Galois理论"
+      ]
+    },
+    {
+      "chapter": "L02",
+      "id": "zpz-is-field",
+      "kind": "claim",
+      "name": "ℤ/pℤ 是域（p 素）",
+      "position": null,
+      "proof": "证明思路：为求 $[a]$（$[a] \\ne [0]$）的唯一逆元，考虑乘法映射 $[x] \\mapsto [ax]$，它单射（课堂速记到此）。",
+      "statement": "（Claim）$p$ 为素数时，$\\mathbb{Z}/p\\mathbb{Z}$ 是域。",
+      "tags": [
+        "域论",
+        "数论"
+      ]
+    },
+    {
+      "chapter": "L02",
+      "id": "prime-element",
+      "kind": "definition",
+      "name": "素元",
+      "position": null,
+      "proof": "RM：素元对构造域很重要，但素元难找；不可约元容易判（\"prime is important to construct fields, but it's hard to find prime; while irreducible is easy to find\"）。",
+      "statement": "环 $R$ 中 $r$ 称为素元（prime），若 $r \\notin R^\\times$ 且 $r \\ne 0$，并对任意 $a, b \\in R$：$$r \\mid ab \\implies r \\mid a \\ \\text{或}\\ r \\mid b.$$",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L02",
+      "id": "irreducible-element",
+      "kind": "definition",
+      "name": "不可约元",
+      "position": null,
+      "proof": "例（找不可约元）：(i) $\\mathbb{R}[x]$：$x^2 + 1$；(ii) $\\mathbb{F}_2[x]$：$x^2 + x + 1$；(iii) $\\mathbb{F}_3[x]$：$x^2 + 1$？（课堂标注 not sufficient——检验还需更多论证）。",
+      "statement": "环 $R$ 中 $r$（非零、非单位）称为不可约元（irreducible），若它不能分解为 $r = ab$（$a, b$ 均非单位）（速记：\"irreducible, r not= ab\"）。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L02",
+      "id": "prime-implies-irreducible",
+      "kind": "claim",
+      "name": "整环中素元 ⟹ 不可约元",
+      "position": null,
+      "proof": "",
+      "statement": "（RM）在整环中，素元必是不可约元（prime $\\implies$ irreducible）。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L02",
+      "id": "zx-fx-prime-equals-irreducible",
+      "kind": "proposition",
+      "name": "ℤ 与 F[x] 中素元 = 不可约元",
+      "position": null,
+      "proof": "不可约 ⟹ 素（Week 2 极小反例法）：设 $S = \\{\\text{不可约但非素的元}\\}$。若 $S \\ne \\emptyset$，取 $m \\in S$（最小正整数/最低次）：有 $m \\mid m_1 m_2$ 但 $m$ 不整除 $m_1, m_2$ 中任何一个。不妨 $m_1 > m_2$；由带余除法 $m_1 = mq + r$，$r > 0$（余式更小），于是可造出更小的同类反例，矛盾。\n素 ⟹ 不可约在一般整环中已成立（见「整环中素元 ⟹ 不可约元」）。\nRM：这条等价的实用价值——素元难找而不可约易判，于是\"用不可约多项式商环构造域\"可行。",
+      "statement": "（fact）对 $R = \\mathbb{Z}$ 或 $F[x]$，素元与不可约元等价（prime $\\iff$ irreducible）。",
+      "tags": [
+        "环论",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "L02",
+      "id": "fx-polynomial-ring",
+      "kind": "definition",
+      "name": "多项式环 F[x]",
+      "position": null,
+      "proof": "",
+      "statement": "$F[x] := \\{\\sum_i a_i x^i : a_i \\in F\\}$（有限和），域 $F$ 上的多项式环。\n首项系数 $\\operatorname{LC}(f) = a_n$；$a_n = 1$ 时称首一（monic）；$n = 0$ 时为常数多项式。\n商环记 $F[x]/(f)$（即 $F[x]/fF[x]$）。",
+      "tags": [
+        "多项式",
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L02",
+      "id": "finite-integral-domain-is-field",
+      "kind": "claim",
+      "name": "有限整环是域",
+      "position": null,
+      "proof": "笔记未展开证明；课堂对 $\\mathbb{Z}/p\\mathbb{Z}$ 用的乘法映射 $[x] \\mapsto [ax]$（单射 ⟹ 有限集上满射）正是这里的关键一步。",
+      "statement": "（RM / 断言）有限整环必是域。",
+      "tags": [
+        "环论",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "L03",
+      "id": "algebraic-closure-existence",
+      "kind": "corollary",
+      "name": "代数闭包的存在性",
+      "position": null,
+      "proof": "构造思路（[[3042week2]] §6 注）：令 $S = \\{E \\supseteq F \\mid E \\text{ 中每个元素都是 } F[x] \\text{ 中某个多项式的根}\\}$，按包含关系成偏序集；链 $E_1 \\subseteq E_2 \\subseteq \\cdots$ 的并 $E = \\bigcup E_i$ 仍是域且 $E \\in S$；用 Zorn 引理取极大元，再验证封闭性（claim $E$ closed；claim $E' \\in S$）。\n⚠️ 注意：这条独立于\"带余除法 ⟹ …\"的链条，属于域扩张那条线。\n⚠️ Jordan 标准形要求特征多项式分裂：在 $\\mathbb{C}$ 上自动成立，在一般域上只有先取 $\\bar{F}$ 才行——这是 MAT3042 反复强调 \"vector spaces over general fields\" 的原因之一。",
+      "statement": "（推论 (ii)）存在 $\\bar{F} \\supseteq F$，使得 $\\bar{F}$ 是代数闭域（algebraically closed）。含义：任何域都能嵌入一个\"所有多项式都有根\"的大域。",
+      "tags": [
+        "域论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "L03",
+      "id": "fundamental-theorem-of-algebra",
+      "kind": "theorem",
+      "name": "代数基本定理（R̄ = ℂ）",
+      "position": null,
+      "proof": "",
+      "statement": "$\\bar{\\mathbb{R}} = \\mathbb{C}$：复数域 $\\mathbb{C}$ 是代数闭域（代数基本定理，fundamental theorem of algebra）。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "Week 2",
+      "id": "factor-theorem",
+      "kind": "proposition",
+      "name": "因式定理",
+      "position": null,
+      "proof": "笔记未单列证明；L03(i) 根的个数上界的证明里，\"若 $\\alpha$ 是根，带余除法给出 $f(x) = (x - \\alpha)g(x)$\"正是这一步。",
+      "statement": "$a$ 是 $f(x)$ 的根 $\\implies (x - a) \\mid f(x)$（Week 2 速记：\"a is root that x−a | f(x)\"）。",
+      "tags": [
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "Week 2",
+      "id": "unique-factorization-theorem",
+      "kind": "theorem",
+      "name": "唯一分解定理（ℤ 与 F[x]）",
+      "position": null,
+      "proof": "存在性：关键部分——若 $r$ 不可约，则 $r = r' u$（$u \\in R^\\times$）即已；否则 $r = r_1 r_2$，对 $r$（大小 / 次数 $\\deg r$）归纳即得。\n唯一性：关键是素元性质（prime property）——设 $p_i, q_i$ 给出两种分解，用整除性质比较；claim $t_1 = l_1$（留作练习），重排后即一致。",
+      "statement": "（Theorem, Unique factorization）设 $R = \\mathbb{Z}$（respectively $F[x]$）。任意 $r \\in R \\setminus \\{0\\}$ 可分解为\n$$r = u \\prod_{i=1}^{s} p_i,$$\n其中 $u \\in R^\\times$ 为单位，$p_i$ 为素元（$\\mathbb{Z}$ 中取正的素数）；分解在相差单位与重排的意义下唯一。",
+      "tags": [
+        "环论",
+        "多项式",
+        "数论"
+      ]
+    },
+    {
+      "chapter": "Week 2",
+      "id": "gcd-lcm-polynomials",
+      "kind": "definition",
+      "name": "多项式的 gcd 与 lcm",
+      "position": null,
+      "proof": "",
+      "statement": "（Def）多项式的最大公因式 $\\gcd$ 与最小公倍式 $\\mathrm{lcm}$；可归纳地定义（\"inductively define the long gcd/lcm\"——辗转相除）。",
+      "tags": [
+        "多项式",
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "homomorphism",
+      "kind": "definition",
+      "name": "同态与同构 (homomorphism & isomorphism)",
+      "position": null,
+      "proof": "",
+      "statement": "设 $A_1, A_2$ 是具有同类代数结构（群、环或域）的两个集合。映射 $\\varphi: A_1 \\to A_2$ 称为**同态**，如果它保持运算：$\\varphi(a+b) = \\varphi(a) + \\varphi(b)$，$\\varphi(ab) = \\varphi(a)\\varphi(b)$。若 $\\varphi$ 是双射（此时 $\\varphi^{-1}$ 自动也是同态），称为**同构（isomorphism）**。例：$\\exp: (\\mathbb{R}, +) \\to (\\mathbb{R}_{>0}, \\cdot)$ 是群同构；$\\mathbb{C} \\cong \\dfrac{\\mathbb{R}[x]}{(x^2+1)\\,\\mathbb{R}[x]}$ 是域同构（$x \\mapsto i$）。",
+      "tags": [
+        "群论",
+        "环论",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "finite-field-classification-lemma",
+      "kind": "lemma",
+      "name": "有限域分类引理",
+      "position": null,
+      "proof": "各条证明出处：第 1 条见 MAT3042-有限域 定理 2.2；第 2 条见定理 4.2 的证明 + 定理 5.1。⚠️ 与扩张次数的联系：$|F| = p^n \\iff [F:\\mathbb{F}_p] = n$，这里已经在用“扩张 = 线性空间”（见 L04 §5 背景）。",
+      "statement": "设 $F$ 是特征 $p$ 的有限域，则：1. $|F| = p^n$ 对某个 $n \\in \\mathbb{Z}_{>0}$ 成立；2. $F$ 的每个元素都是 $x^{p^n} - x \\in \\mathbb{F}_p[x]$ 的根；且子域 $F' \\subseteq F$、$|F'| = p^m$ 存在 ⟺ $m \\mid n$；3. $F$ 的元素可用 $\\mathbb{F}_p$ 上次数 $< n$ 的多项式表示；4. 由 3，$F \\cong \\dfrac{\\mathbb{F}_p[x]}{f(x)\\,\\mathbb{F}_p[x]}$（作为域），其中 $f$ 是某个 $n$ 次不可约多项式；任意两个这样的域之间的同构由根的对应给出。",
+      "tags": [
+        "有限域",
+        "域论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "algebraic-closure-of-fp",
+      "kind": "example",
+      "name": "$\\bar{\\mathbb{F}}_p$ 的构造（沿 $n!$ 取并）",
+      "position": null,
+      "proof": "",
+      "statement": "代数闭包 $\\bar{\\mathbb{F}}_p = \\bigcup_{n \\ge 1} \\mathbb{F}_{p^{n!}}$（沿 $n!$ 取递增并，保证嵌套）。⚠️ 直接并 $\\bigcup_n \\mathbb{F}_{p^n}$ 不封闭，因为 $\\mathbb{F}_{p^m} \\subseteq \\mathbb{F}_{p^n} \\iff m \\mid n$。",
+      "tags": [
+        "有限域"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "frobenius-conjugate-roots",
+      "kind": "corollary",
+      "name": "不可约多项式的根：Frobenius 共轭",
+      "position": null,
+      "proof": "理由：$f(\\beta) = 0 \\Rightarrow f(\\beta^p) = \\sigma(f(\\beta)) = 0$，依此类推。",
+      "statement": "若 $f(x) \\in \\mathbb{F}_p[x]$ 是 $n$ 次不可约多项式，则 $f$ 在 $\\bar{\\mathbb{F}}_p$ 中的根为 $$\\beta,\\ \\beta^p,\\ \\beta^{p^2},\\ \\dots,\\ \\beta^{p^{n-1}} \\quad (\\text{某个 } \\beta)$$ ——是 **Frobenius 迭代**（$\\beta$ 的各共轭元）。⚠️ 不是普通的幂 $\\beta^2, \\beta^3$！",
+      "tags": [
+        "有限域",
+        "多项式"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "maximal-ideal-field",
+      "kind": "proposition",
+      "name": "$R/I$ 是域 ⟺ $I$ 极大理想",
+      "position": null,
+      "proof": "本笔记仅陈述（商环回顾），证明见 MAT3042-群环域速成 §3。",
+      "statement": "$R/I$ 是**域** ⟺ $I$ 是**极大理想（maximal ideal）**。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "prime-ideal-domain",
+      "kind": "proposition",
+      "name": "$R/I$ 是整环 ⟺ $I$ 素理想",
+      "position": null,
+      "proof": "本笔记仅陈述（商环回顾），证明见 MAT3042-群环域速成 §3。",
+      "statement": "$R/I$ 是**整环** ⟺ $I$ 是**素理想（prime ideal）**。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "r-module",
+      "kind": "definition",
+      "name": "左 $R$-模 (left $R$-module)",
+      "position": null,
+      "proof": "动机：把向量空间的标量从域 $F$ 推广到环 $R$。$R = \\mathbb{Z}$ 时得到交换群分类；$R = F[x]$ 时得到线性算子的标准形（Jordan / 有理标准形）——本课程“vector spaces over general fields”的落点。",
+      "statement": "左 $R$-模 $M$ 就是“把向量空间定义里的 $F$-标量换成 $R$-标量”：交换群 $(M, +)$ 配上数乘 $R \\times M \\to M$，满足 $$1 \\cdot m = m,\\quad (r+s)m = rm + sm,\\quad r(m+n) = rm + rn,\\quad (rs)m = r(sm).$$ 备注：右 $R$-模把数乘写在右边，公理相应改为 $v \\cdot 1 = v$，$v(a+b) = va + vb$，$(v+w)a = va + wa$，$(va)b = v(ab)$；$R$ **交换**时左模 = 右模。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "bimodule",
+      "kind": "definition",
+      "name": "$(R_1, R_2)$-双模 (bimodule)",
+      "position": null,
+      "proof": "",
+      "statement": "若 $M$ 同时是左 $R_1$-模和右 $R_2$-模（且两种数乘相容），称为 **$(R_1, R_2)$-双模（bimodule）**。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "r-module-basic-examples",
+      "kind": "example",
+      "name": "$R$-模的基本例子",
+      "position": null,
+      "proof": "",
+      "statement": "(i) 任何交换群都是 $\\mathbb{Z}$-模（$n \\cdot a$ = $a$ 自加 $n$ 次），反之亦然；(ii) 任何环 $R$ 是自身上的模，其子模**恰好是 $R$ 的理想**；(iii) 若 $R \\subseteq S$ 是子环，则 $S$ 是 $R$-模（如 $\\mathbb{C}$ 是 $\\mathbb{R}$-模）。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "cyclic-module",
+      "kind": "definition",
+      "name": "循环模 (cyclic module)",
+      "position": null,
+      "proof": "",
+      "statement": "左 $R$-模 $M$ 称为**循环的（cyclic）**，若 $M = Rm$ 对某个 $m \\in M$ 成立。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "span-r",
+      "kind": "definition",
+      "name": "张成与 $R$-线性组合 (span)",
+      "position": null,
+      "proof": "",
+      "statement": "$\\operatorname{Span}_R(S)$ = $S$ 中元素的全体**有限**和 $\\sum r_i s_i$；这样的和称为 **$R$-线性组合**。例：$P_n(\\mathbb{R}) = \\operatorname{Span}_{\\mathbb{R}}\\{1, x, x^2, \\dots, x^n\\}$。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "replacement-lemma",
+      "kind": "lemma",
+      "name": "替换引理 (replacement lemma)",
+      "position": null,
+      "proof": "$w$ 的展开中 $v_1$ 系数非零，解出 $v_1$。⚠️ 注意是**集合差** $\\setminus$，不是商空间 $\\frac{V}{W}$。",
+      "statement": "若 $$w \\in \\operatorname{Span}(v_1, \\dots, v_n) \\setminus \\operatorname{Span}(v_2, \\dots, v_n),$$ 则 $$v_1 \\in \\operatorname{Span}(w, v_2, \\dots, v_n) \\setminus \\operatorname{Span}(v_2, \\dots, v_n).$$",
+      "tags": [
+        "模论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "r-linear-independence",
+      "kind": "definition",
+      "name": "$R$-线性无关",
+      "position": null,
+      "proof": "⚠️ 一般环上的模**不能**照搬向量空间理论：模可以没有基（有基的模才叫**自由模**），替换引理和维数理论对一般模失效——这正是“自由模分类”要处理的问题。",
+      "statement": "$s_1, \\dots, s_k$ 线性无关，若 $$\\sum r_i s_i = 0 \\implies r_i = 0 \\ (\\forall i).$$",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "simple-extension-basis",
+      "kind": "theorem",
+      "name": "单扩张的基",
+      "position": null,
+      "proof": "**张成**：$m(c)=0$ 给出降幂法则 $c^n = -\\sum_{i<n} a_i c^i$，任意 $\\ge n$ 次的幂可逐步降回 $n-1$ 次以下；**无关**：若 $\\sum_{i<n} b_i c^i = 0$ 系数不全为零，则得到以 $c$ 为根、次数 $< n$ 的非零多项式，与 $m$ 极小（$m$ 整除一切以 $c$ 为根的多项式）矛盾。备注：多元添加归结为逐次单添加 $F(c_1, c_2) = \\bigl(F(c_1)\\bigr)(c_2)$——**不需要**为整个大域找单一生成元（本原元定理保证其存在，但算维数用不上）。",
+      "statement": "若 $c$ 在 $F$ 上代数，极小多项式 $m(x)$ 次数为 $n$，则 $$[F(c):F] = n,\\qquad \\text{基为 } \\{1, c, c^2, \\dots, c^{n-1}\\}.$$",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "restriction-of-scalars-dimension",
+      "kind": "corollary",
+      "name": "限制标量：维数公式 (restriction of scalars)",
+      "position": null,
+      "proof": "塔定律的同构版本，证法一字不差（$V = L$ 即塔定律）。",
+      "statement": "若 $V$ 是 $K$-线性空间，$F \\subseteq K$ 是子域，则 $$\\dim_F V = \\dim_K V \\cdot \\dim_F K.$$",
+      "tags": [
+        "域论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "degree-q-sqrt2-sqrt3",
+      "kind": "example",
+      "name": "$[\\mathbb{Q}(\\sqrt2,\\sqrt3):\\mathbb{Q}] = 4$",
+      "position": null,
+      "proof": "第二层 $= 2$ 归结为 $\\sqrt3 \\notin \\mathbb{Q}(\\sqrt2)$：设 $\\sqrt3 = a+b\\sqrt2$（$a,b \\in \\mathbb{Q}$），平方后比较系数得矛盾。",
+      "statement": "$[\\mathbb{Q}(\\sqrt2,\\sqrt3):\\mathbb{Q}] = [\\mathbb{Q}(\\sqrt2):\\mathbb{Q}]\\cdot[\\mathbb{Q}(\\sqrt2,\\sqrt3):\\mathbb{Q}(\\sqrt2)] = 2 \\times 2 = 4$；基为 $\\{1,\\sqrt2\\}\\times\\{1,\\sqrt3\\} = \\{1,\\sqrt2,\\sqrt3,\\sqrt6\\}$。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "L04",
+      "id": "layer-degree-bound",
+      "kind": "claim",
+      "name": "逐层添加的次数上界",
+      "position": null,
+      "proof": "检查“新元素是否已在旧域里”是把上界变成等号的关键。",
+      "statement": "一般规律：$[F(c_1,c_2):F(c_1)] \\le [F(c_2):F]$（系数域变大，极小多项式只短不长），故**各层在 $F$ 上的次数之积是总次数的上界**。",
+      "tags": [
+        "域论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "basis-of-module",
+      "kind": "definition",
+      "name": "模的基 (basis)",
+      "position": null,
+      "proof": "",
+      "statement": "设 $M$ 是左 $R$-模。$S \\subseteq M$ 是 $M$ 的**基（basis）**，若 $S$ 线性无关且 $\\operatorname{Span}_R(S) = M$。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "basis-existence-division-ring",
+      "kind": "lemma",
+      "name": "基的存在性（域或除环上）",
+      "position": null,
+      "proof": "**关键观察**：基 = **极大 $R$-线性无关组**（$R$ 是除环时两者等价：极大无关 ⟹ 任何 $v \\notin S$ 使 $S \\cup \\{v\\}$ 相关 ⟹ 存在关系式其中 $v$ 系数非零 ⟹ 除环里该系数**可逆**，解出 $v \\in \\operatorname{Span}(S)$，故 $S$ 张成）。**证明（Zorn 引理）**：考虑 $S$ 中的线性无关子集族，按包含关系排序。链条件：设 $\\{S_i\\}_{i\\in I}$ 是全序链，任取**有限**子集 $\\{t_1,\\dots,t_n\\} \\subseteq \\bigcup S_i$，每个 $t_j$ 落在某个 $S_{i_j}$ 里；链全序 ⟹ 这些 $S_{i_j}$ 有最大者 $S_{i_0}$，于是 $\\{t_j\\} \\subseteq S_{i_0}$ 无关。有限子集皆无关 ⟹ 并集无关。Zorn 引理给出极大无关组，由关键观察即为基。⚠️ 与“极大线性无关组”对偶的“极小生成组”路线走不通（见 ℤ 反例 minimal-spanning-set-not-basis）——这是证明必须用 Zorn 而非“从生成集往下删”的原因。",
+      "statement": "设 $R$ 是域或除环，$M = \\operatorname{Span}_R(S)$ 是 $R$-模。则 $M$ 有基。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "basis-three-equivalences-field",
+      "kind": "claim",
+      "name": "域上：基 ⟺ 极大无关组 ⟺ 极小生成组",
+      "position": null,
+      "proof": "Exercise：想清楚域上为什么三者等价。",
+      "statement": "域上：基 ⟺ 极大线性无关组 ⟺ 极小生成组（三者等价）。一般环上“极小生成组 ⟹ 基”**不成立**（反例见 minimal-spanning-set-not-basis）。",
+      "tags": [
+        "模论",
+        "线性代数"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "minimal-spanning-set-not-basis",
+      "kind": "example",
+      "name": "极小生成组未必是基（ℤ 反例）",
+      "position": null,
+      "proof": "所以极小生成组未必是基，$\\mathbb{Z}$-模的“维数”直觉在这里已经需要小心；也说明不能用极小生成组证明基的存在性引理。",
+      "statement": "$$\\mathbb{Z} = \\operatorname{Span}_{\\mathbb{Z}}\\{3,5\\} \\;\\supsetneq\\; \\operatorname{Span}_{\\mathbb{Z}}\\{3\\} = 3\\mathbb{Z}$$ $\\{3,5\\}$ 是**极小生成组**（$\\gcd(3,5)=1$ 故张成 $\\mathbb{Z}$；删掉任何一个都不再张成），但它**线性相关**：$5\\cdot 3 - 3\\cdot 5 = 0$ 是非平凡关系。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "free-module",
+      "kind": "definition",
+      "name": "自由模 (free module)",
+      "position": null,
+      "proof": "",
+      "statement": "$R$-模 $M$ 称为**自由的**，若存在基。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "submodule-of-free-not-free",
+      "kind": "example",
+      "name": "自由模的子模未必自由",
+      "position": null,
+      "proof": "对照：$R$ 是 PID 时自由模的子模仍自由——这是后面 PID 上模分类的入口。",
+      "statement": "例：$R = \\mathbb{Z}/6\\mathbb{Z}$，$M = R$ 自由（基 $\\{1\\}$），子模 $N = \\{0,2,4\\} = 2R$ 不自由——$N$ 的每个元素都被 $3 \\neq 0$ 零化，而自由模的基元素零化子必须为 $0$。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "invariant-basis-number",
+      "kind": "theorem",
+      "name": "不变基数定理 (invariant basis number, IBN)",
+      "position": null,
+      "proof": "**Step 1（$R$ = 域或除环，基交换 + Zorn）**：不妨 $|S_1| \\le |S_2|$。考虑“部分交换”结构 $$\\Sigma := \\left\\{\\ \\varphi_A(f) := A \\cup \\bigl(S_2 \\setminus f(A)\\bigr)\\ \\middle|\\ f: A \\xrightarrow{\\text{inj}} S_2,\\ A \\subseteq S_1,\\ \\varphi_A(f)\\ \\text{线性无关}\\ \\right\\}$$（把 $S_1$ 的子集 $A$ 换进 $S_2$，用像 $f(A)$ 替换被占位置，要求换完仍无关）；$\\Sigma \\neq \\varnothing$（$\\varphi_\\varnothing = S_2$）。偏序为延拓关系：$\\varphi_{A_1}(f_1) \\le \\varphi_{A_2}(f_2)$ ⟺ $A_1 \\subseteq A_2$ 且 $f_2|_{A_1} = f_1$。链条件：全序链取 $A := \\bigcup_i A_i$，$f$ 由各 $f_i$ 拼接（链中各 $f_i$ 在重叠处一致，良定义）；$\\varphi_A(f)$ 的任一有限子集落在某个 $\\varphi_{A_N}(f_N)$（指标最大者）中，故无关。Zorn 给出极大元 $\\varphi_{A_0}(f_0)$。Case (i)：$A_0 = S_1$——$S_1$ 已是基（张成 $M$），$S_2 \\setminus f_0(S_1)$ 中任何元素加进去必相关，故 $S_2 \\setminus f_0(S_1) = \\varnothing$，$f_0$ 是双射，$|S_1| = |S_2|$。Case (ii)：$A_0 \\subsetneq S_1$ 时用除环的除法把 $f_0$ 再延拓一个元素（取 $s \\in S_1 \\setminus A_0$，用 $S_2$ 表出并调整），与极大性矛盾（细节留作练习）。**Step 2（$R$ 交换，商模约化到域上）**：取极大理想 $\\mathfrak{m}$（Krull 定理），$\\mathbb{F} := R/\\mathfrak{m}$ 是域；由商模约化 Claim，$[S_1], [S_2]$ 是 $\\mathbb{F}$-线性空间 $M/\\mathfrak{m}M$ 的两组基，且 $s \\mapsto [s]$ 单射给出 $|S_i| = |[S_i]|$。由 Step 1：$|S_1| = |[S_1]| = \\dim_{\\mathbb{F}} M/\\mathfrak{m}M = |[S_2]| = |S_2|$。**证明思想一句话**：交换环上没有除法，直接比基无从下手——商掉一个极大理想，把模压成域上的线性空间，让 Step 1 的线性代数接手。⚠️ 非交换环不行：同样的商约化失效（$M_n(F)$ 是单环，见 matrix-ring-simple）；IBN 真的失败（存在 $R \\cong R^2$，见 ibn-fails-noncommutative）。",
+      "statement": "设 $R$ 是**交换环或除环**，$M$ 是自由 $R$-模，$S_1, S_2$ 是两组基。则 $|S_1| = |S_2|$。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "maximal-ideal-exists",
+      "kind": "lemma",
+      "name": "交换环存在极大理想 (Krull)",
+      "position": null,
+      "proof": "本笔记作为 Fact 引用；“商极大理想得域”即 $R/I$ 是域 ⟺ $I$ 极大理想（见 MAT3042-群环域速成 §3）。",
+      "statement": "交换环 $R$ 存在极大理想 $\\mathfrak{m} \\subsetneq R$（Krull 定理，依赖选择公理），且 $\\mathbb{F} := R/\\mathfrak{m}$ 是域。",
+      "tags": [
+        "环论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "mod-maximal-ideal-reduction",
+      "kind": "claim",
+      "name": "商模约化：$M/\\mathfrak{m}M$ 是 $\\mathbb{F}$-线性空间",
+      "position": null,
+      "proof": "(i) 良定义：$r - r' \\in \\mathfrak{m}$ 时 $(r-r')v \\in \\mathfrak{m}M$；$v - v' \\in \\mathfrak{m}M$ 时 $r(v-v') \\in \\mathfrak{m}M$。(ii) **张成**：$\\operatorname{Span}_R(S) = M$ ⟹ 任意 $m = \\sum r_i s_i$ 给出 $[m] = \\sum [r_i][s_i]$。**线性无关**：设 $\\sum_j [r_j][s_j] = 0$，则 $\\sum_j r_j s_j \\in \\mathfrak{m}M$，即存在 $m_i \\in \\mathfrak{m}$、$t_i \\in S$ 使 $\\sum_i m_i t_i = \\sum_j r_j s_j$；合并相同的基元素（rearrangement of index），由 $S$ 是基（**表达唯一**）逐项比较系数：每个 $r_j$ 都等于某个 $m_i$，故 $r_j \\in \\mathfrak{m}\\ (\\forall j)$，即 $[r_j] = 0$。",
+      "statement": "设 $\\mathfrak{m} \\subsetneq R$ 是交换环的极大理想，$\\mathbb{F} := R/\\mathfrak{m}$，$M$ 是 $R$-模。定义 $\\mathfrak{m}M := \\left\\{\\sum_{i=1}^n r_i v_i \\,\\middle|\\, r_i \\in \\mathfrak{m},\\ v_i \\in M\\right\\}$（$M$ 的子模），$M/\\mathfrak{m}M := M/{\\sim}$，$v_1 \\sim v_2 \\iff v_1 - v_2 \\in \\mathfrak{m}M$。则：(i) $M/\\mathfrak{m}M$ 是 $\\mathbb{F}$-线性空间，数乘 $[r]\\cdot[v] := [rv]$ 良定义；(ii) 若 $S$ 是 $M$ 的基，则 $[S] := \\{[s] : s \\in S\\}$ 仍是 $M/\\mathfrak{m}M$ 的 $\\mathbb{F}$-基（且 $s \\mapsto [s]$ 在 $S$ 上是单射）。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "matrix-ring-simple",
+      "kind": "claim",
+      "name": "$M_n(F)$ 是单环",
+      "position": null,
+      "proof": "Exercise，提示：用矩阵单位 $E_{ij}$ 从任一非零矩阵生成一切。意义：非交换环的极大（左）理想商 $R/\\mathfrak{m}$ 未必是域/除环——没有非平凡双边理想可商，IBN 证明中的商约化无从谈起。",
+      "statement": "$R = M_n(F)$（$n \\ge 2$）是**单环**：$M_n(F)$ 的双边理想只有 $0$ 和 $R$。",
+      "tags": [
+        "环论",
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "ibn-fails-noncommutative",
+      "kind": "example",
+      "name": "非交换环上 IBN 失败：$R \\cong R^2$",
+      "position": null,
+      "proof": "构造 idea：取 $r_1, r_2, t_1, t_2 \\in R$ 满足 $$r_1 t_1 = 1,\\quad r_2 t_2 = 1,\\quad r_1 t_2 = r_2 t_1 = 0,\\quad t_1 r_1 + t_2 r_2 = 1,$$ 则 $R r_i \\cong R$（$r_i t_i = 1$ 给出分裂），$\\{r_1, r_2\\}$ $R$-线性无关（$r_1 t_2 = r_2 t_1 = 0$），且 $R r_1 + R r_2 = R$（$t_1 r_1 + t_2 r_2 = 1$）——合起来 $R \\cong R r_1 \\oplus R r_2 \\cong R^2$。实例：无穷维线性空间的自同态环 $\\operatorname{End}_F(V)$（课上仅口头提及）。",
+      "statement": "存在非交换环 $R$ 使 $R \\cong R^2$（作为左 $R$-模），即 $S_1 = \\{1\\}$ 和 $S_2 = \\{r_1, r_2\\}$ 是两组**不同基数**的基。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "module-homomorphism",
+      "kind": "definition",
+      "name": "模同态 (module homomorphism)",
+      "position": null,
+      "proof": "",
+      "statement": "左 $R$-模同态 $f: M_1 \\to M_2$：保持加法与数乘的映射（$f(x+y) = f(x)+f(y)$，$f(rx) = rf(x)$）。双射同态 = **同构（isomorphism）**。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "linear-extension",
+      "kind": "lemma",
+      "name": "线性延拓引理 (linear extension)",
+      "position": null,
+      "proof": "自由 ⟹ 每个 $m \\in M_1$ 有**唯一表达** $m = \\sum r_i e_i$（有限和），定义 $\\tilde f(m) := \\sum r_i f(e_i)$。唯一表达保证良定义；同态性由定义即得；唯一性：任何延拓在 $m$ 上的值都被 $f|_B$ 强制。（这就是“自由”二字的含义：基上的值可以**自由指定**，自动延拓。对照线性代数：线性映射由基上的像唯一决定。）",
+      "statement": "设 $M_1$ 是自由 $R$-模，基 $B = \\{e_i\\}_{i\\in I}$，$M_2$ 任意 $R$-模。任意给定映射 $f: B \\to M_2$，存在**唯一**同态 $\\tilde f: M_1 \\to M_2$ 使 $\\tilde f|_B = f$。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "free-module-isomorphic-to-ri",
+      "kind": "corollary",
+      "name": "自由模 $\\cong R^I$",
+      "position": null,
+      "proof": "由线性延拓，$e_i \\mapsto (\\text{第 } i \\text{ 个标准向量})$ 给出同态 $M \\to R^I$；唯一表达 ⟹ 双射。",
+      "statement": "若 $M$ 是自由 $R$-模，基 $B = \\{e_i\\}_{i\\in I}$，则 $$M \\cong R^I := \\bigoplus_{i\\in I} R = \\{\\text{有限支撑函数 } I \\to R\\}.$$",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "rank-of-free-module",
+      "kind": "definition",
+      "name": "自由模的秩 (rank)",
+      "position": null,
+      "proof": "",
+      "statement": "$M$ 自由时的**秩** $\\operatorname{rank}(M) := |B|$（$B$ 为任一基）。由 IBN 定理，$R$ 交换或除环时良定义，与基的选取无关。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "invariant-rank",
+      "kind": "lemma",
+      "name": "不变秩引理 (invariant rank)",
+      "position": null,
+      "proof": "**Key point：同构把基映成基**（$f$ 保持线性关系与生成性，$f^{-1}$ 同理），于是 $M_2$ 有了两组基 $S_2$ 与 $f(S_1)$，由 IBN：$|S_1| = |f(S_1)| = |S_2|$。",
+      "statement": "设 $R$ 交换或除环，$M_1, M_2$ 自由，$f: M_1 \\to M_2$ 是同构。则 $\\operatorname{rank}(M_1) = \\operatorname{rank}(M_2)$。",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L05",
+      "id": "free-module-classification",
+      "kind": "corollary",
+      "name": "自由模按秩分类",
+      "position": null,
+      "proof": "“$\\Leftarrow$”由线性延拓引理（双射 $I \\to J$ 诱导同构）；“$\\Rightarrow$”由不变秩引理。所以交换环/除环上的自由模完全由一个基数（rank）分类——这是“域上维数分类线性空间”的推广，也是课程目标“分类定理”的自由模部分。",
+      "statement": "设 $R$ 交换或除环，则 $$R^I \\cong R^J \\iff |I| = |J|.$$",
+      "tags": [
+        "模论"
+      ]
+    },
+    {
+      "chapter": "L03–L05",
+      "id": "zorn-lemma",
+      "kind": "technique",
+      "name": "Zorn 引理",
+      "position": null,
+      "proof": "",
+      "statement": "设 $(P, \\le)$ 为非空偏序集。若 $P$ 中每条链（全序子集）都在 $P$ 中有上界，则 $P$ 含有极大元。（笔记未展开，列为工具）",
+      "tags": [
+        "集合论"
       ]
     }
   ],
@@ -309,14 +2956,14 @@
       "targetType": "edge"
     },
     {
-      "id": "q-20260922-001",
-      "targetType": "node",
-      "targetId": "repeated-root-criterion",
-      "question": "这个判据的证明思路是什么？为什么形式导数能检测重根？",
       "answer": "**证明思路（核心：一次因式分解 + Leibniz 法则）**\n\n要判断 $(x-\\alpha)^2 \\mid f$，先提出一个因子：$f(x)=(x-\\alpha)g(x)$。于是问题化为 **$(x-\\alpha)\\mid g$ 是否成立**，即 $g(\\alpha)=0$ 是否成立。如何不依赖 $g$ 的具体形式来刻画它？对乘积求导：\n\n$$f'(x)=g(x)+(x-\\alpha)g'(x),$$\n\n代入 $x=\\alpha$ 后第二项**自动消失**，得 $f'(\\alpha)=g(\\alpha)$。于是一条等价链闭合：\n\n$$\\alpha \\text{ 是重根} \\iff (x-\\alpha)\\mid g \\iff g(\\alpha)=0 \\iff f'(\\alpha)=0.$$\n\n整个证明就是把\"重根\"这个二次可除性条件，通过求导翻译成 $f$ 自身的取值条件。\n\n**为什么形式导数能检测重根（动机）**\n\n直观上，若 $f=(x-\\alpha)^m h$（$h(\\alpha)\\neq 0$），则求导使重数恰好降一：\n\n$$f'=(x-\\alpha)^{m-1}\\big[mh+(x-\\alpha)h'\\big],$$\n\n括号内在 $\\alpha$ 处取值为 $m\\,h(\\alpha)$。所以 $m\\ge 2 \\iff f'(\\alpha)=0$（在特征 $0$ 时 $mh(\\alpha)\\neq0$ 自动成立）。导数因此扮演了\"重数探测器\"：每求一次导，$\\alpha$ 处的零阶减一；重根意味着求导后**仍是根**。\n\n**为什么用\"形式\"导数**：一般域 $F$ 上没有极限概念，故直接以 $\\sum k a_k x^{k-1}$ 纯代数地定义，并验证 Leibniz 法则。这让判据在任意域（包括有限域）都有效。需留意特征 $p$ 的微妙处：可能 $mh(\\alpha)=0$（如 $p\\mid m$），此时判据的 gcd 形式 $\\gcd(f,f')=1$ 仍正确，而\"可分\"需用它而非仅靠求值。",
-      "source": "ai",
+      "createdAt": "2026-09-22T00:10:53",
+      "id": "q-20260922-001",
       "model": "kimi-k3",
-      "createdAt": "2026-09-22T00:10:53"
+      "question": "这个判据的证明思路是什么？为什么形式导数能检测重根？",
+      "source": "ai",
+      "targetId": "repeated-root-criterion",
+      "targetType": "node"
     }
   ]
 }
