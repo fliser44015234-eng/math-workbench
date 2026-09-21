@@ -26,13 +26,15 @@
   <input id="search" type="search" placeholder="搜索节点名…" autocomplete="off">
   <select id="tag-filter"><option value="">全部标签</option></select>
   <button id="btn-add" class="edit-only">添加节点</button>
-  <button id="btn-relayout">力导向重排</button>
+  <button id="btn-viewmode">视图：分层</button>
+  <button id="btn-relayout" class="hidden">力导向重排</button>
   <button id="btn-export">导出 JSON</button>
   <span id="mode-badge" class="badge badge-edit">本地可编辑</span>
 </header>
 
 <main id="main">
   <div id="cy"></div>
+  <div id="floor-rail" class="hidden"></div>
 
   <aside id="sidebar" class="hidden">
     <div id="sidebar-head">

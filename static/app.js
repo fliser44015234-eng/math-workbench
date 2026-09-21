@@ -37,6 +37,8 @@ let graph = null;        // 内存中的图数据（唯一事实来源）
 let cy = null;           // Cytoscape 实例
 let readOnly = false;    // 只读展示模式（无本地服务器时）
 let state = { selected: null, radial: null };  // radial: {centerId, depth}
+let viewMode = 'layered';  // 'layered' 分层高楼（默认）| 'free' 自由力导向
+let focusLayer = 1;      // 当前焦点层（初始化时设为最高层）
 let saveTimer = null;
 let toastTimer = null;
 
@@ -190,8 +192,8 @@ const CY_STYLE = [
     selector: 'edge[relation="analogy"]',
     style: { 'line-color': '#a0aec0', 'line-style': 'dashed' },
   },
-  { selector: '.hidden-el', style: { 'display': 'none' } },
-  { selector: '.hidden-filter', style: { 'display': 'none' } },
+  // 注意：元素的显示/隐藏、透明度、压暗一律由 refreshViewStyles() 逐元素内联设置，
+  // 不再用 .hidden-el / .hidden-filter 的全局样式规则（内联样式优先，避免两处打架）。
   { selector: '.flash', style: { 'overlay-color': '#e53e3e', 'overlay-padding': 8, 'overlay-opacity': 0.3 } },
 ];
 
@@ -234,6 +236,141 @@ function runCose(animate) {
   });
 }
 
+/* ---------- 分层高楼视图 ---------- */
+
+const BAND_H = 130;  // 每层分带的高度
+
+function maxLayer() {
+  return Math.max(1, ...graph.nodes.map(n => n.layer || 1));
+}
+// layer 1 在最底部；Cytoscape 的 y 向下增长
+function bandTop(layer) { return (maxLayer() - layer) * BAND_H; }
+function bandClampY(layer, y) {
+  const top = bandTop(layer);
+  return Math.min(Math.max(y, top + 16), top + BAND_H - 16);
+}
+
+// 分层布局：y 由所在层分带决定，x 用已保存 position.x（缺失则层内均布）
+function layeredLayout(animate) {
+  const spreadX = {};
+  const missingByLayer = {};
+  graph.nodes.filter(n => !n.position)
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .forEach(gn => { (missingByLayer[gn.layer || 1] = missingByLayer[gn.layer || 1] || []).push(gn); });
+  Object.values(missingByLayer).forEach(list =>
+    list.forEach((gn, i) => { spreadX[gn.id] = 100 + i * 120; }));
+
+  cy.layout({
+    name: 'preset',
+    positions: n => {
+      const gn = findNode(n.id());
+      if (!gn) return n.position();
+      const l = gn.layer || 1;
+      const x = gn.position ? gn.position.x : (spreadX[gn.id] || 200);
+      const y = gn.position ? bandClampY(l, gn.position.y) : bandTop(l) + BAND_H / 2;
+      return { x, y };
+    },
+    fit: false,
+    animate: false,
+  }).run();
+  refreshViewStyles();
+  fitVisible(animate);
+}
+
+function fitVisible(animate) {
+  const vis = cy.nodes().filter(n => n.style('display') !== 'none');
+  if (!vis.nonempty()) return;
+  if (animate) cy.animate({ fit: { eles: vis, padding: 60 } }, { duration: 300 });
+  else cy.fit(vis, 60);
+}
+
+// 按视图模式逐元素设置 显示/透明度/压暗/标签（显示状态的唯一写入处）
+function refreshViewStyles() {
+  if (!cy) return;
+  const radial = state.radial;
+  const centerL = radial ? ((findNode(radial.centerId) || {}).layer || 1) : null;
+  cy.nodes().forEach(n => {
+    const gn = findNode(n.id());
+    if (!gn) return;
+    const l = gn.layer || 1;
+    let visible = !n.hasClass('hidden-el') && !n.hasClass('hidden-filter');
+    let opacity = 1, blacken = 0, textOp = 1;
+    if (radial) {
+      // 辐射视图：平面同心圆 + 层次提示（标签带层号，低于中心层的调暗）
+      n.style('label', `${gn.name} ·L${l}`);
+      if (l < centerL) {
+        const d = centerL - l;
+        opacity = Math.max(0.35, 1 - 0.15 * d);
+        blacken = Math.min(0.5, 0.12 * d);
+      }
+    } else {
+      n.style('label', gn.name);
+      if (viewMode === 'layered') {
+        if (l > focusLayer) visible = false;                    // 高于焦点层：完全隐藏
+        else if (l < focusLayer) {                              // 下层：按深度差渐暗
+          const d = focusLayer - l;
+          opacity = Math.max(0.25, 1 - 0.18 * d);
+          blacken = Math.min(0.55, 0.13 * d);
+          textOp = Math.max(0.3, 1 - 0.15 * d);
+        }
+      }
+    }
+    n.style({ display: visible ? 'element' : 'none', opacity, 'background-blacken': blacken, 'text-opacity': textOp });
+  });
+  cy.edges().forEach(e => {
+    const visible = e.source().style('display') !== 'none' && e.target().style('display') !== 'none';
+    let opacity = 1;
+    if (visible && viewMode === 'layered' && !radial) {
+      const ls = (findNode(e.source().id()) || {}).layer || 1;
+      const lt = (findNode(e.target().id()) || {}).layer || 1;
+      if (ls !== focusLayer && lt !== focusLayer) opacity = 0.1;  // 完全在下层之间的边仅隐约可见
+    }
+    e.style({ display: visible ? 'element' : 'none', opacity, 'text-opacity': opacity });
+  });
+}
+
+/* ---------- 楼层 rail ---------- */
+
+function renderRail() {
+  const rail = $('#floor-rail');
+  const maxL = maxLayer();
+  const counts = {};
+  graph.nodes.forEach(n => { const l = n.layer || 1; counts[l] = (counts[l] || 0) + 1; });
+  let html = '';
+  for (let l = maxL; l >= 1; l--) {   // 高楼在上，L1 地基在底部
+    const active = viewMode === 'layered' && l === focusLayer ? ' active' : '';
+    html += `<button class="floor-btn${active}" data-layer="${l}" title="第 ${l} 层">` +
+      `<span class="floor-num">L${l}</span><span class="floor-count">${counts[l] || 0}</span></button>`;
+  }
+  rail.innerHTML = html;
+  rail.querySelectorAll('.floor-btn').forEach(b => {
+    b.onclick = () => setFocusLayer(parseInt(b.dataset.layer, 10));
+  });
+  rail.classList.toggle('hidden', viewMode !== 'layered' || !!state.radial);
+}
+
+function setFocusLayer(l) {
+  focusLayer = l;
+  renderRail();
+  refreshViewStyles();
+  fitVisible(true);
+}
+
+// 按当前模式布局并刷新样式（辐射模式下布局由辐射逻辑自己负责）
+function applyLayout(animate) {
+  if (state.radial) { refreshViewStyles(); return; }
+  if (viewMode === 'layered') layeredLayout(animate);
+  else { presetLayout(); refreshViewStyles(); }
+}
+
+function toggleViewMode() {
+  viewMode = viewMode === 'layered' ? 'free' : 'layered';
+  $('#btn-viewmode').textContent = viewMode === 'layered' ? '视图：分层' : '视图：自由';
+  $('#btn-relayout').classList.toggle('hidden', viewMode !== 'free');  // 力导向重排只对自由视图有意义
+  renderRail();
+  applyLayout(true);
+}
+
 function syncPositions() {
   cy.nodes().forEach(n => {
     const gn = findNode(n.id());
@@ -251,10 +388,17 @@ function debounceSavePositions() {
 }
 
 function layoutInitial() {
-  if (graph.nodes.some(n => !n.position)) {
-    runCose(false).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); });
+  const hasNull = graph.nodes.some(n => !n.position);
+  if (viewMode === 'layered') {
+    layeredLayout(false);
+    if (hasNull && !readOnly) { syncPositions(); saveGraph(); }
+    return;
+  }
+  if (hasNull) {
+    runCose(false).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); refreshViewStyles(); });
   } else {
     presetLayout();
+    refreshViewStyles();
   }
 }
 
@@ -262,12 +406,21 @@ function rebuildGraph() {
   cy.elements().remove();
   cy.add(toCyElements());
   initTagFilter();
+  renderRail();
   layoutInitial();
 }
 
 function bindCyEvents() {
   cy.on('tap', 'node', evt => { evt.target.select(); showNodeDetail(evt.target.id()); });
   cy.on('tap', 'edge', evt => { evt.target.select(); showEdgeDetail(evt.target.id()); });
+  // 分层模式下拖动节点：y 钳制在本层分带内，x 自由
+  cy.on('drag', 'node', evt => {
+    if (viewMode !== 'layered' || state.radial) return;
+    const gn = findNode(evt.target.id());
+    if (!gn) return;
+    const p = evt.target.position();
+    evt.target.position({ x: p.x, y: bandClampY(gn.layer || 1, p.y) });
+  });
   cy.on('dragend', 'node', debounceSavePositions);
 }
 
@@ -329,7 +482,7 @@ function showNodeDetail(id) {
   $('#sidebar-body').innerHTML = `
     <span class="kind-badge" style="background:${color}">${KIND_ZH[n.kind] || n.kind}</span>
     <div class="detail-name">${escapeHtml(n.name)}</div>
-    <div class="detail-meta">${n.chapter ? '章节：' + escapeHtml(n.chapter) + ' · ' : ''}${tags}<span class="detail-meta">id: ${escapeHtml(n.id)}</span></div>
+    <div class="detail-meta">层：L${n.layer || 1} · ${n.chapter ? '章节：' + escapeHtml(n.chapter) + ' · ' : ''}${tags}<span class="detail-meta">id: ${escapeHtml(n.id)}</span></div>
     <div class="section-title">命题</div>
     <div class="math-block">${escapeHtml(n.statement || '')}</div>
     <button class="proof-toggle" id="proof-toggle">显示证明</button>
@@ -339,6 +492,7 @@ function showNodeDetail(id) {
     <div class="action-row edit-only">
       <button id="act-edit">编辑</button>
       <button id="act-add-edge">添加边</button>
+      <button id="act-move-layer">移动到别的层</button>
       <button id="act-delete" class="danger">删除</button>
     </div>
     ${qaSectionHTML('node', id)}
@@ -356,6 +510,7 @@ function showNodeDetail(id) {
   if (!readOnly) {
     $('#act-edit').onclick = () => openNodeModal(n);
     $('#act-add-edge').onclick = () => openEdgeModal(n.id);
+    $('#act-move-layer').onclick = () => openMoveLayerModal(n);
     $('#act-delete').onclick = () => deleteNode(n.id);
   }
   bindQaSection('node', id);
@@ -369,9 +524,18 @@ function showNodeDetail(id) {
 
 function jumpToNode(id) {
   const n = cy.getElementById(id);
-  if (n && n.nonempty() && !n.hasClass('hidden-el') && !n.hasClass('hidden-filter')) {
-    n.select();
-    cy.animate({ center: { eles: n } }, { duration: 250 });
+  if (n && n.nonempty()) {
+    const gn = findNode(id);
+    // 分层模式下跳转更高层邻居：自动把焦点层抬上去，让目标可见
+    if (gn && viewMode === 'layered' && !state.radial && (gn.layer || 1) > focusLayer) {
+      setFocusLayer(gn.layer || 1);
+    }
+    if (n.style('display') !== 'none') {
+      n.select();
+      cy.animate({ center: { eles: n } }, { duration: 250 });
+    } else {
+      toast('该节点当前被标签过滤或处于辐射视图外');
+    }
   }
   showNodeDetail(id);
 }
@@ -555,6 +719,8 @@ function enterRadial() {
     padding: 40,
     animate: true,
   }).run();
+  refreshViewStyles();   // 标签加 ·L{n} 后缀、低于中心层的调暗
+  renderRail();          // 辐射模式下隐藏楼层 rail
 
   $('#btn-radial').classList.add('hidden');
   $('#btn-overview').classList.remove('hidden');
@@ -564,7 +730,8 @@ function enterRadial() {
 function exitRadial() {
   state.radial = null;
   cy.elements().removeClass('hidden-el');
-  presetLayout();
+  applyLayout(false);    // 恢复分层/自由总图布局与样式
+  renderRail();
   $('#btn-overview').classList.add('hidden');
   $('#radial-depth').classList.add('hidden');
   if (state.selected && state.selected.type === 'node') $('#btn-radial').classList.remove('hidden');
@@ -588,6 +755,7 @@ function openNodeModal(existing) {
     <h3>${isEdit ? '编辑节点' : '添加节点'}</h3>
     <div class="form-row"><label>名称 *</label><input id="f-name" value="${escapeHtml(n.name)}"></div>
     <div class="form-row"><label>类型</label><select id="f-kind">${KIND_OPTIONS(n.kind)}</select></div>
+    <div class="form-row"><label>层（整数 ≥1，1=地基；当前焦点层 L${focusLayer}）</label><input id="f-layer" type="number" min="1" step="1" value="${isEdit ? (n.layer || 1) : focusLayer}"></div>
     <div class="form-row"><label>命题（支持 LaTeX：$...$、$$...$$）</label><textarea id="f-statement">${escapeHtml(n.statement)}</textarea></div>
     <div class="form-row"><label>证明</label><textarea id="f-proof" style="min-height:100px">${escapeHtml(n.proof)}</textarea></div>
     <div class="form-row"><label>标签（逗号分隔）</label><input id="f-tags" value="${escapeHtml((n.tags || []).join(', '))}"></div>
@@ -605,6 +773,7 @@ function openNodeModal(existing) {
     const fields = {
       name,
       kind: $('#f-kind').value,
+      layer: Math.max(1, parseInt($('#f-layer').value, 10) || focusLayer),
       statement: $('#f-statement').value.trim(),
       proof: $('#f-proof').value.trim(),
       tags: $('#f-tags').value.split(/[,，]/).map(s => s.trim()).filter(Boolean),
@@ -629,6 +798,9 @@ function openNodeModal(existing) {
       closeModal();
       rebuildGraph();
       toast(isEdit ? '节点已更新' : '节点已创建');
+      if (fields.layer > focusLayer && viewMode === 'layered') {
+        toast(`注意：L${fields.layer} 高于当前焦点层 L${focusLayer}，画布上暂时隐藏`);
+      }
       const targetId = isEdit ? existing.id : graph.nodes[graph.nodes.length - 1].id;
       showNodeDetail(targetId);
     }
@@ -707,6 +879,42 @@ function openEdgeEditModal(e) {
   };
 }
 
+// 移动到别的层：唯一的跨层移动方式（画布上节点被钳制在本层分带内）
+function openMoveLayerModal(n) {
+  const maxL = maxLayer();
+  const cur = n.layer || 1;
+  const opts = [];
+  for (let i = 1; i <= maxL + 1; i++) {
+    const mark = i === cur ? '（当前）' : (i === maxL + 1 ? '（新建顶层）' : '');
+    opts.push(`<option value="${i}" ${i === cur ? 'selected' : ''}>L${i} ${mark}</option>`);
+  }
+  openModal(`
+    <h3>移动「${escapeHtml(n.name)}」到别的层</h3>
+    <div class="form-row"><label>目标层（当前焦点层：L${focusLayer}）</label>
+      <select id="f-move-layer">${opts.join('')}</select>
+      <div class="form-hint">层号由 scripts/compute_layers.py 自动计算；这里是人工调整，脚本不带 --force 时不会覆盖。</div>
+    </div>
+    <div class="form-actions">
+      <button id="f-cancel">取消</button>
+      <button class="primary" id="f-ok">移动</button>
+    </div>
+  `);
+  $('#f-cancel').onclick = closeModal;
+  $('#f-ok').onclick = async () => {
+    const target = parseInt($('#f-move-layer').value, 10);
+    if (!target || target < 1) return;
+    n.layer = target;
+    if (await saveGraph()) {
+      closeModal();
+      renderRail();
+      applyLayout(true);
+      showNodeDetail(n.id);
+      if (target > focusLayer) toast(`已移动到 L${target}，高于当前焦点层 L${focusLayer}，画布上暂时隐藏`);
+      else toast(`已移动到 L${target}`);
+    }
+  };
+}
+
 /* ---------- 删除 ---------- */
 
 async function deleteNode(id) {
@@ -752,14 +960,16 @@ function initTagFilter() {
 function applyTagFilter() {
   const tag = $('#tag-filter').value;
   cy.elements().removeClass('hidden-filter');
-  if (!tag) return;
-  cy.nodes().forEach(n => {
-    const gn = findNode(n.id());
-    if (!gn || !(gn.tags || []).includes(tag)) {
-      n.addClass('hidden-filter');
-      n.connectedEdges().addClass('hidden-filter');
-    }
-  });
+  if (tag) {
+    cy.nodes().forEach(n => {
+      const gn = findNode(n.id());
+      if (!gn || !(gn.tags || []).includes(tag)) {
+        n.addClass('hidden-filter');
+        n.connectedEdges().addClass('hidden-filter');
+      }
+    });
+  }
+  refreshViewStyles();
 }
 
 const doSearch = debounce(() => {
@@ -767,8 +977,8 @@ const doSearch = debounce(() => {
   if (!q) return;
   const n = cy.nodes().find(x => x.data('name').includes(q));
   if (!n) { toast('未找到匹配节点'); return; }
-  if (n.hasClass('hidden-el') || n.hasClass('hidden-filter')) {
-    toast('匹配节点当前被过滤或隐藏在辐射视图外');
+  if (n.style('display') === 'none') {
+    toast('匹配节点当前被过滤、隐藏或高于焦点层');
     return;
   }
   n.select();
@@ -789,6 +999,8 @@ function bindToolbar() {
   $('#search').addEventListener('input', doSearch);
   $('#tag-filter').addEventListener('change', applyTagFilter);
   $('#btn-export').onclick = exportJSON;
+  $('#btn-viewmode').onclick = toggleViewMode;
+  $('#btn-relayout').classList.toggle('hidden', viewMode !== 'free');
   $('#btn-relayout').onclick = () => {
     exitRadial();
     runCose(true).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); });
@@ -820,6 +1032,7 @@ function bindToolbar() {
   }
   graph = loaded.data;
   readOnly = loaded.readOnly;
+  focusLayer = maxLayer();   // 默认焦点 = 最高层（看得见地基和塔尖）
 
   document.title = graph.meta.title || '数学知识网络';
   $('#app-title').textContent = graph.meta.title || '数学知识网络';
@@ -840,5 +1053,6 @@ function bindToolbar() {
   });
   bindCyEvents();
   bindToolbar();
+  renderRail();
   layoutInitial();
 })();
