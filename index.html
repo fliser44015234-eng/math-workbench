@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数学知识网络</title>
+<script>
+  // MathJax v3 配置必须在 tex-svg.js 加载前注入
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="static/vendor/tex-svg.js"></script>
+<script src="static/vendor/cytoscape.min.js"></script>
+<script src="static/vendor/marked.min.js"></script>
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+<header id="toolbar">
+  <span id="app-title" class="title">数学知识网络</span>
+  <input id="search" type="search" placeholder="搜索节点名…" autocomplete="off">
+  <select id="tag-filter"><option value="">全部标签</option></select>
+  <button id="btn-add" class="edit-only">添加节点</button>
+  <button id="btn-relayout">力导向重排</button>
+  <button id="btn-export">导出 JSON</button>
+  <span id="mode-badge" class="badge badge-edit">本地可编辑</span>
+</header>
+
+<main id="main">
+  <div id="cy"></div>
+
+  <aside id="sidebar" class="hidden">
+    <div id="sidebar-head">
+      <button id="sidebar-close" title="关闭">×</button>
+    </div>
+    <div id="sidebar-body"></div>
+    <div id="sidebar-foot">
+      <button id="btn-radial" class="hidden">辐射视图</button>
+      <button id="btn-overview" class="hidden">返回总图</button>
+      <select id="radial-depth" class="hidden">
+        <option value="1">1 跳</option>
+        <option value="2">2 跳</option>
+      </select>
+    </div>
+  </aside>
+</main>
+
+<div id="legend">
+  <div class="legend-title">图例</div>
+  <div id="legend-nodes" class="legend-grid"></div>
+  <div id="legend-edges"></div>
+</div>
+
+<div id="modal-overlay" class="hidden">
+  <div id="modal"></div>
+</div>
+
+<div id="toast" class="hidden"></div>
+
+<script src="static/app.js"></script>
+</body>
+</html>

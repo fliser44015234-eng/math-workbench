@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "我的知识网络",
+    "course": "",
+    "updated": "2026-09-21T12:00:00"
+  },
+  "nodes": [
+    {
+      "id": "demo-def-even",
+      "name": "偶数",
+      "kind": "definition",
+      "statement": "能被 $2$ 整除的整数称为偶数，即形如 $n = 2k$（$k \\in \\mathbb{Z}$）的整数。全体偶数记为 $2\\mathbb{Z}$。",
+      "proof": "这是一个定义节点示例。点击节点可查看命题与证明，点击下方「问答」可以记录自己的问题。",
+      "tags": ["演示"],
+      "chapter": "",
+      "position": null
+    },
+    {
+      "id": "demo-thm-even-closed",
+      "name": "偶数对加法封闭",
+      "kind": "theorem",
+      "statement": "任意两个偶数之和仍是偶数。",
+      "proof": "设两个偶数为 $2a$ 与 $2b$（$a, b \\in \\mathbb{Z}$），则 $2a + 2b = 2(a + b)$，而 $a + b \\in \\mathbb{Z}$，故和是偶数。",
+      "tags": ["演示"],
+      "chapter": "",
+      "position": null
+    },
+    {
+      "id": "demo-cor-multiple",
+      "name": "偶数的倍数仍是偶数",
+      "kind": "corollary",
+      "statement": "若 $n$ 是偶数，则对任意整数 $m$，$mn$ 也是偶数。",
+      "proof": "写 $n = 2k$，则 $mn = 2(mk)$，是偶数。也可以把 $mn$ 看作 $n$ 自加 $m$ 次，反复用加法封闭性（负倍数再取相反数）。",
+      "tags": ["演示"],
+      "chapter": "",
+      "position": null
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-demo-1",
+      "source": "demo-def-even",
+      "target": "demo-thm-even-closed",
+      "relation": "depends_on",
+      "label": "定义展开",
+      "note": "把两个偶数写成 2a、2b 再相加"
+    },
+    {
+      "id": "e-demo-2",
+      "source": "demo-thm-even-closed",
+      "target": "demo-cor-multiple",
+      "relation": "implies",
+      "label": "反复相加",
+      "note": "mn 是 n 自加 m 次，由封闭性归纳即得"
+    },
+    {
+      "id": "e-demo-3",
+      "source": "demo-cor-multiple",
+      "target": "demo-thm-even-closed",
+      "relation": "equivalent",
+      "label": "封闭 ⟺ 吸收",
+      "note": "对 2Z 而言：吸收乘法 ⟹ 加法封闭；反之倍数可由反复相加（含相反数）得到"
+    },
+    {
+      "id": "e-demo-4",
+      "source": "demo-cor-multiple",
+      "target": "demo-thm-even-closed",
+      "relation": "generalizes",
+      "label": "吸收性推广封闭性",
+      "note": "对任意乘数封闭（吸收律）强于仅对加法封闭"
+    },
+    {
+      "id": "e-demo-5",
+      "source": "demo-def-even",
+      "target": "demo-cor-multiple",
+      "relation": "analogy",
+      "label": "理想的雏形",
+      "note": "「倍数仍偶」说明 2Z 吸收乘法——这正是环论中理想（ideal）的定义性质"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q-demo-001",
+      "targetType": "node",
+      "targetId": "demo-thm-even-closed",
+      "question": "奇数加奇数是什么？",
+      "answer": "是偶数：$(2a + 1) + (2b + 1) = 2(a + b + 1)$。这说明奇数集对加法不封闭，但「两奇之和为偶」。",
+      "source": "manual",
+      "model": null,
+      "createdAt": "2026-09-21T12:00:00"
+    }
+  ]
+}
