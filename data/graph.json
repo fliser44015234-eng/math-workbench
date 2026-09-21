@@ -100,7 +100,7 @@
   "meta": {
     "course": "MAT3042",
     "title": "MAT3042 知识网络",
-    "updated": "2026-09-21T23:53:49"
+    "updated": "2026-09-22T00:10:53"
   },
   "nodes": [
     {
@@ -307,6 +307,16 @@
       "source": "manual",
       "targetId": "e-root-cyclic",
       "targetType": "edge"
+    },
+    {
+      "id": "q-20260922-001",
+      "targetType": "node",
+      "targetId": "repeated-root-criterion",
+      "question": "这个判据的证明思路是什么？为什么形式导数能检测重根？",
+      "answer": "**证明思路（核心：一次因式分解 + Leibniz 法则）**\n\n要判断 $(x-\\alpha)^2 \\mid f$，先提出一个因子：$f(x)=(x-\\alpha)g(x)$。于是问题化为 **$(x-\\alpha)\\mid g$ 是否成立**，即 $g(\\alpha)=0$ 是否成立。如何不依赖 $g$ 的具体形式来刻画它？对乘积求导：\n\n$$f'(x)=g(x)+(x-\\alpha)g'(x),$$\n\n代入 $x=\\alpha$ 后第二项**自动消失**，得 $f'(\\alpha)=g(\\alpha)$。于是一条等价链闭合：\n\n$$\\alpha \\text{ 是重根} \\iff (x-\\alpha)\\mid g \\iff g(\\alpha)=0 \\iff f'(\\alpha)=0.$$\n\n整个证明就是把\"重根\"这个二次可除性条件，通过求导翻译成 $f$ 自身的取值条件。\n\n**为什么形式导数能检测重根（动机）**\n\n直观上，若 $f=(x-\\alpha)^m h$（$h(\\alpha)\\neq 0$），则求导使重数恰好降一：\n\n$$f'=(x-\\alpha)^{m-1}\\big[mh+(x-\\alpha)h'\\big],$$\n\n括号内在 $\\alpha$ 处取值为 $m\\,h(\\alpha)$。所以 $m\\ge 2 \\iff f'(\\alpha)=0$（在特征 $0$ 时 $mh(\\alpha)\\neq0$ 自动成立）。导数因此扮演了\"重数探测器\"：每求一次导，$\\alpha$ 处的零阶减一；重根意味着求导后**仍是根**。\n\n**为什么用\"形式\"导数**：一般域 $F$ 上没有极限概念，故直接以 $\\sum k a_k x^{k-1}$ 纯代数地定义，并验证 Leibniz 法则。这让判据在任意域（包括有限域）都有效。需留意特征 $p$ 的微妙处：可能 $mh(\\alpha)=0$（如 $p\\mid m$），此时判据的 gcd 形式 $\\gcd(f,f')=1$ 仍正确，而\"可分\"需用它而非仅靠求值。",
+      "source": "ai",
+      "model": "kimi-k3",
+      "createdAt": "2026-09-22T00:10:53"
     }
   ]
 }

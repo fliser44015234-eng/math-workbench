@@ -28,7 +28,7 @@ BACKUP_PATH = DATA_DIR / "graph.json.bak"
 CONFIG_PATH = BASE_DIR / "config.local.json"
 
 MOONSHOT_URL = "https://api.moonshot.cn/v1/chat/completions"
-DEFAULT_MODEL = "kimi-k2-0905-preview"
+DEFAULT_MODEL = "kimi-k3"
 
 KIND_ZH = {
     "definition": "定义", "axiom": "公理", "lemma": "引理",
@@ -220,10 +220,12 @@ def ask():
         resp = requests.post(
             MOONSHOT_URL,
             headers={"Authorization": f"Bearer {key}"},
-            json={"model": model, "messages": messages, "temperature": 0.3},
+            json={"model": model, "messages": messages},
             timeout=60,
         )
-        resp.raise_for_status()
+        if resp.status_code != 200:
+            return jsonify({"error": "upstream",
+                            "message": f"Moonshot API 返回 {resp.status_code}：{resp.text[:300]}"}), 502
         answer = resp.json()["choices"][0]["message"]["content"]
     except requests.RequestException as exc:
         return jsonify({"error": "upstream", "message": f"调用 Moonshot API 失败：{exc}"}), 502
