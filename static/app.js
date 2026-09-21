@@ -236,45 +236,97 @@ function runCose(animate) {
   });
 }
 
-/* ---------- 分层高楼视图 ---------- */
+/* ---------- 分层高楼视图（俯视楼层平面：自适应高 zone） ---------- */
 
-const BAND_H = 130;  // 每层分带的高度
+const ZONE_GAP = 60;   // zone 之间的间隔（浅灰分隔带）
+const ZONE_PAD = 20;   // zone 内拖动 padding
+const GRID_COLS = 8;   // 层内铺开时每行节点数
+const GRID_DX = 130;   // 水平间距（≥120，容纳下方中文标签）
+const GRID_DY = 90;    // 行距（≥80）
 
 function maxLayer() {
   return Math.max(1, ...graph.nodes.map(n => n.layer || 1));
 }
-// layer 1 在最底部；Cytoscape 的 y 向下增长
-function bandTop(layer) { return (maxLayer() - layer) * BAND_H; }
-function bandClampY(layer, y) {
-  const top = bandTop(layer);
-  return Math.min(Math.max(y, top + 16), top + BAND_H - 16);
+function layerCounts() {
+  const counts = {};
+  graph.nodes.forEach(n => { const l = n.layer || 1; counts[l] = (counts[l] || 0) + 1; });
+  return counts;
+}
+// zone 高度按该层节点数自适应，夹在 300–900
+function zoneH(count) {
+  const rows = Math.ceil(Math.max(1, count) / GRID_COLS);
+  return Math.min(900, Math.max(300, rows * 90 + 160));
+}
+// layer 1 在最底部；Cytoscape 的 y 向下增长，从最高层往下堆叠
+function zoneTop(layer, counts) {
+  counts = counts || layerCounts();
+  let y = 0;
+  for (let l = maxLayer(); l > layer; l--) y += zoneH(counts[l] || 0) + ZONE_GAP;
+  return y;
+}
+function zoneClampY(layer, y, counts) {
+  counts = counts || layerCounts();
+  const top = zoneTop(layer, counts);
+  return Math.min(Math.max(y, top + ZONE_PAD), top + zoneH(counts[layer] || 0) - ZONE_PAD);
+}
+function inZone(gn, counts) {
+  if (!gn.position) return false;
+  const top = zoneTop(gn.layer || 1, counts);
+  return gn.position.y >= top && gn.position.y <= top + zoneH(counts[gn.layer || 1] || 0);
 }
 
-// 分层布局：y 由所在层分带决定，x 用已保存 position.x（缺失则层内均布）
-function layeredLayout(animate) {
-  const spreadX = {};
-  const missingByLayer = {};
-  graph.nodes.filter(n => !n.position)
-    .sort((a, b) => a.id.localeCompare(b.id))
-    .forEach(gn => { (missingByLayer[gn.layer || 1] = missingByLayer[gn.layer || 1] || []).push(gn); });
-  Object.values(missingByLayer).forEach(list =>
-    list.forEach((gn, i) => { spreadX[gn.id] = 100 + i * 120; }));
+// 层内网格排列：每行 GRID_COLS 个、在 zone 内居中（以 anchor 节点的平均 x 为基准）
+function gridArrange(list, layer, counts, anchorXs) {
+  const top = zoneTop(layer, counts);
+  const baseX = anchorXs.length ? anchorXs.reduce((s, x) => s + x, 0) / anchorXs.length : 400;
+  const rows = Math.ceil(list.length / GRID_COLS);
+  const startY = top + Math.max(50, (zoneH(counts[layer] || 0) - (rows - 1) * GRID_DY) / 2);
+  const pos = {};
+  [...list].sort((a, b) => a.id.localeCompare(b.id)).forEach((gn, i) => {
+    const r = Math.floor(i / GRID_COLS), c = i % GRID_COLS;
+    const colsThisRow = Math.min(GRID_COLS, list.length - r * GRID_COLS);
+    pos[gn.id] = {
+      x: Math.round(baseX - ((colsThisRow - 1) * GRID_DX) / 2 + c * GRID_DX),
+      y: Math.round(startY + r * GRID_DY),
+    };
+  });
+  return pos;
+}
+
+// 分层布局：y 落在本层 zone 内；无已存位置或 y 不在自己 zone 的节点做层内网格排列。
+// spreadLayer 传入层号时，强制把该层全部节点重新铺开（忽略旧坐标）。返回网格安排的节点数。
+function layeredLayout(animate, spreadLayer) {
+  const counts = layerCounts();
+  const byLayer = {};
+  graph.nodes.forEach(gn => { (byLayer[gn.layer || 1] = byLayer[gn.layer || 1] || []).push(gn); });
+  const gridPos = {};
+  Object.entries(byLayer).forEach(([l, list]) => {
+    const layer = parseInt(l, 10);
+    let arrange, anchorXs;
+    if (spreadLayer === layer) {
+      arrange = list;            // 一键铺开本层：全部重排
+      anchorXs = list.filter(gn => gn.position).map(gn => gn.position.x);
+    } else {
+      arrange = list.filter(gn => !inZone(gn, counts));   // 只动未布局/越界的
+      anchorXs = list.filter(gn => inZone(gn, counts)).map(gn => gn.position.x);
+    }
+    if (arrange.length) Object.assign(gridPos, gridArrange(arrange, layer, counts, anchorXs));
+  });
 
   cy.layout({
     name: 'preset',
     positions: n => {
       const gn = findNode(n.id());
       if (!gn) return n.position();
-      const l = gn.layer || 1;
-      const x = gn.position ? gn.position.x : (spreadX[gn.id] || 200);
-      const y = gn.position ? bandClampY(l, gn.position.y) : bandTop(l) + BAND_H / 2;
-      return { x, y };
+      if (gridPos[gn.id]) return gridPos[gn.id];
+      return { x: gn.position.x, y: zoneClampY(gn.layer || 1, gn.position.y, counts) };
     },
     fit: false,
     animate: false,
   }).run();
   refreshViewStyles();
   fitVisible(animate);
+  return Object.keys(gridPos).length;
 }
 
 function fitVisible(animate) {
@@ -282,6 +334,25 @@ function fitVisible(animate) {
   if (!vis.nonempty()) return;
   if (animate) cy.animate({ fit: { eles: vis, padding: 60 } }, { duration: 300 });
   else cy.fit(vis, 60);
+  updateZoneLines();
+}
+
+// zone 分隔带：跟随 pan/zoom 的 HTML overlay（浅灰带 + 虚线），只画不交互
+function updateZoneLines() {
+  const box = $('#zone-lines');
+  if (!box) return;
+  if (viewMode !== 'layered' || state.radial) { box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  const zoom = cy.zoom(), pan = cy.pan();
+  const counts = layerCounts(), maxL = maxLayer();
+  let html = '';
+  for (let l = maxL; l >= 1; l--) {
+    const top = zoneTop(l, counts), bottom = top + zoneH(counts[l] || 0);
+    if (l > 1) {
+      html += `<div class="zone-gap" style="top:${bottom * zoom + pan.y}px;height:${ZONE_GAP * zoom}px"></div>`;
+    }
+  }
+  box.innerHTML = html;
 }
 
 // 按视图模式逐元素设置 显示/透明度/压暗/标签（显示状态的唯一写入处）
@@ -367,8 +438,21 @@ function toggleViewMode() {
   viewMode = viewMode === 'layered' ? 'free' : 'layered';
   $('#btn-viewmode').textContent = viewMode === 'layered' ? '视图：分层' : '视图：自由';
   $('#btn-relayout').classList.toggle('hidden', viewMode !== 'free');  // 力导向重排只对自由视图有意义
+  $('#btn-spread-layer').classList.toggle('hidden', viewMode !== 'layered');
   renderRail();
   applyLayout(true);
+  updateZoneLines();
+}
+
+// 铺开本层：把焦点层全部节点按网格重排（忽略旧坐标）并保存
+async function spreadCurrentLayer() {
+  if (viewMode !== 'layered' || state.radial) return;
+  layeredLayout(true, focusLayer);
+  if (!readOnly) {
+    syncPositions();
+    await saveGraph();
+  }
+  toast(`第 L${focusLayer} 层已铺开`);
 }
 
 function syncPositions() {
@@ -388,13 +472,13 @@ function debounceSavePositions() {
 }
 
 function layoutInitial() {
-  const hasNull = graph.nodes.some(n => !n.position);
   if (viewMode === 'layered') {
-    layeredLayout(false);
-    if (hasNull && !readOnly) { syncPositions(); saveGraph(); }
+    const placed = layeredLayout(false);
+    // 有节点被网格重排（首次进入新版分层 / 新节点未布局）→ 落盘保存
+    if (placed > 0 && !readOnly) { syncPositions(); saveGraph(); }
     return;
   }
-  if (hasNull) {
+  if (graph.nodes.some(n => !n.position)) {
     runCose(false).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); refreshViewStyles(); });
   } else {
     presetLayout();
@@ -413,13 +497,13 @@ function rebuildGraph() {
 function bindCyEvents() {
   cy.on('tap', 'node', evt => { evt.target.select(); showNodeDetail(evt.target.id()); });
   cy.on('tap', 'edge', evt => { evt.target.select(); showEdgeDetail(evt.target.id()); });
-  // 分层模式下拖动节点：y 钳制在本层分带内，x 自由
+  // 分层模式下拖动节点：y 钳制在本层 zone 内（留 padding），x 自由
   cy.on('drag', 'node', evt => {
     if (viewMode !== 'layered' || state.radial) return;
     const gn = findNode(evt.target.id());
     if (!gn) return;
     const p = evt.target.position();
-    evt.target.position({ x: p.x, y: bandClampY(gn.layer || 1, p.y) });
+    evt.target.position({ x: p.x, y: zoneClampY(gn.layer || 1, p.y) });
   });
   cy.on('dragend', 'node', debounceSavePositions);
 }
@@ -721,6 +805,7 @@ function enterRadial() {
   }).run();
   refreshViewStyles();   // 标签加 ·L{n} 后缀、低于中心层的调暗
   renderRail();          // 辐射模式下隐藏楼层 rail
+  updateZoneLines();     // 辐射模式下隐藏 zone 分隔带
 
   $('#btn-radial').classList.add('hidden');
   $('#btn-overview').classList.remove('hidden');
@@ -748,6 +833,60 @@ function closeModal() { $('#modal-overlay').classList.add('hidden'); }
 const KIND_OPTIONS = selected => Object.keys(KIND_ZH).map(k =>
   `<option value="${k}" ${k === selected ? 'selected' : ''}>${KIND_ZH[k]}（${k}）</option>`).join('');
 
+// AI 建议层与强相关边（添加节点模态内；失败不阻塞手动创建）
+async function suggestLayerAndEdges(btn) {
+  const errBox = $('#f-ai-error');
+  const showErr = msg => { errBox.textContent = msg; errBox.classList.remove('hidden'); };
+  errBox.classList.add('hidden');
+  const name = $('#f-name').value.trim();
+  const statement = $('#f-statement').value.trim();
+  if (!name || !statement) { showErr('先填写名称和命题，再让 AI 建议。'); return; }
+  btn.disabled = true;
+  btn.textContent = 'AI 思考中（kimi-k3 推理约 1–3 分钟）…';
+  try {
+    const res = await fetch('/api/suggest-node', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name, statement,
+        kind: $('#f-kind').value,
+        proof: $('#f-proof').value.trim(),
+      }),
+    });
+    if (res.status === 501) {
+      showErr('未配置 API Key，无法使用 AI 建议（可手动填写）。');
+    } else if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      showErr(`AI 建议失败：${err.message || res.status}（不影响手动创建）`);
+    } else {
+      const data = await res.json();
+      if (data.layer) $('#f-layer').value = data.layer;
+      const result = $('#f-ai-result');
+      if (!data.edges || !data.edges.length) {
+        result.innerHTML = `<div class="form-hint">AI 没有把握给出强相关边${data.layer ? `，层已建议为 L${data.layer}` : ''}。</div>`;
+      } else {
+        result.innerHTML = '<div class="form-hint">AI 建议的边（取消勾选则不创建）：</div>' +
+          data.edges.map(e => {
+            const t = findNode(e.target);
+            const tname = t ? t.name : e.target;
+            const arrow = e.direction === 'out'
+              ? `新节点 ─${REL_ZH[e.relation]}→ ${escapeHtml(tname)}`
+              : `${escapeHtml(tname)} ─${REL_ZH[e.relation]}→ 新节点`;
+            return `<label class="ai-edge-item">
+              <input type="checkbox" checked data-target="${escapeHtml(e.target)}" data-direction="${e.direction}" data-relation="${e.relation}" data-reason="${escapeHtml(e.reason || '')}">
+              <span>${arrow}</span><span class="ai-edge-reason">${escapeHtml(e.reason || '')}</span>
+            </label>`;
+          }).join('');
+      }
+    }
+  } catch (e) {
+    showErr(`AI 建议失败：${e.message}（不影响手动创建）`);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'AI 建议层与关系';
+  }
+}
+
 function openNodeModal(existing) {
   const isEdit = !!existing;
   const n = existing || { name: '', kind: 'theorem', statement: '', proof: '', tags: [], chapter: '' };
@@ -756,6 +895,13 @@ function openNodeModal(existing) {
     <div class="form-row"><label>名称 *</label><input id="f-name" value="${escapeHtml(n.name)}"></div>
     <div class="form-row"><label>类型</label><select id="f-kind">${KIND_OPTIONS(n.kind)}</select></div>
     <div class="form-row"><label>层（整数 ≥1，1=地基；当前焦点层 L${focusLayer}）</label><input id="f-layer" type="number" min="1" step="1" value="${isEdit ? (n.layer || 1) : focusLayer}"></div>
+    ${isEdit ? '' : `
+    <div class="form-row">
+      <button type="button" id="f-ai-suggest">AI 建议层与关系</button>
+      <span class="form-hint">填好名称与命题后可用，AI 建议层号和强相关边（可勾选）。</span>
+      <div class="form-error hidden" id="f-ai-error"></div>
+      <div id="f-ai-result"></div>
+    </div>`}
     <div class="form-row"><label>命题（支持 LaTeX：$...$、$$...$$）</label><textarea id="f-statement">${escapeHtml(n.statement)}</textarea></div>
     <div class="form-row"><label>证明</label><textarea id="f-proof" style="min-height:100px">${escapeHtml(n.proof)}</textarea></div>
     <div class="form-row"><label>标签（逗号分隔）</label><input id="f-tags" value="${escapeHtml((n.tags || []).join(', '))}"></div>
@@ -767,6 +913,8 @@ function openNodeModal(existing) {
     </div>
   `);
   $('#f-cancel').onclick = closeModal;
+  const btnAI = $('#f-ai-suggest');
+  if (btnAI) btnAI.onclick = () => suggestLayerAndEdges(btnAI);
   $('#f-ok').onclick = async () => {
     const name = $('#f-name').value.trim();
     if (!name) { $('#f-error').textContent = '名称不能为空'; $('#f-error').classList.remove('hidden'); return; }
@@ -779,20 +927,33 @@ function openNodeModal(existing) {
       tags: $('#f-tags').value.split(/[,，]/).map(s => s.trim()).filter(Boolean),
       chapter: $('#f-chapter').value.trim(),
     };
+    let createdId = null;
     if (isEdit) {
       Object.assign(existing, fields);
     } else {
-      const center = cy.pan();
       const ext = cy.extent();
+      createdId = slugifyNodeId(name);
       graph.nodes.push({
-        id: slugifyNodeId(name),
+        id: createdId,
         ...fields,
         position: {
           x: Math.round((ext.x1 + ext.x2) / 2 + (Math.random() * 80 - 40)),
           y: Math.round((ext.y1 + ext.y2) / 2 + (Math.random() * 80 - 40)),
         },
       });
-      void center;
+      // 勾选的 AI 建议边随节点一并创建（一次 PUT）
+      document.querySelectorAll('#f-ai-result input[type="checkbox"]:checked').forEach(cb => {
+        const { target, direction, relation, reason } = cb.dataset;
+        if (!findNode(target)) return;
+        graph.edges.push({
+          id: genEdgeId(),
+          source: direction === 'out' ? createdId : target,
+          target: direction === 'out' ? target : createdId,
+          relation,
+          label: '',
+          note: reason ? `AI 建议：${reason}` : 'AI 建议',
+        });
+      });
     }
     if (await saveGraph()) {
       closeModal();
@@ -801,7 +962,7 @@ function openNodeModal(existing) {
       if (fields.layer > focusLayer && viewMode === 'layered') {
         toast(`注意：L${fields.layer} 高于当前焦点层 L${focusLayer}，画布上暂时隐藏`);
       }
-      const targetId = isEdit ? existing.id : graph.nodes[graph.nodes.length - 1].id;
+      const targetId = isEdit ? existing.id : createdId;
       showNodeDetail(targetId);
     }
   };
@@ -1001,6 +1162,8 @@ function bindToolbar() {
   $('#btn-export').onclick = exportJSON;
   $('#btn-viewmode').onclick = toggleViewMode;
   $('#btn-relayout').classList.toggle('hidden', viewMode !== 'free');
+  $('#btn-spread-layer').classList.toggle('hidden', viewMode !== 'layered');
+  $('#btn-spread-layer').onclick = spreadCurrentLayer;
   $('#btn-relayout').onclick = () => {
     exitRadial();
     runCose(true).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); });
@@ -1053,6 +1216,9 @@ function bindToolbar() {
   });
   bindCyEvents();
   bindToolbar();
+  // zone 分隔带 overlay（绝对定位在画布上，pointer-events:none，跟随 pan/zoom 重绘）
+  $('#cy').insertAdjacentHTML('beforeend', '<div id="zone-lines" class="hidden"></div>');
+  cy.on('pan zoom resize', () => requestAnimationFrame(updateZoneLines));
   renderRail();
   layoutInitial();
 })();

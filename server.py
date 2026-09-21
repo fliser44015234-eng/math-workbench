@@ -12,6 +12,7 @@ AI 配置：环境变量 MOONSHOT_API_KEY，或项目根 config.local.json
 
 import json
 import os
+import re
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -48,6 +49,11 @@ SYSTEM_PROMPT = (
 )
 
 app = Flask(__name__, static_folder=None)
+
+# Moonshot 请求走独立 Session：trust_env=False 绕过系统代理
+# （本机直连 api.moonshot.cn 正常，而 macOS 系统代理会掐断长耗时的推理请求）
+_http = requests.Session()
+_http.trust_env = False
 
 
 # ---------- 静态文件（只允许这三条路由） ----------
@@ -217,7 +223,7 @@ def ask():
     messages.append({"role": "user", "content": question})
 
     try:
-        resp = requests.post(
+        resp = _http.post(
             MOONSHOT_URL,
             headers={"Authorization": f"Bearer {key}"},
             json={"model": model, "messages": messages},
@@ -233,6 +239,110 @@ def ask():
         return jsonify({"error": "upstream", "message": f"解析 Moonshot 响应失败：{exc}"}), 502
 
     return jsonify({"answer": answer})
+
+
+# ---------- AI 建议新节点的层与强相关边 ----------
+
+SUGGEST_RELATIONS = {"depends_on", "implies", "equivalent", "generalizes"}
+
+SUGGEST_SYSTEM = (
+    "你是数学知识图谱的建图助手。用户要给图谱添加一个新节点。"
+    "根据给出的图谱摘要，判断新节点应所在的层号，以及它与现有节点之间确信无疑的强逻辑关系。"
+    "严格只输出一个 JSON 对象：不要输出任何其他文字，不要使用 markdown 代码围栏。"
+)
+
+
+def graph_summary_by_layer(g):
+    """按层分组列出全部节点 'id（名称，kind）'，供 prompt 使用。"""
+    by_layer = {}
+    for n in g["nodes"]:
+        by_layer.setdefault(n.get("layer", 1), []).append(n)
+    lines = []
+    for layer in sorted(by_layer):
+        members = "、".join(f"{n['id']}（{n['name']}，{n['kind']}）" for n in by_layer[layer])
+        lines.append(f"L{layer}: {members}")
+    return "\n".join(lines), max(by_layer)
+
+
+@app.route("/api/suggest-node", methods=["POST"])
+def suggest_node():
+    body = request.get_json(force=True, silent=True) or {}
+    name = (body.get("name") or "").strip()
+    statement = (body.get("statement") or "").strip()
+    kind = (body.get("kind") or "").strip()
+    proof = (body.get("proof") or "").strip()
+    if not name or not statement:
+        return jsonify({"error": "bad_request", "message": "需要 name 与 statement"}), 400
+
+    key, model = load_ai_config()
+    if not key:
+        return jsonify({"error": "not_configured",
+                        "message": "未配置 Moonshot API Key"}), 501
+
+    g = load_graph()
+    summary, max_layer = graph_summary_by_layer(g)
+    user_prompt = (
+        "图谱层规则：层号 = 离地基（第 1 层）的证明深度；节点应比它最强的支撑前驱高一层；"
+        "没有支撑前驱则为 1；等价命题同层。\n"
+        "图谱摘要（按层分组，格式 id（名称，kind））：\n"
+        f"{summary}\n\n"
+        f"新节点：名称「{name}」，kind={kind or '未知'}。\n"
+        f"命题：{statement}\n"
+        f"证明：{proof or '（无）'}\n\n"
+        "只输出如下 JSON：\n"
+        '{"layer": 整数, "edges": [{"target": "现有节点id", "direction": "in"|"out", '
+        '"relation": "depends_on"|"implies"|"equivalent"|"generalizes", "reason": "十字以内"}]}\n'
+        "direction 语义：out = 新节点支撑目标（新节点→目标）；in = 目标支撑新节点（目标→新节点）。\n"
+        "只列确信无疑的强关系，最多 6 条；没有把握就返回空 edges 数组。"
+    )
+
+    try:
+        resp = _http.post(
+            MOONSHOT_URL,
+            headers={"Authorization": f"Bearer {key}"},
+            json={"model": model, "messages": [
+                {"role": "system", "content": SUGGEST_SYSTEM},
+                {"role": "user", "content": user_prompt},
+            ], "reasoning_effort": "low"},   # 结构化抽取任务不需要深推理，显著降延迟
+            timeout=300,   # kimi-k3 是推理模型，实测该 prompt 推理约 3 分钟
+        )
+        if resp.status_code != 200:
+            return jsonify({"error": "upstream",
+                            "message": f"Moonshot API 返回 {resp.status_code}：{resp.text[:300]}"}), 502
+        text = resp.json()["choices"][0]["message"]["content"]
+    except requests.RequestException as exc:
+        return jsonify({"error": "upstream", "message": f"调用 Moonshot API 失败：{exc}"}), 502
+    except (KeyError, IndexError, ValueError) as exc:
+        return jsonify({"error": "upstream", "message": f"解析 Moonshot 响应失败：{exc}"}), 502
+
+    # 防御性解析：剥离可能的 ```json 围栏，非法条目丢弃不报错
+    raw = text.strip()
+    if raw.startswith("```"):
+        raw = re.sub(r"^```(?:json)?\s*", "", raw)
+        raw = re.sub(r"\s*```$", "", raw)
+    try:
+        data = json.loads(raw)
+    except ValueError:
+        return jsonify({"error": "parse",
+                        "message": "AI 输出不是合法 JSON",
+                        "raw": text[:300]}), 502
+
+    node_ids = {n["id"] for n in g["nodes"]}
+    layer = None
+    try:
+        layer = max(1, min(max_layer + 1, int(data.get("layer"))))
+    except (TypeError, ValueError):
+        pass
+    edges = []
+    for item in data.get("edges") or []:
+        if not isinstance(item, dict):
+            continue
+        t, direction, relation = item.get("target"), item.get("direction"), item.get("relation")
+        if t not in node_ids or direction not in ("in", "out") or relation not in SUGGEST_RELATIONS:
+            continue
+        edges.append({"target": t, "direction": direction, "relation": relation,
+                      "reason": str(item.get("reason", ""))[:40]})
+    return jsonify({"layer": layer, "edges": edges[:6]})
 
 
 if __name__ == "__main__":
