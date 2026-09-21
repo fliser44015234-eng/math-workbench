@@ -100,7 +100,7 @@
   "meta": {
     "course": "MAT3042",
     "title": "MAT3042 知识网络",
-    "updated": "2026-09-21T23:51:12"
+    "updated": "2026-09-21T23:53:49"
   },
   "nodes": [
     {
@@ -108,7 +108,10 @@
       "id": "division-algorithm",
       "kind": "lemma",
       "name": "多项式带余除法",
-      "position": null,
+      "position": {
+        "x": 63,
+        "y": 292
+      },
       "proof": "存在性：对 $\\deg f$ 作归纳（多项式长除法）。若 $\\deg f < \\deg g$，取 $q = 0, r = f$；否则用 $g$ 的首项消去 $f$ 的首项，把问题归结到次数更低的多项式。\n唯一性：若 $qg + r = q'g + r'$，则 $(q - q')g = r' - r$。若 $q \\ne q'$，左边次数 $\\ge \\deg g$，右边次数 $< \\deg g$，矛盾。故 $q = q'$，进而 $r = r'$。",
       "statement": "设 $F$ 是域，$f, g \\in F[x]$ 且 $g \\ne 0$。则存在唯一的 $q, r \\in F[x]$ 使得\n$$f = qg + r, \\qquad r = 0 \\ \\text{或}\\ \\deg r < \\deg g.$$",
       "tags": [
@@ -120,7 +123,10 @@
       "id": "fx-euclidean-domain",
       "kind": "theorem",
       "name": "F[x] 是欧几里得整环",
-      "position": null,
+      "position": {
+        "x": 112,
+        "y": 244
+      },
       "proof": "$F[x]$ 是整环：$F$ 无零因子，首项系数相乘仍非零。带余除法（见「多项式带余除法」）恰给出以 $\\deg$ 为度量的欧几里得性质。\nED $\\Rightarrow$ PID：取理想 $I \\ne 0$ 中次数最小的非零元 $p$。对任意 $f \\in I$ 作带余除法 $f = qp + r$，则 $r = f - qp \\in I$ 且 $\\deg r < \\deg p$，由最小性得 $r = 0$，故 $I = (p)$。\nPID $\\Rightarrow$ UFD 与 Bézout 为标准事实。",
       "statement": "对任意域 $F$，多项式环 $F[x]$ 以 $d(f) = \\deg f$ 为度量为欧几里得整环（ED）。特别地 $F[x]$ 是 PID 从而是 UFD：每个非零多项式在相差单位与次序的意义下唯一分解为不可约多项式之积，且 $\\gcd$ 总存在并可写成 Bézout 组合。",
       "tags": [
@@ -132,7 +138,10 @@
       "id": "bezout-identity",
       "kind": "lemma",
       "name": "Bézout 恒等式",
-      "position": null,
+      "position": {
+        "x": 165,
+        "y": 191
+      },
       "proof": "辗转相除（Euclid 算法）：反复作带余除法 $f = q_1 g + r_1$，$g = q_2 r_1 + r_2$，……次数严格下降，有限步后余式为 $0$，最后一个非零余式即 $\\gcd$；逐步回代便把 $d$ 表成 $f, g$ 的组合。",
       "statement": "设 $f, g \\in F[x]$ 不全为零，$d = \\gcd(f, g)$。则存在 $u, v \\in F[x]$ 使\n$$uf + vg = d.$$\n特别地，$\\gcd(f, g) = 1 \\iff$ 存在 $u, v$ 使 $uf + vg = 1$。",
       "tags": [
@@ -144,7 +153,10 @@
       "id": "root-count-bound",
       "kind": "corollary",
       "name": "根的个数上界",
-      "position": null,
+      "position": {
+        "x": 21,
+        "y": 334
+      },
       "proof": "对次数 $n$ 归纳。若 $\\alpha$ 是根，带余除法给出 $f(x) = (x - \\alpha)g(x)$，$\\deg g = n - 1$。$F$ 无零因子，故 $f$ 的其他根都是 $g$ 的根；由归纳假设 $g$ 至多有 $n - 1$ 个根，合计至多 $n$ 个。\n⚠️ 这是域特有的：一般环上不成立（如 $\\mathbb{Z}/8\\mathbb{Z}$ 上 $x^2 - 1$ 有 $4$ 个根），关键就是无零因子。",
       "statement": "域 $F$ 上 $n$ 次非零多项式 $f(x) \\in F[x]$ 在 $F$ 中至多有 $n$ 个根（计重数）。",
       "tags": [
@@ -156,7 +168,10 @@
       "id": "coprime-no-common-root",
       "kind": "corollary",
       "name": "互素 ⟹ 无公共根",
-      "position": null,
+      "position": {
+        "x": 204,
+        "y": 150
+      },
       "proof": "一行：由 Bézout，存在 $u, v$ 使 $uf_1 + vf_2 = 1$；若 $\\alpha$ 是公共根，代入得 $0 = 1$，矛盾。",
       "statement": "若 $\\gcd(f_1, f_2) = 1$，则 $f_1$ 与 $f_2$（在 $F$ 的任何扩张中）没有公共根。逆否形式：有公共根 $\\implies \\gcd$ 非常数。",
       "tags": [
@@ -168,7 +183,10 @@
       "id": "formal-derivative",
       "kind": "definition",
       "name": "形式导数",
-      "position": null,
+      "position": {
+        "x": 266,
+        "y": 21
+      },
       "proof": "这是纯代数定义，不依赖极限，在任意域（任意特征）上有效。可直接验证它满足 $(f + g)' = f' + g'$ 与 Leibniz 法则 $(fg)' = f'g + fg'$：先对 $f = x^m, g = x^n$ 验证，一般情形由双线性展开即得。",
       "statement": "对 $f(x) = \\sum_{k=0}^{n} a_k x^k \\in F[x]$，定义其形式导数为\n$$f'(x) = \\sum_{k=1}^{n} k\\, a_k x^{k-1},$$\n其中 $k a_k$ 意为 $a_k$ 自加 $k$ 次。",
       "tags": [
@@ -180,7 +198,10 @@
       "id": "repeated-root-criterion",
       "kind": "proposition",
       "name": "重根判据",
-      "position": null,
+      "position": {
+        "x": 235,
+        "y": 62
+      },
       "proof": "在 $K[x]$ 中写 $f(x) = (x - \\alpha)g(x)$。由 Leibniz 法则求导：$f'(x) = g(x) + (x - \\alpha)g'(x)$，故 $f'(\\alpha) = g(\\alpha)$。于是 $\\alpha$ 是重根 $\\iff (x - \\alpha) \\mid g \\iff g(\\alpha) = 0 \\iff f'(\\alpha) = 0$。",
       "statement": "设 $K/F$ 是含 $f$ 的根 $\\alpha$ 的扩张。则 $\\alpha$ 是 $f$ 的重根（即 $(x - \\alpha)^2 \\mid f$）当且仅当 $f(\\alpha) = f'(\\alpha) = 0$。",
       "tags": [
@@ -193,7 +214,10 @@
       "id": "separable-criterion",
       "kind": "corollary",
       "name": "可分性判据 gcd(f,f′)=1",
-      "position": null,
+      "position": {
+        "x": 194,
+        "y": 100
+      },
       "proof": "（$\\Longleftarrow$）若 $\\alpha$ 是重根，由重根判据 $f(\\alpha) = f'(\\alpha) = 0$，即 $f$ 与 $f'$ 有公共根，故其 $\\gcd$ 非常数（由「互素 ⟹ 无公共根」的逆否）。注意 $\\gcd$ 由辗转相除算出，整个过程不离开 $F$，域扩张不改变 $\\gcd$。\n（$\\Longrightarrow$）若 $\\gcd(f, f') = d$ 非常数，在分裂域中取 $d$ 的根 $\\alpha$，则 $f(\\alpha) = f'(\\alpha) = 0$，由重根判据 $\\alpha$ 是重根。",
       "statement": "$f$ 在 $F$ 的任意扩张中无重根 $\\iff \\gcd(f, f') = 1$。满足条件时称 $f$ 可分（separable）。",
       "tags": [
@@ -206,7 +230,10 @@
       "id": "separable-polynomial",
       "kind": "definition",
       "name": "可分多项式",
-      "position": null,
+      "position": {
+        "x": 151,
+        "y": 77
+      },
       "proof": "概念说明：可分性是保证一般域上多项式行为「不出岔子」的技术条件（有限域上的不可约多项式恒可分）。等价刻画见「可分性判据 gcd(f,f′)=1」：$f$ 可分 $\\iff \\gcd(f, f') = 1$。",
       "statement": "称 $f \\in F[x]$ 可分（separable），如果它在 $F$ 的任意扩张（等价地，在分裂域或代数闭包）中没有重根，即每个根的重数都是 $1$。",
       "tags": [
@@ -218,7 +245,10 @@
       "id": "cyclic-multiplicative-group",
       "kind": "theorem",
       "name": "乘法群有限子群必循环",
-      "position": null,
+      "position": {
+        "x": 61,
+        "y": 516
+      },
       "proof": "设 $|G| = n$，记 $\\psi(d)$ 为 $G$ 中阶恰为 $d$ 的元素个数。关键断言：$\\psi(d) \\le \\varphi(d)$。若 $a \\in G$ 阶为 $d$，循环子群 $\\langle a \\rangle$ 的 $d$ 个元素都满足 $x^d = 1$；由根的个数上界，$x^d - 1$ 在 $F$ 中至多 $d$ 个根，故 $\\langle a \\rangle$ 恰为 $x^d - 1$ 的全部根集，其中阶恰为 $d$ 者（生成元 $a^k$，$\\gcd(k, d) = 1$）恰 $\\varphi(d)$ 个。断言得证。\n于是由 Euler 恒等式 $\\sum_{d \\mid n} \\varphi(d) = n$：\n$$n = \\sum_{d \\mid n} \\psi(d) \\le \\sum_{d \\mid n} \\varphi(d) = n,$$\n首尾相等迫使逐项取等，$\\psi(n) = \\varphi(n) \\ge 1$，即存在阶为 $n$ 的元素，$G$ 循环。",
       "statement": "设 $F$ 是任意域，$G \\le F^\\times$ 是其乘法群的有限子群，则 $G$ 是循环群。特别地 $\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$。",
       "tags": [
@@ -231,7 +261,10 @@
       "id": "primitive-element",
       "kind": "definition",
       "name": "本原元",
-      "position": null,
+      "position": {
+        "x": 82,
+        "y": 419
+      },
       "proof": "存在性由「乘法群有限子群必循环」保证：$\\mathbb{F}_q^\\times$ 循环，生成元恰有 $\\varphi(q - 1)$ 个。推论：取本原元 $\\alpha$ 得 $\\mathbb{F}_q = \\mathbb{F}_p(\\alpha)$，即有限域是其素子域的单扩张。",
       "statement": "$\\mathbb{F}_q^\\times$ 的生成元称为本原元（primitive element）。即 $\\alpha \\in \\mathbb{F}_q$ 满足 $\\mathbb{F}_q^\\times = \\langle \\alpha \\rangle$：每个非零元都是 $\\alpha$ 的幂，等价地 $\\operatorname{ord}(\\alpha) = q - 1$。",
       "tags": [
@@ -243,7 +276,10 @@
       "id": "mod-p-primitive-root",
       "kind": "example",
       "name": "模 p 原根",
-      "position": null,
+      "position": {
+        "x": 41,
+        "y": 419
+      },
       "proof": "存在性是「乘法群有限子群必循环」的特例：$\\mathbb{F}_p = \\mathbb{Z}/p\\mathbb{Z}$ 是域，故 $\\mathbb{F}_p^\\times$ 循环，其生成元的任一整数代表即原根。\n例：模 $7$ 的原根为 $3, 5$——$3$ 的各次幂 mod $7$ 为 $3, 2, 6, 4, 5, 1$，恰遍历全部非零剩余类。",
       "statement": "数论中的模 $p$ 原根：整数 $g$ 使 $g^0, g^1, \\dots, g^{p-2}$ 跑遍 $1, 2, \\dots, p-1$ 的全部剩余类（mod $p$），即 $g$ 在 $(\\mathbb{Z}/p\\mathbb{Z})^\\times$ 中的阶为 $p - 1$。",
       "tags": [
