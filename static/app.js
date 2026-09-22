@@ -326,12 +326,14 @@ function refreshViewStyles() {
       }
     }
     const style = { display: visible ? 'element' : 'none', opacity, 'background-blacken': blacken, 'text-opacity': textOp };
-    // 焦点层标签加浅色背景，压过下层淡影文字，避免层间文字糊在一起
+    // 焦点层标签加圆角底衬：按节点类型取极浅本色（与白色混合），压过下层淡影文字
     if (!radial && viewMode === 'layered' && l === focusLayer) {
-      style['text-background-color'] = '#dbeafe';
-      style['text-background-opacity'] = 0.85;
+      const hex = KIND_COLOR[gn.kind] || '#718096';
+      const mix = i => Math.round(255 + (parseInt(hex.substr(i, 2), 16) - 255) * 0.14);
+      style['text-background-color'] = `rgb(${mix(1)}, ${mix(3)}, ${mix(5)})`;
+      style['text-background-opacity'] = 0.9;
       style['text-background-shape'] = 'roundrectangle';
-      style['text-background-padding'] = '2px';
+      style['text-background-padding'] = '3px';
     } else {
       style['text-background-opacity'] = 0;
     }
