@@ -78,6 +78,12 @@ def validate_graph(g):
         if pos is not None:
             if not isinstance(pos, dict) or not _is_number(pos.get("x")) or not _is_number(pos.get("y")):
                 errors.append(f"{where} (id={nid}): position 必须是 null 或 {{'x': 数值, 'y': 数值}}")
+        tags = n.get("tags")
+        if tags is not None and (not isinstance(tags, list) or not all(isinstance(t, str) for t in tags)):
+            errors.append(f"{where} (id={nid}): tags 若提供必须是字符串数组")
+        for field in ("statement", "proof", "chapter"):
+            if field in n and n[field] is not None and not isinstance(n[field], str):
+                errors.append(f"{where} (id={nid}): {field} 必须是字符串")
 
     # ---- 边 ----
     edge_ids = set()
@@ -99,6 +105,8 @@ def validate_graph(g):
             ref = e.get(endpoint)
             if ref not in node_ids:
                 errors.append(f"{where} (id={eid}): {endpoint} 指向不存在的节点 '{ref}'")
+        if e.get("source") is not None and e.get("source") == e.get("target"):
+            errors.append(f"{where} (id={eid}): source 与 target 相同（自环）")
 
     # ---- 问答 ----
     q_ids = set()
