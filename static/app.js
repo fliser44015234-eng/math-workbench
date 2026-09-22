@@ -714,6 +714,9 @@ const AI_SYSTEM_IMPORT = '你是数学知识图谱的建图助手。用户给你
   '- 节点 id 用英文 kebab-case（小写字母/数字/连字符）。\n' +
   '- statement/proof 用笔记原文的 LaTeX，忠于原文，不得编造；笔记没给证明则 proof 留空字符串。\n' +
   '- 若笔记中的知识点在现有节点清单里已存在，仍照常提取（会按同名去重并列入 skipped）；现有节点清单主要用于边端点引用。\n' +
+  '- 节点 name 必须是简短主题名（≤15 字，优先中文）：禁止裸公式、禁止书名/页码/章节号引用（这类信息放 statement 或 tags）。公式只允许作为短修饰出现在 name 里（如「Bézout 恒等式」可以，「det(A^t)=det(A)」不行——应命名为「转置保持行列式」）。\n' +
+  '- 边方向：depends_on 的 A→B 表示「B 的证明使用了 A」。示例：「余子式展开 ⇒ det(A^t)=det(A) 的证明」应连 cofactor-expansion → det-transpose，而不是反过来。拿不准方向的边宁可不加。\n' +
+  '- statement 要完整、干净（LaTeX 正常使用），不要残留「见 p.149」之类的引用文字。\n' +
   '- 严格只输出一个 JSON 对象，不要输出任何其他文字，不要使用 markdown 代码围栏。';
 
 function loadAIConfig() {
@@ -728,20 +731,26 @@ function applyBYOKVisibility() {
   document.body.classList.toggle('byok', readOnly && hasBYOK());
 }
 
-async function callAI(messages) {
+async function callAI(messages, { timeoutMs = 180000 } = {}) {
   const cfg = loadAIConfig();
   if (!cfg) throw new Error('未配置 API Key：请先在工具栏「AI 设置」里配置。');
   const body = { model: cfg.model, messages };
   if (cfg.base_url.includes('moonshot')) body.reasoning_effort = 'low';  // 仅 Moonshot 支持
+  const ctrl = new AbortController();
+  const timeout = setTimeout(() => ctrl.abort(), timeoutMs);
   let res;
   try {
     res = await fetch(`${cfg.base_url.replace(/\/+$/, '')}/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${cfg.api_key}` },
       body: JSON.stringify(body),
+      signal: ctrl.signal,
     });
   } catch (e) {
+    if (e.name === 'AbortError') throw new Error('请求超时，笔记可能过长，可分次导入');
     throw new Error('该厂商可能不允许网页直连（CORS）或网络异常，可换 Kimi/DeepSeek 或在本地运行服务端。');
+  } finally {
+    clearTimeout(timeout);
   }
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -1463,6 +1472,7 @@ function openImportModal() {
     <div class="form-row"><label>或直接粘贴笔记内容 *</label><textarea id="imp-content" style="min-height:140px" placeholder="粘贴 Markdown / 纯文本笔记…"></textarea></div>
     <div class="form-row"><label>章节（可选，默认取文件名）</label><input id="imp-chapter" placeholder="如 L03 / Week 4"></div>
     <div class="form-error hidden" id="imp-error"></div>
+    <div class="form-hint hidden" id="imp-progress-hint">长笔记通常 30–90 秒，请勿关闭页面。</div>
     <div class="form-actions">
       <button id="f-cancel">取消</button>
       <button class="primary" id="imp-run">AI 提取</button>
@@ -1487,7 +1497,12 @@ async function runImportExtract() {
   const chapterHint = $('#imp-chapter').value.trim();
   const btn = $('#imp-run');
   btn.disabled = true;
-  btn.textContent = 'AI 提取中（约 15–60 秒）…';
+  // 实时进度：按钮每秒跳表 + 小字提示，防止误以为卡死
+  const startedAt = Date.now();
+  const tick = () => { btn.textContent = `AI 正在通读笔记…已耗时 ${Math.round((Date.now() - startedAt) / 1000)}s`; };
+  tick();
+  const ticker = setInterval(tick, 1000);
+  $('#imp-progress-hint').classList.remove('hidden');
   try {
     if (readOnly) {
       // 网页版 BYOK：客户端直连，结果汇入同一确认页
@@ -1521,6 +1536,8 @@ async function runImportExtract() {
   } catch (e) {
     showErr(`提取失败：${e.message}`);
   } finally {
+    clearInterval(ticker);
+    $('#imp-progress-hint').classList.add('hidden');
     btn.disabled = false;
     btn.textContent = 'AI 提取';
   }
@@ -1532,8 +1549,8 @@ function renderImportConfirm(data) {
     <label class="import-item">
       <input type="checkbox" checked data-kind="node" data-idx="${i}">
       <span class="import-kind" style="background:${KIND_COLOR[n.kind] || '#718096'}">${KIND_ZH[n.kind] || n.kind}</span>
-      <span>${escapeHtml(n.name)}</span>
-      <span class="import-preview">${escapeHtml((n.statement || '').slice(0, 60))}</span>
+      <span class="import-name">${escapeHtml(n.name)}</span>
+      <span class="import-preview">${escapeHtml(n.statement || '')}</span>
     </label>`).join('');
   const edgeHtml = edges.map((e, i) => `
     <label class="import-item">
@@ -1551,6 +1568,7 @@ function renderImportConfirm(data) {
       <button class="primary" id="imp-join">加入工作台</button>
     </div>
   `);
+  typeset($('#modal'));   // 预览区公式渲染成 SVG（限高截断，不再显示裸 LaTeX 源码）
   $('#f-cancel').onclick = closeModal;
   $('#imp-join').onclick = () => joinImport(data);
 }

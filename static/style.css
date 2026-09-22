@@ -403,7 +403,16 @@ html, body {
 }
 .import-item:hover { background: #f0f7ff; }
 .import-item input { flex: none; }
-.import-item .import-preview { font-size: 11px; color: #a0aec0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.import-name { flex: none; font-weight: 600; }
+.import-item .import-preview {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: #718096;
+  line-height: 1.6;
+  max-height: 3.2em;   /* 限高截断；公式由 MathJax 渲染而非裸源码 */
+  overflow: hidden;
+}
 .import-skipped { font-size: 12px; color: #a0aec0; margin-bottom: 10px; }
 .import-kind {
   flex: none;
