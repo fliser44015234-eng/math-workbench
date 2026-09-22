@@ -325,7 +325,17 @@ function refreshViewStyles() {
         }
       }
     }
-    n.style({ display: visible ? 'element' : 'none', opacity, 'background-blacken': blacken, 'text-opacity': textOp });
+    const style = { display: visible ? 'element' : 'none', opacity, 'background-blacken': blacken, 'text-opacity': textOp };
+    // 焦点层标签加浅色背景，压过下层淡影文字，避免层间文字糊在一起
+    if (!radial && viewMode === 'layered' && l === focusLayer) {
+      style['text-background-color'] = '#ffffff';
+      style['text-background-opacity'] = 0.85;
+      style['text-background-shape'] = 'roundrectangle';
+      style['text-background-padding'] = '2px';
+    } else {
+      style['text-background-opacity'] = 0;
+    }
+    n.style(style);
   });
   cy.edges().forEach(e => {
     const visible = e.source().style('display') !== 'none' && e.target().style('display') !== 'none';
