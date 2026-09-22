@@ -151,6 +151,8 @@ async function saveGraph() {
     try {
       localStorage.setItem(LS_KEY, JSON.stringify(graph));
       toast('已保存到浏览器（本机可见）');
+      const restoreBtn = document.getElementById('btn-restore-published');
+      if (restoreBtn) restoreBtn.classList.remove('hidden');
       return true;
     } catch (e) {
       toast('保存失败：' + e.message);
