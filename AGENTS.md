@@ -15,7 +15,7 @@
    - 节点 `id` 用英文 kebab-case（如 `repeated-root-criterion`），全库唯一；边 id 用 `e-` 前缀短横线风格；问答 id 用 `q-YYYYMMDD-序号`。
    - `statement` / `proof` 用 LaTeX：行内 `$...$`，行间 `$$...$$`。JSON 字符串里反斜杠要双写（`\\in`、`\\alpha`）。
    - 新节点的 `position` 填 `null`，前端会自动布局。
-   - 新节点的 `layer` 可以不写，随后运行 `python3 scripts/compute_layers.py`（**不带 `--force`**，只补缺失、不覆盖人工调整）自动分层；也可以手动按"比它最高支撑前驱高一层"指定。注意 `validate.py` 要求 layer 必填 ≥1，顺序是：编辑 → 跑分层脚本 → 跑校验。
+   - 新节点的 `layer` 不写即可：服务端在 PUT 保存时会自动跑 `scripts/compute_layers.py` 补齐缺失层号（不覆盖人工调整）。想手动指定就按"比它最高支撑前驱高一层"取值。`validate.py` 对 layer 的要求是可选、若提供必须 ≥1 整数。
    - 内容以用户的课程笔记/教材为准，不要凭印象编造命题表述。
 3. **运行校验**（必须）：
    ```bash

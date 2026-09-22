@@ -14,13 +14,15 @@ import json
 import os
 import re
 import shutil
+import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
 
 import requests
 from flask import Flask, jsonify, request, send_from_directory
 
-from validate import validate_graph
+from validate import EDGE_RELATIONS, NODE_KINDS, validate_graph
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -73,20 +75,43 @@ def data_files(filename):
     return send_from_directory(DATA_DIR, filename)
 
 
-# ---------- 图数据读写 ----------
+# ---------- 图数据读写（支持 ?name= 多图） ----------
 
-def load_graph():
-    with open(GRAPH_PATH, encoding="utf-8") as f:
+# 图名白名单：小写字母/数字/点/连字符，拒绝 ".."（防路径穿越）
+GRAPH_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9.\-]{0,39}$")
+
+
+def resolve_graph_path():
+    """从 ?name= 解析出 data/ 下已存在的 .json 文件；非法或不存在返回 None。"""
+    name = request.args.get("name", "graph")
+    if not GRAPH_NAME_RE.match(name) or ".." in name:
+        return None
+    p = (DATA_DIR / f"{name}.json").resolve()
+    if DATA_DIR.resolve() not in p.parents:
+        return None
+    if not p.is_file():
+        return None   # API 不创建新图；开新图用 cp data/graph.template.json data/新名.json
+    return p
+
+
+def load_graph(path=None):
+    with open(path or GRAPH_PATH, encoding="utf-8") as f:
         return json.load(f)
 
 
 @app.route("/api/graph", methods=["GET"])
 def get_graph():
-    return jsonify(load_graph())
+    path = resolve_graph_path()
+    if path is None:
+        return jsonify({"error": "not_found", "message": "图不存在或名称非法"}), 404
+    return jsonify(load_graph(path))
 
 
 @app.route("/api/graph", methods=["PUT"])
 def put_graph():
+    path = resolve_graph_path()
+    if path is None:
+        return jsonify({"ok": False, "errors": ["图不存在或名称非法"]}), 404
     data = request.get_json(force=True, silent=True)
     if data is None:
         return jsonify({"ok": False, "errors": ["请求体不是合法 JSON"]}), 400
@@ -94,12 +119,23 @@ def put_graph():
     if errors:
         return jsonify({"ok": False, "errors": errors}), 400
     data.setdefault("meta", {})["updated"] = datetime.now().isoformat(timespec="seconds")
-    if GRAPH_PATH.exists():
-        shutil.copy(GRAPH_PATH, BACKUP_PATH)
-    with open(GRAPH_PATH, "w", encoding="utf-8") as f:
+    if path.exists():
+        shutil.copy(path, path.with_name(path.name + ".bak"))
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    return jsonify({"ok": True})
+    # 缺 layer 的节点：best-effort 调 compute_layers.py 补齐（异常静默，不影响保存成功）
+    layers_filled = False
+    if any("layer" not in n for n in data.get("nodes", [])):
+        try:
+            proc = subprocess.run(
+                [sys.executable, str(BASE_DIR / "scripts" / "compute_layers.py"), str(path)],
+                cwd=BASE_DIR, timeout=120, capture_output=True, check=False,
+            )
+            layers_filled = proc.returncode == 0
+        except Exception:
+            pass
+    return jsonify({"ok": True, "layers_filled": layers_filled})
 
 
 # ---------- AI 问答 ----------
@@ -343,6 +379,140 @@ def suggest_node():
         edges.append({"target": t, "direction": direction, "relation": relation,
                       "reason": str(item.get("reason", ""))[:40]})
     return jsonify({"layer": layer, "edges": edges[:6]})
+
+
+# ---------- AI 笔记导入 ----------
+
+IMPORT_SYSTEM = (
+    "你是数学知识图谱的建图助手。用户给你一份课程笔记，请你提取知识点与逻辑关系，输出为图谱数据。"
+    "规则：\n"
+    "- 节点 kind 只能是：definition（定义）/ axiom（公理）/ lemma（引理）/ proposition（命题）/ "
+    "theorem（定理）/ corollary（推论）/ claim（断言）/ technique（技巧）/ example（例）。\n"
+    "- 边 relation 只能是：depends_on（A→B 表示 A 支撑 B 的证明，箭头指向被支撑者）/ "
+    "implies（A 直接推出 B）/ equivalent（A 与 B 等价，无方向）/ generalizes（A 是 B 的一般情形）/ "
+    "analogy（跨领域类比，无方向）。只提取确信无疑的强关系，拿不准宁可不加。\n"
+    "- 节点 id 用英文 kebab-case（小写字母/数字/连字符）。\n"
+    "- statement/proof 用笔记原文的 LaTeX，忠于原文，不得编造；笔记没给证明则 proof 留空字符串。\n"
+    "- 若笔记中的知识点在现有节点清单里已存在，仍照常提取（服务端会按同名去重并列入 skipped）；"
+    "现有节点清单主要用于边端点引用。\n"
+    "- 严格只输出一个 JSON 对象，不要输出任何其他文字，不要使用 markdown 代码围栏。"
+)
+
+
+def slugify(text):
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return slug or "node"
+
+
+@app.route("/api/import-notes", methods=["POST"])
+def import_notes():
+    body = request.get_json(force=True, silent=True) or {}
+    content = (body.get("content") or "").strip()
+    chapter_hint = (body.get("chapter_hint") or "").strip()
+    if not content:
+        return jsonify({"error": "bad_request", "message": "需要 content"}), 400
+    content = content[:60000]  # 防超长
+
+    key, model = load_ai_config()
+    if not key:
+        return jsonify({"error": "not_configured",
+                        "message": "未配置 Moonshot API Key"}), 501
+
+    g = load_graph()
+    summary, _ = graph_summary_by_layer(g)
+    chapter_line = f'所有新节点的 chapter 统一填 "{chapter_hint}"。' if chapter_hint else "chapter 可留空字符串。"
+    user_prompt = (
+        "现有图谱节点清单（按层分组，格式 id（名称，kind），供边端点引用）：\n"
+        f"{summary}\n\n"
+        "注意：笔记中出现的知识点请全部照常提取，不要因清单中已有而跳过；与现有节点重名的由服务端去重。\n"
+        f"{chapter_line}\n"
+        "只输出如下 JSON：\n"
+        '{"nodes": [{"id": "...", "name": "...", "kind": "...", "statement": "...", "proof": "...", '
+        '"tags": ["..."], "chapter": "..."}], '
+        '"edges": [{"source": "节点id", "target": "节点id", "relation": "...", "label": "...", "note": "..."}]}\n'
+        "edge 端点可以是现有节点 id 或本次新节点 id。\n\n"
+        "笔记正文：\n" + content
+    )
+
+    try:
+        resp = _http.post(
+            MOONSHOT_URL,
+            headers={"Authorization": f"Bearer {key}"},
+            json={"model": model, "messages": [
+                {"role": "system", "content": IMPORT_SYSTEM},
+                {"role": "user", "content": user_prompt},
+            ], "reasoning_effort": "low"},
+            timeout=300,
+        )
+        if resp.status_code != 200:
+            return jsonify({"error": "upstream",
+                            "message": f"Moonshot API 返回 {resp.status_code}：{resp.text[:300]}"}), 502
+        text = resp.json()["choices"][0]["message"]["content"]
+    except requests.RequestException as exc:
+        return jsonify({"error": "upstream", "message": f"调用 Moonshot API 失败：{exc}"}), 502
+    except (KeyError, IndexError, ValueError) as exc:
+        return jsonify({"error": "upstream", "message": f"解析 Moonshot 响应失败：{exc}"}), 502
+
+    # 防御性解析：剥围栏、json.loads、逐项校验，非法条目丢弃不报错
+    raw = text.strip()
+    if raw.startswith("```"):
+        raw = re.sub(r"^```(?:json)?\s*", "", raw)
+        raw = re.sub(r"\s*```$", "", raw)
+    try:
+        data = json.loads(raw)
+    except ValueError:
+        return jsonify({"error": "parse",
+                        "message": "AI 输出不是合法 JSON",
+                        "raw": text[:300]}), 502
+
+    existing_ids = {n["id"] for n in g["nodes"]}
+    existing_names = {re.sub(r"\s+", "", n["name"]).lower() for n in g["nodes"]}
+    nodes_out, skipped_existing = [], []
+    batch_ids = set()
+    for item in data.get("nodes") or []:
+        if len(nodes_out) >= 60:   # 上限防失控
+            break
+        if not isinstance(item, dict):
+            continue
+        name = str(item.get("name") or "").strip()
+        if not name or item.get("kind") not in NODE_KINDS:
+            continue
+        # 与现有节点同名（去空白、忽略大小写）→ 视为已存在，不入候选
+        if re.sub(r"\s+", "", name).lower() in existing_names:
+            skipped_existing.append(name)
+            continue
+        nid = slugify(str(item.get("id") or name))
+        if nid in existing_ids or nid in batch_ids:
+            base, i = nid, 2
+            while f"{base}-{i}" in existing_ids or f"{base}-{i}" in batch_ids:
+                i += 1
+            nid = f"{base}-{i}"
+        batch_ids.add(nid)
+        tags = item.get("tags")
+        nodes_out.append({
+            "id": nid,
+            "name": name,
+            "kind": item["kind"],
+            "statement": str(item.get("statement") or ""),
+            "proof": str(item.get("proof") or ""),
+            "tags": [str(t) for t in tags if str(t).strip()] if isinstance(tags, list) else [],
+            "chapter": str(item.get("chapter") or chapter_hint or ""),
+        })
+
+    valid_ids = existing_ids | batch_ids
+    edges_out = []
+    for item in data.get("edges") or []:
+        if not isinstance(item, dict):
+            continue
+        s, t, r = item.get("source"), item.get("target"), item.get("relation")
+        if s in valid_ids and t in valid_ids and s != t and r in EDGE_RELATIONS:
+            edges_out.append({
+                "source": s, "target": t, "relation": r,
+                "label": str(item.get("label") or "")[:60],
+                "note": str(item.get("note") or "")[:200],
+            })
+
+    return jsonify({"nodes": nodes_out, "edges": edges_out, "skipped_existing": skipped_existing})
 
 
 if __name__ == "__main__":

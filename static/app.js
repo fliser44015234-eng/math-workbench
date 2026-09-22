@@ -103,14 +103,21 @@ function genQaId() {
 
 /* ---------- 数据加载与保存 ---------- */
 
+// 多图支持：?graph=名字 → data/{名字}.json / /api/graph?name={名字}
+const GRAPH_NAME = (() => {
+  const p = new URLSearchParams(location.search).get('graph') || 'graph';
+  return (/^[a-z0-9][a-z0-9.-]{0,39}$/.test(p) && !p.includes('..')) ? p : 'graph';
+})();
+const GRAPH_API = `/api/graph?name=${encodeURIComponent(GRAPH_NAME)}`;
+
 async function loadGraph() {
   try {
-    const res = await fetch('/api/graph');
+    const res = await fetch(GRAPH_API);
     if (!res.ok) throw new Error(String(res.status));
     return { data: await res.json(), readOnly: false };
   } catch {
-    const res = await fetch('data/graph.json');
-    if (!res.ok) throw new Error('无法加载 data/graph.json');
+    const res = await fetch(`data/${GRAPH_NAME}.json`);
+    if (!res.ok) throw new Error(`无法加载 data/${GRAPH_NAME}.json`);
     return { data: await res.json(), readOnly: true };
   }
 }
@@ -118,7 +125,7 @@ async function loadGraph() {
 async function saveGraph() {
   if (readOnly) return true;
   try {
-    const res = await fetch('/api/graph', {
+    const res = await fetch(GRAPH_API, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(graph),
@@ -1068,6 +1075,131 @@ function openMoveLayerModal(n) {
   };
 }
 
+/* ---------- 笔记导入（AI 提取 + 确认合并） ---------- */
+
+function importNodeName(id, newNodes) {
+  const n = newNodes.find(x => x.id === id) || findNode(id);
+  return n ? n.name : id;
+}
+
+function openImportModal() {
+  openModal(`
+    <h3>导入笔记</h3>
+    <div class="form-row"><label>选择笔记文件（.md / .txt）</label><input type="file" id="imp-file" accept=".md,.txt,text/markdown,text/plain"></div>
+    <div class="form-row"><label>或直接粘贴笔记内容 *</label><textarea id="imp-content" style="min-height:140px" placeholder="粘贴 Markdown / 纯文本笔记…"></textarea></div>
+    <div class="form-row"><label>章节（可选，默认取文件名）</label><input id="imp-chapter" placeholder="如 L03 / Week 4"></div>
+    <div class="form-error hidden" id="imp-error"></div>
+    <div class="form-actions">
+      <button id="f-cancel">取消</button>
+      <button class="primary" id="imp-run">AI 提取</button>
+    </div>
+  `);
+  $('#f-cancel').onclick = closeModal;
+  $('#imp-file').onchange = async e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    $('#imp-content').value = await f.text();
+    if (!$('#imp-chapter').value) $('#imp-chapter').value = f.name.replace(/\.[^.]+$/, '');
+  };
+  $('#imp-run').onclick = runImportExtract;
+}
+
+async function runImportExtract() {
+  const errBox = $('#imp-error');
+  const showErr = msg => { errBox.textContent = msg; errBox.classList.remove('hidden'); };
+  errBox.classList.add('hidden');
+  const content = $('#imp-content').value.trim();
+  if (!content) { showErr('请先选择文件或粘贴笔记内容。'); return; }
+  const btn = $('#imp-run');
+  btn.disabled = true;
+  btn.textContent = 'AI 提取中（约 15–60 秒）…';
+  try {
+    const res = await fetch('/api/import-notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content, chapter_hint: $('#imp-chapter').value.trim() }),
+    });
+    if (res.status === 501) {
+      showErr('未配置 API Key，无法使用 AI 提取。');
+      return;
+    }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      showErr(`提取失败：${err.message || res.status}`);
+      return;
+    }
+    renderImportConfirm(await res.json());
+  } catch (e) {
+    showErr(`提取失败：${e.message}`);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'AI 提取';
+  }
+}
+
+function renderImportConfirm(data) {
+  const { nodes, edges, skipped_existing: skipped } = data;
+  const nodeHtml = nodes.map((n, i) => `
+    <label class="import-item">
+      <input type="checkbox" checked data-kind="node" data-idx="${i}">
+      <span class="import-kind" style="background:${KIND_COLOR[n.kind] || '#718096'}">${KIND_ZH[n.kind] || n.kind}</span>
+      <span>${escapeHtml(n.name)}</span>
+      <span class="import-preview">${escapeHtml((n.statement || '').slice(0, 60))}</span>
+    </label>`).join('');
+  const edgeHtml = edges.map((e, i) => `
+    <label class="import-item">
+      <input type="checkbox" checked data-kind="edge" data-idx="${i}">
+      <span class="import-kind" style="background:${REL_COLOR[e.relation] || '#718096'}">${REL_ZH[e.relation] || e.relation}</span>
+      <span>${escapeHtml(importNodeName(e.source, nodes))} → ${escapeHtml(importNodeName(e.target, nodes))}</span>
+    </label>`).join('');
+  openModal(`
+    <h3>确认导入（节点 ${nodes.length} / 边 ${edges.length}）</h3>
+    ${skipped.length ? `<div class="import-skipped">与现有节点同名，已跳过：${skipped.map(escapeHtml).join('、')}</div>` : ''}
+    <div class="form-row"><label>节点（取消勾选则不导入）</label><div class="import-list">${nodeHtml || '<div class="form-hint">无新增节点</div>'}</div></div>
+    <div class="form-row"><label>边</label><div class="import-list">${edgeHtml || '<div class="form-hint">无新增边</div>'}</div></div>
+    <div class="form-actions">
+      <button id="f-cancel">取消</button>
+      <button class="primary" id="imp-join">加入工作台</button>
+    </div>
+  `);
+  $('#f-cancel').onclick = closeModal;
+  $('#imp-join').onclick = () => joinImport(data);
+}
+
+async function joinImport(data) {
+  const pickedNodes = [], pickedEdges = [];
+  document.querySelectorAll('#modal input[type="checkbox"]').forEach(cb => {
+    const pool = cb.dataset.kind === 'node' ? data.nodes : data.edges;
+    const item = pool[+cb.dataset.idx];
+    if (cb.checked && item) (cb.dataset.kind === 'node' ? pickedNodes : pickedEdges).push(item);
+  });
+  if (!pickedNodes.length && !pickedEdges.length) { toast('没有勾选任何内容'); return; }
+  pickedNodes.forEach(n => {
+    graph.nodes.push({
+      id: n.id, name: n.name, kind: n.kind,
+      statement: n.statement, proof: n.proof,
+      tags: n.tags || [], chapter: n.chapter || '',
+      position: null,   // 不写 layer：服务端保存时自动按依赖深度补全
+    });
+  });
+  pickedEdges.forEach(e => {
+    if (!findNode(e.source) || !findNode(e.target)) return;   // 端点未勾选则丢弃
+    graph.edges.push({
+      id: genEdgeId(), source: e.source, target: e.target,
+      relation: e.relation, label: e.label || '', note: e.note || '',
+    });
+  });
+  if (await saveGraph()) {
+    closeModal();
+    try {
+      const fresh = await loadGraph();   // 重新 GET，拿到服务端补好的 layer
+      graph = fresh.data;
+    } catch { /* 保留内存状态 */ }
+    rebuildGraph();
+    toast(`导入 ${pickedNodes.length} 节点 ${pickedEdges.length} 边`);
+  }
+}
+
 /* ---------- 删除 ---------- */
 
 async function deleteNode(id) {
@@ -1164,6 +1296,7 @@ function bindToolbar() {
   };
   if (!readOnly) {
     $('#btn-add').onclick = () => openNodeModal(null);
+    $('#btn-import').onclick = openImportModal;
   }
   $('#sidebar-close').onclick = hideSidebar;
   $('#btn-radial').onclick = enterRadial;
@@ -1193,6 +1326,7 @@ function bindToolbar() {
 
   document.title = graph.meta.title || '数学知识网络';
   $('#app-title').textContent = graph.meta.title || '数学知识网络';
+  $('#graph-name').textContent = `图：${GRAPH_NAME}`;
   if (readOnly) {
     document.body.classList.add('readonly');
     const badge = $('#mode-badge');

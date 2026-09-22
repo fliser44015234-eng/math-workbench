@@ -35,6 +35,7 @@ python3 -m venv .venv
 
 ## 如何添加内容
 
+- **笔记导入**（成批录入）：工具栏"导入笔记"——上传 .md/.txt 或直接粘贴，AI（kimi-k3）通读全图清单后提取知识点与强相关边，你在确认页勾选后一键并入；新节点不写层号，服务端保存时自动补层。与现有节点同名的条目会被识别为已存在并跳过。
 - **网页编辑**（推荐日常用）：顶部"添加节点"；节点侧栏里"编辑 / 删除 / 添加边"；边侧栏可改标签与备注。所有变更立即写回 `data/graph.json`（旧文件自动备份为 `graph.json.bak`）。添加节点时可点"**AI 建议层与关系**"：kimi-k3 会阅读全图摘要，建议新节点的层号和最多 6 条强相关边（逐条勾选后再随节点一次保存）。
 - **让 Kimi Code 帮忙写**：直接说"把 XX 定理加入工作台"。代理会按 `AGENTS.md` 的流程改 `data/graph.json` 并跑校验。数据格式的精确规范见 `SCHEMA.md`。
 - 命令行校验数据：`./.venv/bin/python validate.py data/graph.json`。
@@ -48,6 +49,13 @@ cp config.example.json config.local.json   # 然后编辑填入 sk-...
 ```
 
 也可以用环境变量 `MOONSHOT_API_KEY`。未配置时"问 AI"会提示改用手动存档，其余功能不受影响。`config.local.json` 已被 `.gitignore` 忽略，且服务器不提供对它的 HTTP 访问，不会泄露。
+
+## 多图支持与空白模板
+
+一个部署可以挂多份图数据：URL 加 `?graph=名字` 即读写 `data/名字.json`（默认 `graph`）。
+
+- **开新图**：`cp data/graph.template.json data/新名.json`，然后访问 `http://localhost:8421/?graph=新名`（名字限小写字母/数字/点/连字符，≤40 字符；API 只允许读写 data/ 下已存在的文件，不能用它创建）。
+- **空白模板**：工具栏"空白模板"链接新标签页打开 `?graph=graph.template`；线上地址同理——`https://<用户名>.github.io/<仓库名>/?graph=graph.template` 就是一个公开只读的空白演示页。
 
 ## 部署到 GitHub Pages（公开只读）
 

@@ -32,9 +32,25 @@ html, body {
 #toolbar .title {
   font-size: 16px;
   font-weight: 700;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+.graph-name {
+  font-size: 11px;
+  color: #a0aec0;
   margin-right: 8px;
   white-space: nowrap;
 }
+#link-template {
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+#link-template:hover { background: #edf2f7; }
 #search { width: 180px; }
 #toolbar input, #toolbar select {
   height: 30px;
@@ -365,6 +381,36 @@ html, body {
 .ai-edge-item:hover { background: #f0f7ff; }
 .ai-edge-item input { flex: none; }
 .ai-edge-reason { font-size: 11px; color: #a0aec0; margin-left: auto; }
+
+/* 导入笔记模态 */
+.import-list {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  margin-bottom: 10px;
+}
+.import-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  padding: 4px 2px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.import-item:hover { background: #f0f7ff; }
+.import-item input { flex: none; }
+.import-item .import-preview { font-size: 11px; color: #a0aec0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.import-skipped { font-size: 12px; color: #a0aec0; margin-bottom: 10px; }
+.import-kind {
+  flex: none;
+  font-size: 10px;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0 6px;
+}
 
 /* ---- 楼层 rail（分层高楼视图） ---- */
 #floor-rail {

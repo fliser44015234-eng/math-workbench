@@ -43,14 +43,14 @@
 | `proof` | string | 证明，同样支持 LaTeX；换行用 `\n`。 |
 | `tags` | string[] | 主题标签，用于顶部下拉过滤，如 `["多项式", "域论"]`。 |
 | `chapter` | string | 章节标记，如 `"L03"`、`"Week 2"`，可空。 |
-| `layer` | int | 必填，**≥1 的整数，1 = 地基**。语义：高中/基本常识在第 1 层，"由下层知识一步推出"的在上层，等价的必在同一层。由 `scripts/compute_layers.py` 自动计算（见下）；人工调整优先。 |
+| `layer` | int | **可留空**（保存时服务端自动按依赖深度补全）；若提供必须是 ≥1 的整数，1 = 地基。语义：高中/基本常识在第 1 层，"由下层知识一步推出"的在上层，等价的必在同一层。由 `scripts/compute_layers.py` 计算；人工调整优先。 |
 | `position` | object \| null | 画布坐标 `{ "x": 数值, "y": 数值 }`；`null` 表示尚未布局——只要任一节点为 `null`，前端首次加载会自动布局并把坐标写回。所有视图共用同一套平面坐标，拖动即保存。 |
 
 ### layer 的计算与人工调整
 
 - 算法（`scripts/compute_layers.py`）：支撑边 = `depends_on` + `implies`；`equivalent` 的节点用并查集归并到同层；`generalizes` / `analogy` **不参与**层计算；支撑关系成环时用 SCC 缩点（环上节点同层），再在 DAG 上取最长路：`layer = 1`（无支撑前驱）或 `1 + max(layer(前驱))`。
-- 用法：`python3 scripts/compute_layers.py` 只为**缺失 layer 的节点**补齐（不覆盖人工调整）；`python3 scripts/compute_layers.py --force` 全量重算。运行后直接写回 `data/graph.json` 并打印每层成员名单。
-- 新增节点时可以不写 `layer`，随后运行一次不带 `--force` 的脚本补齐；`validate.py` 要求 layer 必填，请先跑脚本再校验。手动指定时按"比它最高支撑前驱高一层"取值。
+- 用法：`python3 scripts/compute_layers.py` 只为**缺失 layer 的节点**补齐（不覆盖人工调整）；`python3 scripts/compute_layers.py --force` 全量重算。运行后直接写回 `data/graph.json` 并打印每层成员名单。**服务端在每次 PUT 保存后若发现缺 layer 的节点，会自动跑一次该脚本补齐**（网页编辑 / 笔记导入的新节点无需手写 layer）。
+- 新增节点时可以不写 `layer`（推荐，交给自动补全）；`validate.py` 对 layer 的要求是：可留空，若提供必须是 ≥1 的整数。手动指定时按"比它最高支撑前驱高一层"取值。
 - 网页上唯一的跨层移动方式是节点侧栏的"移动到别的层"按钮。
 
 ## 边 edge

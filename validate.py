@@ -72,8 +72,8 @@ def validate_graph(g):
         if not n.get("name"):
             errors.append(f"{where} (id={nid}): name 缺失或为空")
         layer = n.get("layer")
-        if not isinstance(layer, int) or isinstance(layer, bool) or layer < 1:
-            errors.append(f"{where} (id={nid}): layer 必须是 ≥1 的整数（1=地基），当前为 {layer!r}")
+        if layer is not None and (not isinstance(layer, int) or isinstance(layer, bool) or layer < 1):
+            errors.append(f"{where} (id={nid}): layer 若提供必须是 ≥1 的整数（1=地基），当前为 {layer!r}")
         pos = n.get("position")
         if pos is not None:
             if not isinstance(pos, dict) or not _is_number(pos.get("x")) or not _is_number(pos.get("y")):
