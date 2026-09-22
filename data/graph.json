@@ -1164,7 +1164,8 @@
   "meta": {
     "course": "MAT3042",
     "title": "MAT3042 知识网络",
-    "updated": "2026-09-22T01:35:45"
+    "updated": "2026-09-22T11:03:55",
+    "layoutVersion": 2
   },
   "nodes": [
     {
@@ -1174,8 +1175,8 @@
       "layer": 1,
       "name": "多项式带余除法",
       "position": {
-        "x": 330,
-        "y": 762
+        "x": 1334,
+        "y": 6
       },
       "proof": "存在性：对 $\\deg f$ 作归纳（多项式长除法）。若 $\\deg f < \\deg g$，取 $q = 0, r = f$；否则用 $g$ 的首项消去 $f$ 的首项，把问题归结到次数更低的多项式。\n唯一性：若 $qg + r = q'g + r'$，则 $(q - q')g = r' - r$。若 $q \\ne q'$，左边次数 $\\ge \\deg g$，右边次数 $< \\deg g$，矛盾。故 $q = q'$，进而 $r = r'$。\n（Week 2 课堂把整数版与多项式版都留作练习。）",
       "statement": "设 $F$ 是域，$f, g \\in F[x]$ 且 $g \\ne 0$。则存在唯一的 $q, r \\in F[x]$ 使得\n$$f = qg + r, \\qquad r = 0\\ \\text{或}\\ \\deg r < \\deg g.$$\nWeek 2 速记把整数版与多项式版并列（La）：(i) 任意 $n, m \\in \\mathbb{Z}$，存在 $q, r$ 使 $n = qm + r$；(ii) 任意 $f(x)$ 与 $m(x) \\ne 0$，存在 $q(x), r(x)$ 使 $f = qm + r$。$q$ 称为商（quotient），$r$ 称为余式（remainder）。",
@@ -1190,8 +1191,8 @@
       "layer": 2,
       "name": "F[x] 是欧几里得整环",
       "position": {
-        "x": 221,
-        "y": 661
+        "x": 404,
+        "y": 439
       },
       "proof": "$F[x]$ 是整环：$F$ 无零因子，首项系数相乘仍非零。带余除法（见「多项式带余除法」）恰给出以 $\\deg$ 为度量的欧几里得性质。\nED $\\Rightarrow$ PID：取理想 $I \\ne 0$ 中次数最小的非零元 $p$。对任意 $f \\in I$ 作带余除法 $f = qp + r$，则 $r = f - qp \\in I$ 且 $\\deg r < \\deg p$，由最小性得 $r = 0$，故 $I = (p)$。\nPID $\\Rightarrow$ UFD 与 Bézout 为标准事实。\n（L03 一页纸逻辑图把本周成果概括为：带余除法（$F[x]$ 是 ED）$\\Rightarrow$ Bézout、唯一分解 $\\Rightarrow$ 四个推论。）",
       "statement": "对任意域 $F$，多项式环 $F[x]$ 以 $d(f) = \\deg f$ 为度量为欧几里得整环（ED）。特别地 $F[x]$ 是 PID 从而是 UFD：每个非零多项式在相差单位与次序的意义下唯一分解为不可约多项式之积，且 $\\gcd$ 总存在并可写成 Bézout 组合。",
@@ -1206,8 +1207,8 @@
       "layer": 3,
       "name": "Bézout 恒等式",
       "position": {
-        "x": 370,
-        "y": 541
+        "x": 545,
+        "y": 569
       },
       "proof": "辗转相除（Euclid 算法）：反复作带余除法 $f = q_1 g + r_1$，$g = q_2 r_1 + r_2$，……次数严格下降，有限步后余式为 $0$，最后一个非零余式即 $\\gcd$；逐步回代便把 $d$ 表成 $f, g$ 的组合。\n（Week 2 速记要点：关键是取最小的 $ax + by = 1$——最小正/最低次的组合。）",
       "statement": "设 $f, g \\in F[x]$ 不全为零，$d = \\gcd(f, g)$。则存在 $u, v \\in F[x]$ 使\n$$uf + vg = d.$$\n特别地，$\\gcd(f, g) = 1 \\iff$ 存在 $u, v$ 使 $uf + vg = 1$。",
@@ -1222,8 +1223,8 @@
       "layer": 3,
       "name": "根的个数上界",
       "position": {
-        "x": 508,
-        "y": 758
+        "x": 212,
+        "y": 445
       },
       "proof": "对次数 $n$ 归纳。若 $\\alpha$ 是根，带余除法给出 $f(x) = (x - \\alpha)g(x)$，$\\deg g = n - 1$。$F$ 无零因子，故 $f$ 的其他根都是 $g$ 的根；由归纳假设 $g$ 至多有 $n - 1$ 个根，合计至多 $n$ 个。\n⚠️ 这是域特有的：一般环上不成立（如 $\\mathbb{Z}/8\\mathbb{Z}$ 上 $x^2 - 1$ 有 $4$ 个根），关键就是无零因子。",
       "statement": "域 $F$ 上 $n$ 次非零多项式 $f(x) \\in F[x]$ 在 $F$ 中至多有 $n$ 个根（计重数）。",
@@ -1238,8 +1239,8 @@
       "layer": 4,
       "name": "互素 ⟹ 无公共根",
       "position": {
-        "x": 413,
-        "y": 357
+        "x": -432,
+        "y": -221
       },
       "proof": "一行：由 Bézout，存在 $u, v$ 使 $uf_1 + vf_2 = 1$；若 $\\alpha$ 是公共根，代入得 $0 = 1$，矛盾。（见 [[3042week2]] §6(3)。）\n逆否命题很好用：有公共根 $\\implies \\gcd$ 非常数——这是 [[MAT3042-有限域]] §1 重根判据（$\\gcd(f, f') = 1 \\iff$ 无重根）的底层逻辑（L03）。",
       "statement": "若 $\\gcd(f_1, f_2) = 1$，则 $f_1$ 与 $f_2$（在 $F$ 的任何扩张中）没有公共根。逆否形式：有公共根 $\\implies \\gcd$ 非常数。",
@@ -1254,8 +1255,8 @@
       "layer": 1,
       "name": "形式导数",
       "position": {
-        "x": 427,
-        "y": 339
+        "x": 1142,
+        "y": 185
       },
       "proof": "这是纯代数定义，不依赖极限，在任意域（任意特征）上有效。可直接验证它满足 $(f + g)' = f' + g'$ 与 Leibniz 法则 $(fg)' = f'g + fg'$：先对 $f = x^m, g = x^n$ 验证，一般情形由双线性展开即得。",
       "statement": "对 $f(x) = \\sum_{k=0}^{n} a_k x^k \\in F[x]$，定义其形式导数为\n$$f'(x) = \\sum_{k=1}^{n} k\\, a_k x^{k-1},$$\n其中 $k a_k$ 意为 $a_k$ 自加 $k$ 次。",
@@ -1270,8 +1271,8 @@
       "layer": 5,
       "name": "重根判据",
       "position": {
-        "x": 426,
-        "y": 353
+        "x": 650,
+        "y": 739
       },
       "proof": "在 $K[x]$ 中写 $f(x) = (x - \\alpha)g(x)$。由 Leibniz 法则求导：$f'(x) = g(x) + (x - \\alpha)g'(x)$，故 $f'(\\alpha) = g(\\alpha)$。于是 $\\alpha$ 是重根 $\\iff (x - \\alpha) \\mid g \\iff g(\\alpha) = 0 \\iff f'(\\alpha) = 0$。",
       "statement": "设 $K/F$ 是含 $f$ 的根 $\\alpha$ 的扩张。则 $\\alpha$ 是 $f$ 的重根（即 $(x - \\alpha)^2 \\mid f$）当且仅当 $f(\\alpha) = f'(\\alpha) = 0$。",
@@ -1287,8 +1288,8 @@
       "layer": 6,
       "name": "可分性判据 gcd(f,f′)=1",
       "position": {
-        "x": 426,
-        "y": 367
+        "x": 648,
+        "y": 725
       },
       "proof": "（$\\Longleftarrow$）若 $\\alpha$ 是重根，由重根判据 $f(\\alpha) = f'(\\alpha) = 0$，即 $f$ 与 $f'$ 有公共根，故其 $\\gcd$ 非常数（由「互素 ⟹ 无公共根」的逆否）。注意 $\\gcd$ 由辗转相除算出，整个过程不离开 $F$，域扩张不改变 $\\gcd$。\n（$\\Longrightarrow$）若 $\\gcd(f, f') = d$ 非常数，在分裂域中取 $d$ 的根 $\\alpha$，则 $f(\\alpha) = f'(\\alpha) = 0$，由重根判据 $\\alpha$ 是重根。",
       "statement": "$f$ 在 $F$ 的任意扩张中无重根 $\\iff \\gcd(f, f') = 1$。满足条件时称 $f$ 可分（separable）。",
@@ -1304,8 +1305,8 @@
       "layer": 6,
       "name": "可分多项式",
       "position": {
-        "x": 426,
-        "y": 380
+        "x": 645,
+        "y": 713
       },
       "proof": "概念说明：可分性是保证一般域上多项式行为「不出岔子」的技术条件（有限域上的不可约多项式恒可分）。等价刻画见「可分性判据 gcd(f,f′)=1」：$f$ 可分 $\\iff \\gcd(f, f') = 1$。\n有限域理论的关键用例：$x^q - x$ 的形式导数为 $-1$，故 $\\gcd(f, f') = 1$，$f$ 可分（有限域存在性定理证明的第一步）。",
       "statement": "称 $f \\in F[x]$ 可分（separable），如果它在 $F$ 的任意扩张（等价地，在分裂域或代数闭包）中没有重根，即每个根的重数都是 $1$。",
@@ -1320,8 +1321,8 @@
       "layer": 5,
       "name": "乘法群有限子群必循环",
       "position": {
-        "x": 655,
-        "y": 869
+        "x": 209,
+        "y": 429
       },
       "proof": "课堂速记证法（L03）：设 $m$ 为 $G$ 中元素阶的最大值，可证每个元素的阶整除 $m$；则 $G$ 的所有元素都是 $x^m - 1$ 的根，由根的个数上界至多 $m$ 个根，故 $|G| \\le m$，从而 $|G| = m$，阶为 $m$ 的元素就是生成元。\n（Week 2 速记另有 sketch：取 $\\langle g \\rangle$ 极大，断言它就是 $G$；若有 $g' \\in G \\setminus \\langle g \\rangle$，则由阶的 gcd 论证推出矛盾，$\\langle g \\rangle = \\langle g' \\rangle$。）\n另一证法（Euler 函数计数，见 [[MAT3042-有限域]] 定理 3.3）：设 $|G| = n$，记 $\\psi(d)$ 为 $G$ 中阶恰为 $d$ 的元素个数。关键断言：$\\psi(d) \\le \\varphi(d)$。若 $a \\in G$ 阶为 $d$，循环子群 $\\langle a \\rangle$ 的 $d$ 个元素都满足 $x^d = 1$；由根的个数上界，$x^d - 1$ 在 $F$ 中至多 $d$ 个根，故 $\\langle a \\rangle$ 恰为 $x^d - 1$ 的全部根集，其中阶恰为 $d$ 者（生成元 $a^k$，$\\gcd(k, d) = 1$）恰 $\\varphi(d)$ 个。断言得证。\n于是由 Euler 恒等式 $\\sum_{d \\mid n} \\varphi(d) = n$：\n$$n = \\sum_{d \\mid n} \\psi(d) \\le \\sum_{d \\mid n} \\varphi(d) = n,$$\n首尾相等迫使逐项取等，$\\psi(n) = \\varphi(n) \\ge 1$，即存在阶为 $n$ 的元素，$G$ 循环。\n推论：$\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$，生成元即本原元；数论里\"模 $p$ 原根存在\"也是这条的特例。\n注意 (i) 是 (iv) 的前提：根的个数上界正是从 (i) 来的（L03）。\n注（有限域笔记 §3）：这个证明只用到了「域中 $x^d - 1$ 根数 $\\le d$」，所以它同时证明了：$\\mathbb{C}$ 中 $n$ 次单位根成群 $\\cong \\mathbb{Z}/n\\mathbb{Z}$，$\\mathbb{F}_p^\\times$ 循环（数论中原根的存在性）等等。",
       "statement": "设 $F$ 是任意域，$G \\le F^\\times$ 是其乘法群的有限子群，则 $G$ 是循环群，即存在 $g \\in G$ 使 $G = \\langle g \\rangle$。特别地 $\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$。",
@@ -1338,8 +1339,8 @@
       "layer": 6,
       "name": "本原元",
       "position": {
-        "x": 669,
-        "y": 871
+        "x": 211,
+        "y": 414
       },
       "proof": "存在性由「乘法群有限子群必循环」保证：$\\mathbb{F}_q^\\times$ 循环，生成元恰有 $\\varphi(q - 1)$ 个。\n推论：取本原元 $\\alpha$ 得 $\\mathbb{F}_q = \\mathbb{F}_p(\\alpha)$，即有限域是其素子域的单扩张。\n（L03 推论表述：$\\mathbb{F}_q^\\times \\cong \\mathbb{Z}/(q-1)\\mathbb{Z}$，生成元即本原元。）",
       "statement": "$\\mathbb{F}_q^\\times$ 的生成元称为本原元（primitive element）。即 $\\alpha \\in \\mathbb{F}_q$ 满足 $\\mathbb{F}_q^\\times = \\langle \\alpha \\rangle$：每个非零元都是 $\\alpha$ 的幂，等价地 $\\operatorname{ord}(\\alpha) = q - 1$。",
@@ -1354,8 +1355,8 @@
       "layer": 1,
       "name": "模 p 原根",
       "position": {
-        "x": 668,
-        "y": 883
+        "x": 565,
+        "y": 543
       },
       "proof": "存在性是「乘法群有限子群必循环」的特例（L03 明确点出）：$\\mathbb{F}_p = \\mathbb{Z}/p\\mathbb{Z}$ 是域，故 $\\mathbb{F}_p^\\times$ 循环，其生成元的任一整数代表即原根。\n例：模 $7$ 的原根为 $3, 5$——$3$ 的各次幂 mod $7$ 为 $3, 2, 6, 4, 5, 1$，恰遍历全部非零剩余类。",
       "statement": "数论中的模 $p$ 原根：整数 $g$ 使 $g^0, g^1, \\dots, g^{p-2}$ 跑遍 $1, 2, \\dots, p-1$ 的全部剩余类（mod $p$），即 $g$ 在 $(\\mathbb{Z}/p\\mathbb{Z})^\\times$ 中的阶为 $p - 1$。",
@@ -1370,8 +1371,8 @@
       "layer": 1,
       "name": "群（group）",
       "position": {
-        "x": 314,
-        "y": 1146
+        "x": 565,
+        "y": 364
       },
       "proof": "例子（记住这几个就够用）：$(\\mathbb{Z}, +)$；$(\\mathbb{Z}/n\\mathbb{Z}, +)$（abelian、有限）；$(F \\setminus \\{0\\}, \\times)$（域的非零元乘法群，abelian）；$\\mathrm{GL}_n(F)$（可逆 $n \\times n$ 矩阵，非 abelian）；向量空间 $V$ 在 $+$ 下是 abelian group——所以「模」的加法部分永远是 abelian group。\n补充（L02）：$(n\\mathbb{Z}, +)$；$F[x]/(f)$ 的加法群；$\\mathrm{SL}_n(F)$（特殊线性群）。",
       "statement": "集合 $G$ 配一个二元运算 $\\cdot$，满足：\n1. 封闭性（closure）：$a, b \\in G \\implies a \\cdot b \\in G$；\n2. 结合律（associativity）：$(a \\cdot b) \\cdot c = a \\cdot (b \\cdot c)$；\n3. 单位元（identity）：存在 $e$，$a \\cdot e = e \\cdot a = a$；\n4. 逆元（inverse）：每个 $a$ 有 $a^{-1}$，$a \\cdot a^{-1} = e$。\n若再满足交换律（commutativity）$a \\cdot b = b \\cdot a$，叫阿贝尔群（abelian group），此时运算常写成 $+$，单位元写 $0$，逆元写 $-a$。",
@@ -1386,8 +1387,8 @@
       "layer": 1,
       "name": "子群（subgroup）",
       "position": {
-        "x": 782,
-        "y": 892
+        "x": 565,
+        "y": 901
       },
       "proof": "",
       "statement": "$H \\le G$：$H$ 是 $G$ 的子集，且对运算封闭、含单位元 $e$、含每个元素的逆元。例：$n\\mathbb{Z} \\le \\mathbb{Z}$。",
@@ -1402,8 +1403,8 @@
       "layer": 1,
       "name": "群同态、核与像",
       "position": {
-        "x": 842,
-        "y": 726
+        "x": 757,
+        "y": 364
       },
       "proof": "这和线性映射的 kernel/image 是完全平行的语言，线性代数的直觉直接搬过来。",
       "statement": "同态（homomorphism）$\\varphi: G \\to H$ 是保持运算的映射：$\\varphi(ab) = \\varphi(a)\\varphi(b)$。\n核（kernel）$\\ker \\varphi = \\{g : \\varphi(g) = e_H\\}$，是 $G$ 的子群；像（image）$\\operatorname{im} \\varphi$ 是 $H$ 的子群。\n双射的同态叫同构（isomorphism），记 $G \\cong H$。",
@@ -1418,8 +1419,8 @@
       "layer": 2,
       "name": "陪集与商群",
       "position": {
-        "x": 790,
-        "y": 880
+        "x": 29,
+        "y": 540
       },
       "proof": "类比商空间 $V/W$。",
       "statement": "对 abelian group（或更一般的 normal subgroup）：陪集（coset）$a + H = \\{a + h : h \\in H\\}$；所有陪集构成商群（quotient group）$G/H$，运算 $(a+H) + (b+H) = (a+b) + H$。有自然的商同态 $\\pi: G \\to G/H$，$a \\mapsto a + H$，$\\ker \\pi = H$。",
@@ -1434,8 +1435,8 @@
       "layer": 3,
       "name": "Lagrange 定理",
       "position": {
-        "x": 637,
-        "y": 869
+        "x": 178,
+        "y": 450
       },
       "proof": "",
       "statement": "（有限群）$|G| = |H| \\cdot [G:H]$，其中 $[G:H]$ 是陪集个数（index，指数）。",
@@ -1450,8 +1451,8 @@
       "layer": 3,
       "name": "第一同构定理（群）",
       "position": {
-        "x": 827,
-        "y": 726
+        "x": 21,
+        "y": 557
       },
       "proof": "这就是 rank-nullity 的群论祖先。课程里讲的「同构定理」全是这个模式。",
       "statement": "$\\varphi: G \\to H$ 同态 $\\implies G / \\ker \\varphi \\cong \\operatorname{im} \\varphi$。",
@@ -1466,8 +1467,8 @@
       "layer": 1,
       "name": "循环群（cyclic group）",
       "position": {
-        "x": 537,
-        "y": 1275
+        "x": 757,
+        "y": 6
       },
       "proof": "",
       "statement": "由单个元素生成的群：$G = \\langle a \\rangle = \\{a^n\\}$。",
@@ -1482,8 +1483,8 @@
       "layer": 1,
       "name": "循环群的子群仍循环",
       "position": {
-        "x": 484,
-        "y": 1275
+        "x": 1142,
+        "y": 6
       },
       "proof": "⚠️ 注意：这一条在环论里会变成「$\\mathbb{Z}$ 是 PID」。",
       "statement": "循环群的子群仍是循环群；$\\mathbb{Z}$ 的子群恰为 $n\\mathbb{Z}$。",
@@ -1498,8 +1499,8 @@
       "layer": 1,
       "name": "环（交换含幺环）",
       "position": {
-        "x": 431,
-        "y": 1275
+        "x": -205,
+        "y": 901
       },
       "proof": "例子：$\\mathbb{Z}$（整数）；$F[x]$（域 $F$ 上的多项式环——模论部分的主角）；$\\mathbb{Z}/n\\mathbb{Z}$；$F$ 本身（域是特殊的环）；$M_n(F)$（矩阵环，非交换——是好反例来源）。",
       "statement": "环 $(R, +, \\cdot)$：$(R, +)$ 是 abelian group；$\\times$ 结合、有单位元，且对 $+$ 有分配律 $a(b+c) = ab+ac$。乘法也交换时称交换环（commutative ring）。\nMAT3042 里基本只关心交换含幺环（commutative ring with identity）：$ab = ba$，且存在 $1 \\ne 0$。下文默认。",
@@ -1514,8 +1515,8 @@
       "layer": 1,
       "name": "单位与单位群 Rˣ",
       "position": {
-        "x": 484,
-        "y": 1328
+        "x": 1142,
+        "y": 901
       },
       "proof": "",
       "statement": "单位（unit）是有乘法逆元的元素。记 $R^\\times = \\{u \\in R \\mid \\exists v,\\ uv = vu = 1\\}$ 为全体单位，它在乘法下成群（单位群）。\n例：$\\mathbb{Z}$ 的单位只有 $\\pm 1$；$F[x]$ 的单位是非零常数。",
@@ -1531,8 +1532,8 @@
       "layer": 1,
       "name": "零因子（zero divisor）",
       "position": {
-        "x": 378,
-        "y": 1275
+        "x": 1719,
+        "y": 901
       },
       "proof": "",
       "statement": "$a \\ne 0$ 但存在 $b \\ne 0$ 使 $ab = 0$，则称 $a$ 为零因子。例：$\\mathbb{Z}/6\\mathbb{Z}$ 中 $2 \\cdot 3 = 0$。",
@@ -1547,8 +1548,8 @@
       "layer": 1,
       "name": "整环（integral domain）",
       "position": {
-        "x": 744,
-        "y": 524
+        "x": 1526,
+        "y": 364
       },
       "proof": "RM（L02 课堂层级关系）：域 $\\subseteq$ 整环 $\\subseteq$ 交换环 $\\subseteq$ 环。",
       "statement": "整环 = 无零因子的交换含幺环，等价于消去律成立：$ab = ac,\\ a \\ne 0 \\implies b = c$。$\\mathbb{Z}$ 和 $F[x]$ 都是。",
@@ -1563,8 +1564,8 @@
       "layer": 1,
       "name": "理想（ideal）",
       "position": {
-        "x": 652,
-        "y": 735
+        "x": 1334,
+        "y": 364
       },
       "proof": "⚠️ 注意：理想一般不是子环（比如 $2\\mathbb{Z}$ 不含 $1$）。类比：子群之于群，理想之于环，子空间之于向量空间。",
       "statement": "理想 $I \\subseteq R$：加法子群，且吸收乘法（$r \\in R,\\ a \\in I \\implies ra \\in I$）。理想正是环同态的 kernel。",
@@ -1579,8 +1580,8 @@
       "layer": 1,
       "name": "商环（quotient ring）",
       "position": {
-        "x": 664,
-        "y": 715
+        "x": 757,
+        "y": 722
       },
       "proof": "关键事实：同态 $\\varphi: R \\to S$ 的核 $\\ker \\varphi$ 必是理想——这就是「商环只能模理想」的原因。商结构的想法：$(R, +, \\cdot) \\to (R/{\\sim}, +, \\cdot)$ 要成为环，需要这个映射是同态——这迫使 $\\sim$ 由理想给出。",
       "statement": "商环 $R/I$：元素为陪集 $a+I$，运算 $(a+I)(b+I) = ab + I$。良定义性依赖理想的吸收性。",
@@ -1595,8 +1596,8 @@
       "layer": 1,
       "name": "主理想（principal ideal）",
       "position": {
-        "x": 451,
-        "y": 1071
+        "x": 372,
+        "y": 722
       },
       "proof": "",
       "statement": "主理想：$(a) = aR = \\{ar : r \\in R\\}$，由单元素生成。",
@@ -1611,8 +1612,8 @@
       "layer": 2,
       "name": "第一同构定理（环）",
       "position": {
-        "x": 648,
-        "y": 717
+        "x": 165,
+        "y": 618
       },
       "proof": "",
       "statement": "环同态 $\\varphi$ 给出 $R / \\ker \\varphi \\cong \\operatorname{im} \\varphi$。",
@@ -1627,8 +1628,8 @@
       "layer": 1,
       "name": "欧几里得整环（ED）",
       "position": {
-        "x": 206,
-        "y": 646
+        "x": -205,
+        "y": 185
       },
       "proof": "",
       "statement": "欧几里得整环（Euclidean domain）是有「带余除法」的整环：存在度量 $d$，任意 $a, b \\ne 0$ 可写 $a = qb + r$ 且 $r = 0$ 或 $d(r) < d(b)$。\n$\\mathbb{Z}$ 用 $|\\cdot|$；$F[x]$ 用 $\\deg$——这就是多项式长除法。",
@@ -1643,8 +1644,8 @@
       "layer": 2,
       "name": "主理想整环（PID）",
       "position": {
-        "x": 447,
-        "y": 1084
+        "x": 1431,
+        "y": 7
       },
       "proof": "",
       "statement": "主理想整环（PID）：每个理想都是主理想。",
@@ -1659,8 +1660,8 @@
       "layer": 1,
       "name": "唯一分解整环（UFD）",
       "position": {
-        "x": 113,
-        "y": 1275
+        "x": 949,
+        "y": 901
       },
       "proof": "",
       "statement": "唯一分解整环（UFD）：每个元素唯一分解成不可约元乘积（类比算术基本定理；$F[x]$ 中即唯一因式分解）。",
@@ -1675,8 +1676,8 @@
       "layer": 2,
       "name": "ED ⟹ PID",
       "position": {
-        "x": 192,
-        "y": 644
+        "x": 401,
+        "y": 470
       },
       "proof": "取理想中度量最小的非零元作为生成元，用带余除法证明。",
       "statement": "每个欧几里得整环都是主理想整环：$\\mathrm{ED} \\implies \\mathrm{PID}$。",
@@ -1691,8 +1692,8 @@
       "layer": 3,
       "name": "整环层级包含链",
       "position": {
-        "x": 177,
-        "y": 633
+        "x": 407,
+        "y": 484
       },
       "proof": "一条必须背下来的包含链。其中 ED ⟹ PID 一环用带余除法证明（取理想中度量最小的非零元作生成元）。",
       "statement": "$$\\text{Euclidean domain} \\subsetneq \\text{PID} \\subsetneq \\text{UFD} \\subsetneq \\text{integral domain} \\subsetneq \\text{commutative ring}$$",
@@ -1707,8 +1708,8 @@
       "layer": 1,
       "name": "PID 中不可约元 = 素元",
       "position": {
-        "x": 268,
-        "y": 711
+        "x": 1526,
+        "y": 543
       },
       "proof": "",
       "statement": "在 PID 中：irreducible（不可约元）= prime（素元）。",
@@ -1723,8 +1724,8 @@
       "layer": 1,
       "name": "PID 中 gcd 的 Bézout 形式",
       "position": {
-        "x": 362,
-        "y": 528
+        "x": 1334,
+        "y": 543
       },
       "proof": "",
       "statement": "在 PID 中，gcd 存在且能写成 Bézout 形式 $sa + tb$。",
@@ -1739,8 +1740,8 @@
       "layer": 3,
       "name": "F[x] 是 PID，理想形如 (p(x))",
       "position": {
-        "x": 207,
-        "y": 657
+        "x": 389,
+        "y": 453
       },
       "proof": "关键推论：由 $F[x]$ 以 $\\deg$ 为度量是欧几里得整环，再用 ED ⟹ PID 立得。",
       "statement": "$F[x]$ 是 ED $\\implies$ 是 PID $\\implies$ 每个理想形如 $(p(x))$。",
@@ -1756,8 +1757,8 @@
       "layer": 4,
       "name": "极小多项式（PID 语言）",
       "position": {
-        "x": 351,
-        "y": 619
+        "x": -45,
+        "y": 1088
       },
       "proof": "因为 $F[x]$ 是 PID，零化理想是主理想，取其首一生成元。你在 Friedberg 里学的 minimal polynomial 本质就是 PID 语言。",
       "statement": "算子 $T$ 的极小多项式（minimal polynomial）的严格定义：$T$ 的零化理想 $\\mathrm{Ann}$ 的首一生成元。",
@@ -1773,8 +1774,8 @@
       "layer": 3,
       "name": "中国剩余定理（CRT）",
       "position": {
-        "x": 450,
-        "y": 1100
+        "x": 1416,
+        "y": 20
       },
       "proof": "这正是「primary decomposition / 准素分解」的引擎：把 minimal polynomial 分解成互素因子幂，空间就分解为广义特征子空间的直和。Jordan 标准形的存在性证明里你会再见到它。",
       "statement": "$R$ 是 PID（比如 $F[x]$），$p_1, \\dots, p_k$ 两两互素，则\n$$R/(p_1\\cdots p_k) \\;\\cong\\; R/(p_1) \\times \\cdots \\times R/(p_k)$$",
@@ -1789,8 +1790,8 @@
       "layer": 1,
       "name": "域（field）",
       "position": {
-        "x": 752,
-        "y": 509
+        "x": 565,
+        "y": 185
       },
       "proof": "例子：$\\mathbb{Q}, \\mathbb{R}, \\mathbb{C}$，$\\mathbb{Z}/p\\mathbb{Z}$（$p$ 素数），记作 $\\mathbb{F}_p$。反例：$\\mathbb{Z}$ 不是域（$2$ 没有逆）。",
       "statement": "域 $(F, +, \\cdot)$：存在两个二元运算 $+, \\cdot$，对任意 $x, y, z \\in F$ 满足：\n(1) 交换律：$x + y = y + x$，$x \\cdot y = y \\cdot x$；\n(2) 结合律：$x + (y + z) = (x + y) + z$，$x \\cdot (y \\cdot z) = (x \\cdot y) \\cdot z$；\n(3) 单位元：存在 $0, 1$，使 $x + 0 = x$，$1 \\cdot x = x$；\n(4) 逆元：任意 $x$ 有 $-x$ 使 $x + (-x) = 0$；任意 $x \\ne 0$ 有 $x^{-1}$ 使 $x \\cdot x^{-1} = 1$；\n(5) 分配律：$x \\cdot (y + z) = x \\cdot y + x \\cdot z$。\n等价地（速成语言）：域 = 交换含幺环且每个非零元都是 unit，即 $(F, +)$ 和 $(F \\setminus \\{0\\}, \\times)$ 都是 abelian group。",
@@ -1805,8 +1806,8 @@
       "layer": 2,
       "name": "域 ⟺ 只有平凡理想",
       "position": {
-        "x": 646,
-        "y": 747
+        "x": 137,
+        "y": 602
       },
       "proof": "因为非零理想含单位元就吞掉整个环。",
       "statement": "$F$ 是域 $\\iff F$ 的理想只有 $\\{0\\}$ 和 $F$。",
@@ -1822,8 +1823,8 @@
       "layer": 1,
       "name": "域的特征（characteristic）",
       "position": {
-        "x": 389,
-        "y": 873
+        "x": 565,
+        "y": 6
       },
       "proof": "char $0$：$\\mathbb{Q}, \\mathbb{R}, \\mathbb{C}$；char $p$：$\\mathbb{F}_p$。⚠️ 注意 char $p$ 时 $(a+b)^p = a^p + b^p$（freshman's dream），这一系列坑会出现在作业里。\nMAT3042 讲「vector spaces over general fields」意味着：所有 Friedberg 里对 $\\mathbb{R}/\\mathbb{C}$ 证的定理都要重新审视——哪些依赖 char $\\ne 2$（双线性型部分！），哪些依赖代数封闭（Jordan 形式要求特征多项式分裂；在 $\\mathbb{C}$ 上自动成立，一般域上只有 rational canonical form 是无条件的）。\nRM（L02）：若 $\\operatorname{char} F = 0$，则 $\\mathbb{Q} \\subseteq F$；若 $\\operatorname{char} F = p$，则 $\\mathbb{F}_p \\subseteq F$——它们是最小的域（素域）。",
       "statement": "$1+1+\\cdots+1$ 加到第几次变 $0$？若 $n \\cdot 1 = 0$ 的最小正整数是 $p$，则 $\\operatorname{char} F = p$（必为素数）；若永不为 $0$，$\\operatorname{char} F = 0$。",
@@ -1838,8 +1839,8 @@
       "layer": 2,
       "name": "Freshman's dream（特征 p 幂次公式）",
       "position": {
-        "x": 479,
-        "y": 731
+        "x": 286,
+        "y": 650
       },
       "proof": "由二项式定理 $(a+b)^p = \\sum_{k=0}^{p} \\binom{p}{k} a^{p-k} b^k$。对 $0 < k < p$，$\\binom{p}{k} = \\frac{p!}{k!(p-k)!}$：分子被 $p$ 整除，分母不被 $p$ 整除（$p$ 素，$k, p-k < p$），故 $p \\mid \\binom{p}{k}$，在特征 $p$ 下这些项全为 $0$，只剩 $a^p + b^p$。\n笔记强调：⚠️ 特征 $p$ 的这一系列坑会出现在作业里。典型用途：有限域 $p^m$ 元子域的加法封闭性验证（定理 4.1 / 5.1 中「根集成域」的论证）。",
       "statement": "设 $F$ 是特征 $p$ 的域，则对任意 $a, b \\in F$，\n$$(a+b)^p = a^p + b^p.$$\n迭代得 $(a+b)^{p^n} = a^{p^n} + b^{p^n}$。（定理 6.1 证明中的关键恒等式，笔记称之为 **freshman's dream**）",
@@ -1855,8 +1856,8 @@
       "layer": 1,
       "name": "域扩张与扩张次数",
       "position": {
-        "x": 521,
-        "y": 565
+        "x": 757,
+        "y": 185
       },
       "proof": "线性空间公理是域公理的子集，自动成立（逐条验证见「域扩张 ⟹ 线性空间（免费得到）」）。与有限域分类引理第 1 条（$|F| = p^n \\iff [F:\\mathbb{F}_p] = n$）同源——那里就已经在用「扩张 = 线性空间」。",
       "statement": "域扩张 $K/F$：$K$ 是包含 $F$ 的域。此时 $K$ 天然是 $F$ 上的线性空间（向量 = $K$ 的元素，标量 = $F$ 的元素，数乘就是 $K$ 里的乘法）。定义\n$$[K:F] := \\dim_F K,$$\n称为 $K$ 在 $F$ 上的次数（degree），取值正整数或 $\\infty$。例：$[\\mathbb{C}:\\mathbb{R}] = 2$（基 $\\{1, i\\}$）；$[\\mathbb{Q}(\\sqrt2):\\mathbb{Q}] = 2$（基 $\\{1, \\sqrt2\\}$）；$[F:F] = 1$；$[\\mathbb{R}:\\mathbb{Q}] = \\infty$。",
@@ -1871,8 +1872,8 @@
       "layer": 4,
       "name": "F[x]/(f) 是域 ⟺ f 不可约（Kronecker 构造）",
       "position": {
-        "x": 382,
-        "y": 561
+        "x": 1115,
+        "y": 434
       },
       "proof": "PID 中不可约元生成极大理想，模极大理想得域。例：$\\mathbb{R}[x]/(x^2+1) \\cong \\mathbb{C}$；$\\mathbb{F}_2[x]/(x^2+x+1) \\cong \\mathbb{F}_4$。\n这是「给多项式强行造根」的标准机器，也是 splitting field 和 Jordan 形式在一般域上讨论的起点。\n商环中逆元的具体来源（L01/L02）：$f$ 不可约且 $f \\nmid g$ ⟹ 由 Bézout 存在 $a, b$ 使 $ag + bf = 1$，故 $a = g^{-1} \\bmod f$。构造动机：模仿 $\\mathbb{F}_p = \\mathbb{Z}/p\\mathbb{Z}$ 取商；素元难找而不可约易判。",
       "statement": "$p(x) \\in F[x]$ 不可约 $\\implies F[x]/(p(x))$ 是域，且 $p$ 在这个新域里有根（陪集 $x + (p)$ 就是根）。\n等价表述（Kronecker 定理）：任何域上的非常数多项式在某扩张域中有根，扩张构造为 $E[x]/(p)$，$p$ 不可约。\n反向亦真（L02）：$f$ 可约时商环有零因子、不是域，故「$F[x]/(f)$ 是域 $\\iff f$ 不可约」（在 $F[x]$ 中素元 = 不可约元）。",
@@ -1888,8 +1889,8 @@
       "layer": 1,
       "name": "模的三大特例",
       "position": {
-        "x": 325,
-        "y": 1328
+        "x": 1142,
+        "y": 543
       },
       "proof": "关键观察：给定向量空间 $V$ 上的线性算子 $T$，$V$ 自然变成一个 $F[x]$-模——多项式 $p(x)$ 作用在向量 $v$ 上定义为 $p(T)v$。于是「研究算子 $T$ 的结构」=「研究 $F[x]$-模 $V$ 的结构」。",
       "statement": "$R = $ field $\\implies$ module = 向量空间（你学过的全部）；\n$R = \\mathbb{Z}$ $\\implies$ module = abelian group（所以 abelian group 的分类 = $\\mathbb{Z}$-模的分类）；\n$R = F[x]$ $\\implies$ module = $(V, T)$，一个向量空间加一个选定的算子——linear algebra II 的主战场。",
@@ -1905,8 +1906,8 @@
       "layer": 1,
       "name": "PID 上有限生成模结构定理",
       "position": {
-        "x": 9,
-        "y": 1073
+        "x": 1719,
+        "y": 543
       },
       "proof": "笔记只给表述（开学后老师证明）。Smith normal form 只是证明过程中对「表示矩阵」做的行列变换。",
       "statement": "PID 上有限生成模（finitely generated module over a PID）同构于 free part $\\oplus$ torsion part 的直和分解。",
@@ -1921,8 +1922,8 @@
       "layer": 2,
       "name": "标准形是结构定理的推论",
       "position": {
-        "x": 131,
-        "y": 1166
+        "x": 1216,
+        "y": 58
       },
       "proof": "这就是课程大纲说的「the theorems in MAT2040/41/42 can be generalized to modules over PIDs」——Friedberg 第七章辛苦算出来的东西，会被重写成模论的一个推论。⚠️ Jordan 形式要求特征多项式分裂（在 $\\mathbb{C}$ 上自动成立）；一般域上只有 rational canonical form 是无条件的。",
       "statement": "结构定理代回 $F[x]$-模：torsion 分解就是 rational canonical form；在代数闭域上进一步裂解就是 Jordan form。",
@@ -1938,8 +1939,8 @@
       "layer": 2,
       "name": "域扩张 ⟹ 线性空间（免费得到）",
       "position": {
-        "x": 506,
-        "y": 555
+        "x": 335,
+        "y": 647
       },
       "proof": "线性空间的每条公理都是 $K$ 的域公理的特例：加法交换/结合、零向量、负元 ↔ $K$ 的加法群公理；$1 \\cdot u = u$ ↔ $K$ 的乘法单位元（$1 \\in F$）；$(ab)u = a(bu)$ ↔ 乘法结合律；$a(u+v) = au+av$ 与 $(a+b)u = au+bu$ ↔ 两条分配律。无需验证任何新东西，唯一条件是 $F \\subseteq K$（标量必须能和向量相乘）。\n⚠️ 方向不可逆：$F$-线性空间一般不是域（如 $\\mathbb{R}^2$ 分量相乘有零因子）。域比线性空间「多」了向量间乘法；忘掉多余部分就得到线性空间——所以线性代数全部武器（维数、基、塔定律）可以免费搬进域论。",
       "statement": "设 $F \\subseteq K$ 是域扩张。把 $K$ 看成 $F$-线性空间：向量加法 = $K$ 的加法，数乘 = $K$ 的乘法限制在 $F \\times K$ 上。",
@@ -1955,8 +1956,8 @@
       "layer": 2,
       "name": "特征 p 主宰加法结构",
       "position": {
-        "x": 552,
-        "y": 838
+        "x": 205,
+        "y": 821
       },
       "proof": "唯一环同态 $\\mathbb{Z} \\to F$，$k \\mapsto k \\cdot 1$。每个素数在 $F$ 里只有两种命运：$p \\cdot 1 = 0$（死了，变成零）；其他 $q \\cdot 1 \\ne 0$ 皆可逆（活着，且泯然众人）。关键放大：$p \\cdot a = (p \\cdot 1) \\cdot a = 0 \\cdot a = 0$；而 $q \\cdot a = 0$ 两边乘 $(q \\cdot 1)^{-1}$ 逼出 $a = 0$。\n「数乘」不是外加的：$\\bar{k} \\cdot a$ 就是重复加法（$k$ 次），良定义性恰好靠 $p$ 死掉：$(k+p) \\cdot a = k \\cdot a + p \\cdot a = k \\cdot a$。为什么 $q$ 造不出平行结构：把 $F$ 看成 $\\mathbb{F}_q$-线性空间需要 $q \\cdot a = 0$ 对所有 $a$ 成立，但这逼出 $a = 0$——自相矛盾，不是没选它，是它不存在。\n一句话：char $F = p$ 不是 $F$ 的众多属性之一，而是 $F$ 加法结构的完整基因；「把 $F$ 看成 $\\mathbb{F}_p$-线性空间」不是我们的选择，而是认出它本来如此。",
       "statement": "char $F = p$ 时每个非零元的加法阶都是 $p$：$p \\cdot a = 0$ 对所有 $a \\in F$ 成立；而其他素数 $q$ 在加法群里没有 $q$-阶元素（$q \\cdot a = 0 \\implies a = 0$）。「每个非零元加法阶都是 $p$」的交换群 = 一堆 $\\mathbb{Z}/p$ 的直和 = 天生就是 $\\mathbb{F}_p$-线性空间。",
@@ -1972,8 +1973,8 @@
       "layer": 3,
       "name": "素子域 (prime subfield)",
       "position": {
-        "x": 672,
-        "y": 671
+        "x": 233,
+        "y": 818
       },
       "proof": "存在性：映射 $\\mathbb{Z} \\to F$，$k \\mapsto k\\cdot 1$ 的核是 $p\\mathbb{Z}$，由环的第一同构定理，其像 $\\cong \\mathbb{Z}/p\\mathbb{Z} = \\mathbb{F}_p$。唯一性：任何子域都含 $1$，故含 $1$ 生成的这一切。",
       "statement": "有限域 $F$ 包含唯一一个同构于 $\\mathbb{F}_p$ 的子域，称为 $F$ 的**素子域（prime subfield）**；即由 $1$ 生成的子域 $\\{0, 1, \\dots, (p-1)\\cdot 1\\}$。（定理 2.2 中定义）",
@@ -1989,8 +1990,8 @@
       "layer": 4,
       "name": "x^{p^n} − x 的完全分解",
       "position": {
-        "x": 494,
-        "y": 756
+        "x": 1502,
+        "y": 1088
       },
       "proof": "$|F^\\times| = q - 1$，Lagrange 定理 $\\implies a^{q-1} = 1$（$a \\ne 0$）$\\implies a^q = a$；$a = 0$ 显然。于是 $F$ 的 $q$ 个元素都是 $x^q - x$ 的根；该多项式次数恰为 $q$，而根数 $\\le$ 次数（根的个数上界），故 $F$ 恰为全部根集。两边首一、次数 $q$、根集相同，故相等。",
       "statement": "设 $F$ 是特征 $p$ 的有限域，$|F| = q = p^n$。则每个 $a \\in F$ 都是 $x^q - x$ 的根，且在 $F[x]$ 中\n$$x^q - x = \\prod_{a \\in F}(x-a).$$\n（推论 4.3；「每元皆根」出自定理 4.2 的证明。）",
@@ -2006,8 +2007,8 @@
       "layer": 7,
       "name": "有限域是单扩张 F = 𝔽_p(α)",
       "position": {
-        "x": 669,
-        "y": 858
+        "x": 224,
+        "y": 423
       },
       "proof": "取本原元 $\\alpha$（乘法群循环性保证其存在，即有限域笔记定理 3.3），每个非零元都是 $\\alpha$ 的幂，故 $\\mathbb{F}_q = \\mathbb{F}_p(\\alpha)$。$\\alpha$ 的极小多项式次数 = 扩张次数，给出基与多项式表示。这将在 §6 证明自同构群结构（定理 6.2）时用到。",
       "statement": "设 $|F| = p^n$。$F^\\times$ 循环，取生成元 $\\alpha$ 使 $F = \\mathbb{F}_p(\\alpha)$——有限域是单扩张。$\\alpha$ 的极小多项式次数 $= [F:\\mathbb{F}_p] = n$，基 $\\{1, \\alpha, \\dots, \\alpha^{n-1}\\}$，故每元 $= a_0 + a_1\\alpha + \\dots + a_{n-1}\\alpha^{n-1}$：元素可用 $\\mathbb{F}_p$ 上次数 $< n$ 的多项式表示。（有限域笔记推论 3.5。）",
@@ -2023,8 +2024,8 @@
       "layer": 1,
       "name": "赋值同态",
       "position": {
-        "x": 619,
-        "y": 718
+        "x": 180,
+        "y": 185
       },
       "proof": "",
       "statement": "赋值同态 $\\varphi_\\alpha: \\mathbb{F}_p[x] \\to F$，$g \\mapsto g(\\alpha)$。当 $F = \\mathbb{F}_p(\\alpha)$ 时 $\\varphi_\\alpha$ 满射，核 $= (f)$，$f$ 为 $\\alpha$ 的极小多项式（$n$ 次不可约）。",
@@ -2040,8 +2041,8 @@
       "layer": 8,
       "name": "F ≅ 𝔽_p[x]/(f)，同构由根的对应给出",
       "position": {
-        "x": 632,
-        "y": 733
+        "x": 148,
+        "y": 618
       },
       "proof": "1. 赋值同态 $\\varphi_\\alpha: \\mathbb{F}_p[x] \\to F$，$g \\mapsto g(\\alpha)$；$F = \\mathbb{F}_p(\\alpha)$ ⟹ 满射，核 $= (f)$；\n2. 第一同构定理：$\\mathbb{F}_p[x]/(f) \\cong F$；\n3. 同构 = 根的对应：$f, g$ 都整除 $x^{p^n} - x$ 且在 $F$ 中分裂 ⟹ $g$ 在 $F$ 中有根 $\\beta$；映射 $\\bar{x} \\mapsto \\beta$ 良定义（$g(\\beta) = 0$）、单射（域同态核为理想，域只有平凡理想）、两边同为 $p^n$ 元故双射。",
       "statement": "设 $|F| = p^n$，$F = \\mathbb{F}_p(\\alpha)$，$f$ 为 $\\alpha$ 的极小多项式（$n$ 次不可约）。则 $\\mathbb{F}_p[x]/(f) \\cong F$。\n若 $g$ 是另一个 $n$ 次不可约多项式，$F' = \\mathbb{F}_p[x]/(g)$，则 $g$ 在 $F$ 中有根 $\\beta$，映射 $\\bar{x} \\mapsto \\beta$ 给出同构 $F' \\cong F$——同构由根的对应给出。",
@@ -2056,8 +2057,8 @@
       "layer": 3,
       "name": "塔定律 (tower law)",
       "position": {
-        "x": 521,
-        "y": 535
+        "x": 392,
+        "y": 639
       },
       "proof": "**（i）张成**：任取 $x \\in L$，两步“剥壳”：1. 用外层基 $x = \\sum_j c_j v_j$（$c_j \\in K$）；2. 用内层基展开每个系数 $c_j = \\sum_i a_{ij} u_i$（$a_{ij} \\in F$）。合起来 $x = \\sum_{i,j} a_{ij}\\, u_i v_j$。**（ii）线性无关**：设 $\\sum_{i,j} a_{ij} u_i v_j = 0$。关键手法：按 $j$ 归并，$\\sum_j \\bigl(\\sum_i a_{ij} u_i\\bigr) v_j = 0$，括号记为 $c_j \\in K$；由 $\\{v_j\\}$ 在 $K$ 上无关得所有 $c_j = 0$，再由 $\\{u_i\\}$ 在 $F$ 上无关得所有 $a_{ij} = 0$。⚠️ 两次无关性必须**从外到内嵌套使用**。Remarks：无限情形公式作为基数等式也成立；特别地 $[L:F]$ 有限 ⟺ 两层都有限。",
       "statement": "设 $F \\subseteq K \\subseteq L$，$[K:F] = m$，$[L:K] = n$ 均有限。则 $$[L:F] = [L:K]\\cdot[K:F] = mn.$$ 更精确地：若 $\\{u_1,\\dots,u_m\\}$ 是 $K$ 在 $F$ 上的基，$\\{v_1,\\dots,v_n\\}$ 是 $L$ 在 $K$ 上的基，则 $\\{u_i v_j\\}$ 这 $mn$ 个元素是 $L$ 在 $F$ 上的基。",
@@ -2073,8 +2074,8 @@
       "layer": 3,
       "name": "代数元 ⟺ 有限次数",
       "position": {
-        "x": 633,
-        "y": 706
+        "x": 173,
+        "y": 632
       },
       "proof": "工具：赋值同态 $f \\mapsto f(\\alpha)$ + 第一同构定理（详见 [[3042L04]]）。",
       "statement": "$c$ 在 $F$ 上代数 $\\iff [F(c):F] < \\infty$，且该次数等于 $c$ 的极小多项式的次数。",
@@ -2089,8 +2090,8 @@
       "layer": 3,
       "name": "有限扩张的元素皆代数（维数论证）",
       "position": {
-        "x": 495,
-        "y": 582
+        "x": 351,
+        "y": 650
       },
       "proof": "维数论证：$d+1$ 个幂 $1, \\gamma, \\dots, \\gamma^d$ 在 $d$ 维空间中必线性相关，该相关关系就是一个在 $\\gamma$ 处取零的非零 $F$-多项式。",
       "statement": "若 $[L:F] = d < \\infty$，则 $L$ 中每个 $\\gamma$ 都在 $F$ 上代数。",
@@ -2106,8 +2107,8 @@
       "layer": 5,
       "name": "代数闭包是代数封闭的",
       "position": {
-        "x": 495,
-        "y": 566
+        "x": 366,
+        "y": 648
       },
       "proof": "证明（系数的下降，descent of coefficients）：任取非常数 $g(x) = c_0 + c_1 x + \\dots + c_n x^n \\in E[x]$，证 $g$ 在 $E$ 中有根。\nStep 0（根存在于某处）：由 Kronecker 定理（用于基域 $E$），存在含 $E$ 的扩张及其中元素 $\\alpha$ 使 $g(\\alpha) = 0$；全部任务是证 $\\alpha \\in E$。\nStep 1（把系数装进小域）：令 $K = F(c_0, c_1, \\dots, c_n)$——关键隐藏点：多项式只有有限多个系数。每个 $c_i \\in E$ 在 $F$ 上代数，由「代数 ⟺ 有限次数」每次添加贡献有限次数，塔定律逐层给出 $[K:F] < \\infty$。\nStep 2（添加 $\\alpha$，次数仍有限）：$g$ 的系数全在 $K$ 中，$g(\\alpha) = 0$ 说明 $\\alpha$ 在 $K$ 上代数，$[K(\\alpha):K] \\le \\deg g < \\infty$，塔定律给 $[K(\\alpha):F] = [K(\\alpha):K] \\cdot [K:F] < \\infty$。\nStep 3（$\\alpha$ 在 $F$ 上代数）：$\\alpha \\in K(\\alpha)$ 而 $K(\\alpha)/F$ 有限，维数论证迫使 $\\alpha$ 在 $F$ 上代数。\nStep 4（$\\alpha \\in E$）：$E$ 恰由 $F$ 上代数元组成，故 $\\alpha \\in E$。$g$ 任意，故 $E$ 代数封闭。$\\blacksquare$\n点睛：难点在于只知道 $\\alpha$ 在巨大的 $E$ 上代数；「系数下降」利用 $g$ 只有有限个系数、个个在 $F$ 上代数，把问题从无限扩张 $E$ 降到有限扩张 $K$，塔定律与维数论证得以施展。",
       "statement": "设 $F$ 是域，$E = \\{\\alpha : \\alpha \\text{ 是某个非零 } f(x) \\in F[x] \\text{ 的根}\\}$（在某个取定的外围扩张中）是 $F$ 上全体代数元。则 $E$ 代数封闭（algebraically closed）：系数在 $E$ 中的每个非常数多项式在 $E$ 中有根。",
@@ -2122,8 +2123,8 @@
       "layer": 1,
       "name": "不可约元生成极大理想，模极大理想得域",
       "position": {
-        "x": 282,
-        "y": 413
+        "x": -12,
+        "y": 543
       },
       "proof": "笔记未给证明，作为「$p$ 不可约 ⟹ $F[x]/(p)$ 是域」的核心依据引用。",
       "statement": "PID 中不可约元生成极大理想；环模去极大理想是域。",
@@ -2139,8 +2140,8 @@
       "layer": 1,
       "name": "分裂域 (splitting field)",
       "position": {
-        "x": 378,
-        "y": 1328
+        "x": 180,
+        "y": 901
       },
       "proof": "存在性见「Splitting field 的存在性 (Kronecker)」（定理 0.1），同构意义下的唯一性见「Splitting field 的唯一性」（定理 0.2）。$x^q - x$ 在 $\\mathbb{F}_p$ 上的分裂域是构造有限域的核心用例（定理 4.1）。",
       "statement": "设 $F$ 是域，$f(x) \\in F[x]$，$\\deg f \\ge 1$。若域扩张 $K/F$ 使 $f$ 在 $K[x]$ 中完全分解为一次因子之积，且 $K$ 由 $F$ 和 $f$ 的全部根生成，则称 $K$ 为 $f$ 在 $F$ 上的**分裂域（splitting field）**。（定理 0.1 中定义）",
@@ -2155,8 +2156,8 @@
       "layer": 5,
       "name": "Splitting field 的存在性 (Kronecker)",
       "position": {
-        "x": 398,
-        "y": 571
+        "x": 506,
+        "y": 556
       },
       "proof": "证明思路：对次数归纳。取 $f$ 的一个不可约因子 $g$，则 $K_1 = F[x]/(g(x))$ 是域（速成文档 §3），且 $\\alpha = x + (g)$ 是 $g$ 的根。于是在 $K_1[x]$ 中 $f(x) = (x-\\alpha)h(x)$，对 $h$ 用归纳假设即可。\n⚠️ 笔记只叙述并给出证明思路：完整证明属于域扩张理论。",
       "statement": "设 $F$ 是域，$f(x) \\in F[x]$，$\\deg f \\ge 1$。则存在域扩张 $K/F$，使 $f$ 在 $K[x]$ 中完全分解为一次因子之积，且 $K$ 由 $F$ 和 $f$ 的全部根生成（这样的 $K$ 叫 $f$ 在 $F$ 上的分裂域）。（定理 0.1）",
@@ -2171,8 +2172,8 @@
       "layer": 1,
       "name": "Splitting field 的唯一性",
       "position": {
-        "x": 527,
-        "y": 732
+        "x": 372,
+        "y": 901
       },
       "proof": "证明思路：对根的个数归纳，逐步把 $F$ 上的恒等同构扩张到逐个添加根的域上；关键是“不可约多项式的任意两个根生成的扩张同构”：$F(\\alpha) \\cong F[x]/(p) \\cong F(\\beta)$。\n⚠️ 同样只给证明思路。",
       "statement": "同一多项式在同一域上的任意两个分裂域同构，且同构可取为在 $F$ 上恒等。（定理 0.2）",
@@ -2187,8 +2188,8 @@
       "layer": 2,
       "name": "形式导数的 Leibniz 法则",
       "position": {
-        "x": 440,
-        "y": 351
+        "x": 649,
+        "y": 753
       },
       "proof": "对 $f = x^m, g = x^n$ 直接验证 $(x^{m+n})' = (m+n)x^{m+n-1} = m x^{m-1} x^n + x^m n x^{n-1}$，一般情形由双线性性展开即得。",
       "statement": "对 $f, g \\in F[x]$：$(fg)' = f'g + fg'$；$(f+g)' = f' + g'$。（引理 1.2）",
@@ -2203,8 +2204,8 @@
       "layer": 1,
       "name": "整环的特征是 0 或素数",
       "position": {
-        "x": 813,
-        "y": 613
+        "x": 1719,
+        "y": 364
       },
       "proof": "设 $\\operatorname{char} R = n > 0$ 且 $n = ab$（$1 < a, b < n$）。则 $(a\\cdot 1)(b \\cdot 1) = n \\cdot 1 = 0$。$R$ 无零因子，故 $a\\cdot 1 = 0$ 或 $b \\cdot 1 = 0$，与 $n$ 的最小性矛盾。",
       "statement": "整环（特别地，任何域）的特征要么是 $0$，要么是素数 $p$。（定理 2.1）",
@@ -2220,8 +2221,8 @@
       "layer": 3,
       "name": "有限域的阶是素数幂",
       "position": {
-        "x": 657,
-        "y": 685
+        "x": 216,
+        "y": 805
       },
       "proof": "$F$ 有限，故 $1, 1+1, 1+1+1, \\dots$ 必重复，特征不为 $0$；由定理 2.1 特征为素数 $p$。映射 $\\mathbb{Z} \\to F$，$k \\mapsto k\\cdot 1$ 的核是 $p\\mathbb{Z}$，由环的第一同构定理，其像 $\\{0, 1, \\dots, (p-1)\\cdot 1\\} \\cong \\mathbb{Z}/p\\mathbb{Z} = \\mathbb{F}_p$，这就是素子域。\n接着，$F$ 是其素子域 $\\mathbb{F}_p$ 上的向量空间（域扩张自动是底域上的向量空间，验证即向量空间公理）。$F$ 有限 $\\Rightarrow$ 维数有限，设 $\\dim_{\\mathbb{F}_p} F = n$。取一组基后 $F \\cong \\mathbb{F}_p^n$（作为向量空间），数元素个数：$|F| = p^n$。",
       "statement": "有限域 $F$ 的特征是某个素数 $p$；$F$ 包含唯一一个同构于 $\\mathbb{F}_p$ 的子域（称为素子域）；且 $|F| = p^n$ 对某个 $n \\ge 1$ 成立。（定理 2.2）",
@@ -2238,8 +2239,8 @@
       "layer": 4,
       "name": "域的阶只能是素数幂",
       "position": {
-        "x": 644,
-        "y": 669
+        "x": 342,
+        "y": -221
       },
       "proof": "由定理 2.2 立得。§4 将证明反向：每个素数幂 $q = p^n$ 确实给出一个（且本质唯一的）域 $\\mathbb{F}_q$。",
       "statement": "元素个数为 $6, 10, 12, 14, \\dots$ 的域不存在。有限域的阶只能是素数幂。（推论 2.3）",
@@ -2254,8 +2255,8 @@
       "layer": 1,
       "name": "Euler 函数的因子和恒等式",
       "position": {
-        "x": 642,
-        "y": 885
+        "x": -12,
+        "y": 185
       },
       "proof": "把集合 $\\{1, 2, \\dots, n\\}$ 按“与 $n$ 的 gcd”分类。$\\gcd(k, n) = d$ 当且仅当 $d \\mid k$ 且 $\\gcd(k/d,\\, n/d) = 1$，故第 $d$ 类恰有 $\\varphi(n/d)$ 个元素。各类不相交且覆盖全体，所以 $n = \\sum_{d\\mid n} \\varphi(n/d) = \\sum_{d \\mid n} \\varphi(d)$（$d$ 跑遍 $n$ 的因子时 $n/d$ 也跑遍）。",
       "statement": "$\\displaystyle\\sum_{d \\mid n} \\varphi(d) = n$，其中 $\\varphi$ 是 Euler 函数（$\\varphi(d) = |\\{1 \\le k \\le d : \\gcd(k,d)=1\\}|$）。（引理 3.1）",
@@ -2271,8 +2272,8 @@
       "layer": 4,
       "name": "阶恰为 d 的元素个数上界 ψ(d) ≤ φ(d)",
       "position": {
-        "x": 505,
-        "y": 770
+        "x": 728,
+        "y": 1088
       },
       "proof": "若 $G$ 中没有阶为 $d$ 的元素，$\\psi(d) = 0$，成立。否则取 $a \\in G$，$\\operatorname{ord}(a) = d$。循环子群 $\\langle a \\rangle$ 的 $d$ 个元素都满足 $x^d = 1$；由引理 3.2，$x^d - 1$ 在 $F$ 中至多 $d$ 个根，故 $\\langle a \\rangle$ **就是** $x^d - 1$ 的全部根集。于是 $G$ 中一切阶整除 $d$ 的元素都在 $\\langle a \\rangle$ 里，其中阶恰为 $d$ 者即 $\\langle a \\rangle$ 的生成元 $a^k$（$\\gcd(k,d)=1$），恰 $\\varphi(d)$ 个。",
       "statement": "设 $F$ 是域，$G \\le F^\\times$ 为 $n$ 阶有限子群，$\\psi(d)$ 为 $G$ 中阶恰为 $d$ 的元素个数（$d \\mid n$）。则 $\\psi(d) \\le \\varphi(d)$。（定理 3.3 证明中的断言）",
@@ -2288,8 +2289,8 @@
       "layer": 7,
       "name": "有限域的存在性",
       "position": {
-        "x": 382,
-        "y": 577
+        "x": 492,
+        "y": 573
       },
       "proof": "考虑 $f(x) = x^q - x \\in \\mathbb{F}_p[x]$。由定理 0.1，$f$ 在 $\\mathbb{F}_p$ 上有分裂域 $K$。\n**第一步：$f$ 无重根。** 形式导数 $f'(x) = qx^{q-1} - 1 = -1$（因为 $\\operatorname{char} = p \\mid q$，$q = 0$）。$\\gcd(f, f') = \\gcd(f, -1) = 1$，由推论 1.4，$f$ 在 $K$ 中有 $q$ 个**互不相同的**根。\n**第二步：根集 $S = \\{\\alpha \\in K : \\alpha^q = \\alpha\\}$ 本身是域。** $0, 1 \\in S$，显然。加法封闭：反复用 freshman's dream（$(a+b)^p = a^p + b^p$，见 §6 定理 6.1 的证明），得 $(a+b)^q = (a+b)^{p^n} = a^{p^n} + b^{p^n} = a + b$。乘法封闭：$(ab)^q = a^q b^q = ab$。加法逆：若 $p$ 为奇素数则 $q$ 为奇数，$(-a)^q = -a^q = -a$；若 $p = 2$ 则 $-a = a$。乘法逆：$a \\ne 0 \\Rightarrow (a^{-1})^q = (a^q)^{-1} = a^{-1}$。故 $S$ 是 $K$ 的子域，且 $|S| = q$。\n**第三步：$K = S$。** $S$ 包含 $f$ 的全部根；又 $\\mathbb{F}_p \\subseteq S$（$a \\in \\mathbb{F}_p$ 时 $a^p = a$，迭代得 $a^{p^n} = a$）。而 $K$ 是由 $\\mathbb{F}_p$ 和这些根生成的最小域，故 $K \\subseteq S$，即 $K = S$，$|K| = q$。",
       "statement": "对每个素数幂 $q = p^n$，存在恰有 $q$ 个元素的域。（定理 4.1）",
@@ -2304,8 +2305,8 @@
       "layer": 4,
       "name": "有限域的唯一性",
       "position": {
-        "x": 511,
-        "y": 741
+        "x": -432,
+        "y": 434
       },
       "proof": "设 $|F| = q$。乘法群 $F^\\times$ 的阶为 $q-1$，由 Lagrange 定理，每个 $a \\ne 0$ 满足 $a^{q-1} = 1$，从而每个 $a \\in F$（含 $0$）满足 $a^q = a$。即 $F$ 的全部 $q$ 个元素都是 $x^q - x$ 的根；该多项式次数恰为 $q$，所以它在 $F$ 中完全分裂，$F$ 正是它的根集、是 $x^q - x$ 在 $\\mathbb{F}_p$ 上的分裂域。由定理 0.2，分裂域在同构意义下唯一。",
       "statement": "任意两个 $q$ 元域同构。故可记作 $\\mathbb{F}_q$（或 $GF(q)$）。（定理 4.2）",
@@ -2320,8 +2321,8 @@
       "layer": 1,
       "name": "x^{p^d}−x 的整除性判据",
       "position": {
-        "x": 345,
-        "y": 602
+        "x": 1526,
+        "y": 901
       },
       "proof": "第二步：$p^n - 1 = (p^d)^m - 1 \\equiv 0 \\pmod{p^d - 1}$ 当且仅当 $n = dm$；第一步：$x^M - 1 = (x^m - 1)(x^{M-m} + x^{M-2m} + \\cdots)$ 当 $m \\mid M$。",
       "statement": "对 $d, n \\ge 1$，\n$$x^{p^d} - x \\;\\mid\\; x^{p^n} - x \\iff p^d - 1 \\mid p^n - 1 \\iff d \\mid n.$$（§4 整除性小引理，定理 4.4 证明内；自测题 4）",
@@ -2337,8 +2338,8 @@
       "layer": 8,
       "name": "x^{p^n}−x 的不可约因子分类",
       "position": {
-        "x": 336,
-        "y": 619
+        "x": 458,
+        "y": 575
       },
       "proof": "由于 $x^{p^n} - x$ 无重根（定理 4.1 第一步），它等于其全体首一不可约因子之积，每个只出现一次。设 $f$ 首一不可约，$\\deg f = d$。\n$f \\mid x^{p^n} - x$ ⟺ $f$ 在 $\\mathbb{F}_{p^n}$ 中有根 $\\alpha$（⇒：$x^{p^n}-x$ 在 $\\mathbb{F}_{p^n}$ 中分裂，$f$ 的根都在其中；⇐：$\\alpha$ 在 $\\mathbb{F}_p$ 上的极小多项式整除一切以 $\\alpha$ 为根的多项式）。\n而 $f$ 在 $\\mathbb{F}_{p^n}$ 中有根 ⟺ $d \\mid n$：若 $\\alpha \\in \\mathbb{F}_{p^n}$ 且极小多项式次数为 $d$，则 $\\mathbb{F}_p(\\alpha)$ 有 $p^d$ 个元素，$\\mathbb{F}_{p^n}$ 是其上向量空间，故 $d \\mid n$；反之若 $d \\mid n$，由小引理 $x^{p^d} - x \\mid x^{p^n} - x$，而 $f \\mid x^{p^d} - x$（$f$ 的根 $\\beta$ 满足 $\\beta^{p^d} = \\beta$，因为 $\\mathbb{F}_p[x]/(f) \\cong \\mathbb{F}_{p^d}$），故 $f \\mid x^{p^n} - x$。",
       "statement": "在 $\\mathbb{F}_p[x]$ 中，\n$$x^{p^n} - x = \\prod_{\\substack{f \\text{ 首一不可约} \\\\ \\deg f \\,\\mid\\, n}} f(x).$$\n即 $x^{p^n} - x$ 恰好是“所有次数整除 $n$ 的首一不可约多项式”之积（每个出现一次）。（定理 4.4，选读）",
@@ -2354,8 +2355,8 @@
       "layer": 9,
       "name": "不可约多项式的计数公式",
       "position": {
-        "x": 321,
-        "y": 619
+        "x": 442,
+        "y": 562
       },
       "proof": "比较定理 4.4 两边的次数即得 $p^n = \\sum_{d \\mid n} d\\, N_p(d)$；再作 Möbius 反演即得显式公式，其正性给出任意次数不可约多项式的存在性。",
       "statement": "记 $N_p(d)$ 为 $\\mathbb{F}_p[x]$ 中 $d$ 次首一不可约多项式的个数，比较定理 4.4 两边的次数得\n$$p^n = \\sum_{d \\mid n} d\\, N_p(d).$$\n用 Möbius 反演可得 $N_p(n) = \\frac{1}{n}\\sum_{d\\mid n} \\mu(d)\\, p^{n/d} > 0$。**推论：任意次数的不可约多项式在 $\\mathbb{F}_p[x]$ 中都存在**（这给出了定理 4.1 的另一条构造路线：$\\mathbb{F}_{p^n} = \\mathbb{F}_p[x]/(f)$）。（推论 4.5）",
@@ -2372,8 +2373,8 @@
       "layer": 1,
       "name": "x^{16}−x 在 F_2[x] 中的分解",
       "position": {
-        "x": 331,
-        "y": 634
+        "x": 1334,
+        "y": 901
       },
       "proof": "出现的不可约因子次数 $1, 2, 4$ 恰为 $4$ 的全部因子，与定理 4.4 的分类吻合；计数 $16 = 1\\cdot 2 + 2\\cdot 1 + 4\\cdot 3$ 与推论 4.5 的公式吻合。",
       "statement": "$p = 2, n = 4$：$2^4 = 16 = 1\\cdot 2 + 2\\cdot 1 + 4\\cdot 3$，即 $N_2(4) = 3$。验证：\n$$x^{16} - x = x(x+1)(x^2+x+1)(x^4+x+1)(x^4+x^3+1)(x^4+x^3+x^2+x+1).$$（§4 例）",
@@ -2389,8 +2390,8 @@
       "layer": 4,
       "name": "有限域的子域结构",
       "position": {
-        "x": 494,
-        "y": 742
+        "x": 1888,
+        "y": -221
       },
       "proof": "**（存在）** 设 $d \\mid n$。由 §4 的小引理，$x^{p^d} - x \\mid x^{p^n} - x$。右边在 $\\mathbb{F}_{p^n}$ 中完全分裂（推论 4.3），故左边的 $p^d$ 个根都落在 $\\mathbb{F}_{p^n}$ 中。用定理 4.1 第二步同样的论证（加法封闭靠 freshman's dream 等），这 $p^d$ 个根构成子域，即 $\\mathbb{F}_{p^d}$。\n**（仅有这些）** 设 $K$ 是 $\\mathbb{F}_{p^n}$ 的子域。$K$ 必含素子域 $\\mathbb{F}_p$，故 $|K| = p^d$ 对某个 $d$（定理 2.2）。$\\mathbb{F}_{p^n}$ 是 $K$ 上的向量空间，设维数为 $m$，数元素：$p^n = (p^d)^m = p^{dm}$，故 $d \\mid n$。\n**（唯一性）** 若 $K$ 是 $p^d$ 元子域，由定理 4.2 的证明，$K$ 的每个元素满足 $a^{p^d} = a$；而 $x^{p^d} - x$ 在域中至多 $p^d$ 个根，所以 $K$ 与上面构造的根集**重合**。",
       "statement": "$\\mathbb{F}_{p^n}$ 的子域恰好是 $\\mathbb{F}_{p^d}$（$d \\mid n$），每个 $d \\mid n$ 对应**唯一一个**子域，即 $\\sigma^d$ 的固定域 $\\{a : a^{p^d} = a\\}$。子域格与 $n$ 的因子格同构。（定理 5.1）",
@@ -2406,8 +2407,8 @@
       "layer": 1,
       "name": "F_{2^{12}} 的子域格",
       "position": {
-        "x": 480,
-        "y": 744
+        "x": 372,
+        "y": 185
       },
       "proof": "注意 $\\mathbb{F}_4 \\not\\subset \\mathbb{F}_8$，因为 $2 \\nmid 3$——包含关系完全由次数的整除关系决定（定理 5.1：子域格与因子格同构）。",
       "statement": "$\\mathbb{F}_{2^{12}}$ 的子域对应 $12$ 的因子 $1,2,3,4,6,12$：$\\mathbb{F}_2 \\subset \\mathbb{F}_4 \\subset \\mathbb{F}_{64} \\subset \\mathbb{F}_{4096}$ 与 $\\mathbb{F}_2 \\subset \\mathbb{F}_8 \\subset \\mathbb{F}_{4096}$ 等。（§5 例）",
@@ -2422,8 +2423,8 @@
       "layer": 3,
       "name": "Frobenius 自同态",
       "position": {
-        "x": 643,
-        "y": 834
+        "x": 272,
+        "y": 655
       },
       "proof": "乘法性 $(ab)^p = a^p b^p$ 与 $\\sigma(1) = 1$ 显然。加法性由二项式定理：对 $0 < k < p$ 有 $p \\mid \\binom{p}{k}$，特征 $p$ 下只剩 $a^p + b^p$——这就是 freshman's dream。\n域同态的核是真理想，而域只有 $\\{0\\}$ 和自身两个理想，$\\sigma(1) = 1 \\ne 0$，故 $\\ker \\sigma = 0$，$\\sigma$ 单射。$F$ 有限时单射即双射，$\\sigma \\in \\operatorname{Aut}(F)$。",
       "statement": "设 $F$ 是特征 $p$ 的域。映射 $\\sigma: F \\to F$，$\\sigma(a) = a^p$（称为 **Frobenius endomorphism，Frobenius 自同态**）是域同态。当 $F$ 有限时，$\\sigma$ 是自同构。（定理 6.1）",
@@ -2439,8 +2440,8 @@
       "layer": 8,
       "name": "有限域的自同构群",
       "position": {
-        "x": 654,
-        "y": 852
+        "x": 228,
+        "y": 438
       },
       "proof": "1. 固定域 = $x^p - x$ 的根集。由引理 3.2 至多 $p$ 个根；$\\mathbb{F}_p$ 的 $p$ 个元素都满足（Fermat 小定理），故恰好是 $\\mathbb{F}_p$。\n2. $\\sigma^n(a) = a^{p^n} = a$ 对所有 $a \\in F$ 成立（定理 4.2 的证明），故 $\\sigma^n = \\mathrm{id}$。若 $\\sigma^d = \\mathrm{id}$ 对某 $d \\ge 1$ 成立，则 $F$ 的全部 $p^n$ 个元素都是 $x^{p^d} - x$ 的根，由引理 3.2 得 $p^d \\ge p^n$，即 $d \\ge n$。故阶恰为 $n$。\n3. 任何自同构 $\\tau$ 固定 $1$，从而固定 $1$ 生成的素子域 $\\mathbb{F}_p$ 的每个元素，故 $\\operatorname{Aut}(F) = \\operatorname{Aut}(F/\\mathbb{F}_p)$。取本原元 $\\alpha$（定理 3.3），由推论 3.5，$F = \\mathbb{F}_p(\\alpha)$，所以 $\\tau$ 由 $\\tau(\\alpha)$ 唯一决定。$\\tau(\\alpha)$ 必是 $\\alpha$ 在 $\\mathbb{F}_p$ 上极小多项式 $m(x)$ 的根（$\\tau$ 保持多项式关系：$m(\\tau\\alpha) = \\tau(m(\\alpha)) = 0$）。而 $\\deg m = [\\mathbb{F}_p(\\alpha) : \\mathbb{F}_p] = n$，$m$ 至多 $n$ 个根，故 $|\\operatorname{Aut}(F)| \\le n$。但由 (2)，$\\langle \\sigma \\rangle$ 已给出 $n$ 个不同的自同构，所以 $\\operatorname{Aut}(F) = \\langle \\sigma \\rangle$。\n注：$\\sigma$ 的各次幂的固定域恰好给出全部子域，这与定理 5.1 互相印证。“自同构群 ↔ 子域格”的反变对应就是 **Galois 理论**的雏形：$\\mathbb{F}_{p^n}/\\mathbb{F}_p$ 是 Galois 扩张，Galois 群为 $\\mathbb{Z}/n\\mathbb{Z}$。",
       "statement": "设 $q = p^n$，$F = \\mathbb{F}_q$，$\\sigma$ 为 Frobenius 自同构。则\n1. $\\sigma$ 的固定域 $\\{a : a^p = a\\}$ 恰为 $\\mathbb{F}_p$；\n2. $\\sigma$ 在 $\\operatorname{Aut}(F)$ 中的阶恰为 $n$；\n3. $\\operatorname{Aut}(F/\\mathbb{F}_p) = \\langle \\sigma \\rangle \\cong \\mathbb{Z}/n\\mathbb{Z}$。（定理 6.2）",
@@ -2457,8 +2458,8 @@
       "layer": 1,
       "name": "σ^d 的固定域是 F_{p^{gcd(d,n)}}",
       "position": {
-        "x": 668,
-        "y": 1071
+        "x": 1719,
+        "y": 185
       },
       "proof": "笔记未给证明（自测题 6：证明定理 6.2 注中的此断言）。它与定理 5.1 互相印证：$\\sigma$ 的各次幂的固定域恰好给出全部子域。",
       "statement": "在 $\\mathbb{F}_{p^n}$ 上，$\\sigma^d$ 的固定域是 $\\mathbb{F}_{p^{\\gcd(d,n)}}$。于是 $\\sigma$ 的各次幂的固定域恰好给出全部子域。（定理 6.2 注中的断言；自测题 6）",
@@ -2474,8 +2475,8 @@
       "layer": 5,
       "name": "多项式 ≠ 多项式函数",
       "position": {
-        "x": 520,
-        "y": 755
+        "x": 210,
+        "y": 458
       },
       "proof": "无限情形：$f \\ne 0$ 时由引理 3.2 只有至多 $\\deg f$ 个根，不可能零化无限域。有限情形：定理 4.2 的证明表明每个 $a \\in \\mathbb{F}_q$ 满足 $a^q = a$。",
       "statement": "若 $F$ 是**无限域**，$f \\in F[x]$ 满足 $f(a) = 0$ 对所有 $a \\in F$，则 $f = 0$（零多项式）。若 $F = \\mathbb{F}_q$，则 $f(x) = x^q - x$ 是**非零**多项式，但作为函数 $\\mathbb{F}_q \\to \\mathbb{F}_q$ 恒等于 $0$。（命题 7.1）",
@@ -2491,8 +2492,8 @@
       "layer": 4,
       "name": "F_q 上每个函数都是多项式函数",
       "position": {
-        "x": 515,
-        "y": 770
+        "x": 342,
+        "y": 434
       },
       "proof": "计数：函数共 $q^q$ 个，次数 $< q$ 的多项式也是 $q^q$ 个，两两不同函数因为差多项式根数 $< q$。所以“有限域上区分多项式与多项式函数”是硬性需求，不是洁癖。",
       "statement": "$\\mathbb{F}_q$ 上的**每个**函数 $\\mathbb{F}_q \\to \\mathbb{F}_q$ 都由唯一一个次数 $< q$ 的多项式给出。（§7“事实上可以证明”）",
@@ -2508,8 +2509,8 @@
       "layer": 1,
       "name": "对称 / 反对称 / 交错双线性型",
       "position": {
-        "x": 366,
-        "y": 894
+        "x": 180,
+        "y": 6
       },
       "proof": "",
       "statement": "对双线性型 $B$：**symmetric**（对称）指 $B(x,y) = B(y,x)$；**skew-symmetric**（反对称）指 $B(x,y) = -B(y,x)$；**alternating**（交错）指 $B(x,x) = 0$ 对所有 $x$。（§7）",
@@ -2524,8 +2525,8 @@
       "layer": 2,
       "name": "交错与反对称的关系（char 2 的陷阱）",
       "position": {
-        "x": 376,
-        "y": 880
+        "x": 186,
+        "y": 847
       },
       "proof": "1. $0 = B(x+y, x+y) = B(x,x) + B(x,y) + B(y,x) + B(y,y) = B(x,y) + B(y,x)$。\n2. 反对称时 $B(x,x) = -B(x,x)$，即 $2B(x,x) = 0$；char $\\ne 2$ 时 $2$ 可逆，故 $B(x,x) = 0$。\n3. char $2$ 时 $1 = -1$，两个条件逐字相同。反例：$\\mathbb{F}_2$ 上的点积 $B(x,y) = x \\cdot y$ 对称（故反对称），但 $B(e_1, e_1) = 1 \\ne 0$，不交错。\nMAT3042 分类 bilinear/sesquilinear forms 时会反复遇到这个分叉：char $\\ne 2$ 的世界里对称双线性型与二次型一一对应（$Q(x) = B(x,x)$，$B(x,y) = \\frac{1}{2}(Q(x+y) - Q(x) - Q(y))$），char $2$ 时这套对应整个垮掉，需要单独的理论。",
       "statement": "1. 交错 ⟹ 反对称（任意特征）；\n2. char $\\ne 2$ 时，反对称 ⟺ 交错；\n3. char $= 2$ 时，对称 ⟺ 反对称，且反对称**不**蕴含交错。（命题 7.2）",
@@ -2541,8 +2542,8 @@
       "layer": 1,
       "name": "GL_n(F_q) 的阶",
       "position": {
-        "x": 369,
-        "y": 1220
+        "x": 372,
+        "y": 364
       },
       "proof": "可逆矩阵 ⟺ 列向量构成 $\\mathbb{F}_q^n$ 的一组基 ⟺ 第 $i+1$ 列不在前 $i$ 列的张成空间中。逐列计数：第 1 列可取任意非零向量，$q^n - 1$ 种；选定前 $i$ 列（线性无关）后，其张成空间含 $q^i$ 个向量，故第 $i+1$ 列有 $q^n - q^i$ 种取法。各列选择独立，相乘即得。",
       "statement": "$$|\\mathrm{GL}_n(\\mathbb{F}_q)| = \\prod_{i=0}^{n-1} (q^n - q^i) = (q^n - 1)(q^n - q)\\cdots(q^n - q^{n-1}).$$（定理 8.1）",
@@ -2559,8 +2560,8 @@
       "layer": 2,
       "name": "有序基 / PGL / 旗簇的计数",
       "position": {
-        "x": 394,
-        "y": 1071
+        "x": 855,
+        "y": 103
       },
       "proof": "有序基与可逆矩阵的列向量组一一对应，故计数与定理 8.1 相同。",
       "statement": "$\\mathbb{F}_q^n$ 的（有序）基总数也是 $\\prod_{i=0}^{n-1}(q^n - q^i)$；由此可得 $|\\mathrm{GL}_n(\\mathbb{F}_q)| / |\\mathbb{F}_q^\\times| = |\\mathrm{PGL}_n(\\mathbb{F}_q)|$ 之类的计数，以及旗簇（flag variety）的点的计数。（推论 8.2）",
@@ -2576,8 +2577,8 @@
       "layer": 1,
       "name": "等价关系",
       "position": {
-        "x": 615,
-        "y": 1071
+        "x": 1719,
+        "y": 6
       },
       "proof": "",
       "statement": "集合 $X$ 上的关系 $\\sim$ 称为等价关系（equivalence relation），若满足：\n(1) 自反性：$a \\sim a$（任意 $a$）；\n(2) 对称性：$a \\sim b \\implies b \\sim a$；\n(3) 传递性：$a \\sim b,\\ b \\sim c \\implies a \\sim c$。\n记 $[a] := \\{\\text{所有与 } a \\text{ 相关的 } b\\}$ 为 $a$ 的等价类（其中任一 $b$ 都称为代表元 representative），$X/{\\sim} := \\{[a] : a \\in X\\}$ 称为商集（quotient set）。",
@@ -2592,8 +2593,8 @@
       "layer": 1,
       "name": "等价关系基本定理",
       "position": {
-        "x": 507,
-        "y": 1073
+        "x": 1526,
+        "y": 6
       },
       "proof": "",
       "statement": "（Th1, fundamental）三者一一对应：\n$$\\{X \\text{ 上的等价关系}\\} \\longleftrightarrow \\{X \\text{ 的划分（partition：不相交且并为 } X\\text{）}\\} \\longleftrightarrow \\{\\text{投影映射 } X \\to X/{\\sim}\\}.$$",
@@ -2608,8 +2609,8 @@
       "layer": 1,
       "name": "商映射分解命题",
       "position": {
-        "x": 7,
-        "y": 1275
+        "x": 565,
+        "y": 722
       },
       "proof": "证明要点：只需验证 $[a] \\mapsto f(a)$ 良定义（routine）。关于双射部分：由 $g$ 的定义，$g$ 是满射；单射性由 $g^{-1}(y) = [a]$ 给出（速记甚略）。\n应用：有理数、实数的构造。",
       "statement": "（Prop, factorization）给定函数 $f: X \\to Y$ 与 $X$ 上的等价关系 $\\sim$。若 $a \\sim b \\implies f(a) = f(b)$，则存在函数 $g: X/{\\sim} \\to Y$ 使得 $f = g \\circ p$，其中 $p: X \\to X/{\\sim}$ 为投影。",
@@ -2624,8 +2625,8 @@
       "layer": 2,
       "name": "不可约多项式在扩域中的分解（gcd 定理）",
       "position": {
-        "x": 694,
-        "y": 1004
+        "x": 251,
+        "y": 929
       },
       "proof": "证明思路（根的循环链）：\n1) $f$ 不可约、次数 $d$ ⟹ $d$ 个根全在 $\\mathbb{F}_{p^d}$ 里；\n2) Frobenius 自同构 $\\sigma: x \\mapsto x^p$ 把 $d$ 个根串成一条长度 $d$ 的循环链 $\\alpha \\mapsto \\alpha^p \\mapsto \\alpha^{p^2} \\mapsto \\cdots \\mapsto$ 回到 $\\alpha$；\n3) 在 $\\mathbb{F}_{p^n}$ 上有效的操作是 $\\sigma^n$（每次跳 $n$ 步）；$d$ 环链跳 $n$ 步 ⟹ 断成 $\\gcd(d, n)$ 条小链；\n4) 每条小链 = 一个不可约因子（轨道乘积的系数被 $\\sigma^n$ 固定 ⟹ 落在 $\\mathbb{F}_{p^n}$）。\n例：$d = 4, n = 2$：4 环链跳 2 步 → 2 条长度 2 的小链，故 $f$ 在 $\\mathbb{F}_{p^2}$ 上分成 2 个二次因子（$\\gcd(4, 2) = 2$）。",
       "statement": "（Office hour 定理）设 $f$ 在 $\\mathbb{F}_p$ 上不可约，$\\deg f = d$。则在 $\\mathbb{F}_{p^n}$ 上，$f$ 恰好分解为 $\\gcd(d, n)$ 个不可约因子，每个因子的次数为 $d / \\gcd(d, n)$。",
@@ -2642,8 +2643,8 @@
       "layer": 3,
       "name": "扩域上保持不可约的判据",
       "position": {
-        "x": 697,
-        "y": 1018
+        "x": 250,
+        "y": 943
       },
       "proof": "由「不可约多项式在扩域中的分解」取 $\\gcd(d, n) = 1$ 的情形即得。\n应用（office hour 问答）：总存在 $n$ 使 $\\gcd(d, n) = 1$（例如 $n \\equiv 1 \\pmod d$），故\"$f$ 在所有 $\\mathbb{F}_{p^n}$（$n \\ge 2$）上都可约\"不可能发生——\"没有 $d$ 能被所有 $n$ 整除\"。",
       "statement": "（推论）设 $f$ 在 $\\mathbb{F}_p$ 上不可约，$\\deg f = d$。则 $f$ 在 $\\mathbb{F}_{p^n}$ 上仍不可约 $\\iff \\gcd(d, n) = 1$。",
@@ -2659,8 +2660,8 @@
       "layer": 1,
       "name": "Frobenius 自同构",
       "position": {
-        "x": 708,
-        "y": 989
+        "x": 1526,
+        "y": 185
       },
       "proof": "它是「不可约多项式在扩域中的分解」证明的核心：$\\sigma$ 把不可约多项式的 $d$ 个根串成一条长度 $d$ 的循环链。\n大图景：有限域的 Galois 群 $= \\langle \\text{Frobenius} \\rangle$ 是循环群，所以一切都能算出来。\n作为映射的性质（是域同态；$F$ 有限时是自同构；固定域恰为 $\\mathbb{F}_p$）见「Frobenius 自同态」（定理 6.1）与「有限域的自同构群」（定理 6.2）。",
       "statement": "有限域上的 Frobenius 自同构 $\\sigma: x \\mapsto x^p$。在 $\\mathbb{F}_{p^n}$ 上有效的操作是 $\\sigma^n$（每次跳 $n$ 步）。",
@@ -2676,8 +2677,8 @@
       "layer": 1,
       "name": "模 p 判别法",
       "position": {
-        "x": 272,
-        "y": 1275
+        "x": 757,
+        "y": 543
       },
       "proof": "L02 课堂以 \"TFAE\" 问题引出：(i) $f$ 在 $\\mathbb{Z}[x]$ 不可约；(ii) $f$ 在某个 $\\mathbb{F}_p[x]$ 不可约；(iii) $f$ 在任意 $\\mathbb{F}_p[x]$ 不可约——并记下 (ii) ⟹ (i)：否则 $f = h_1 h_2$ 在 $\\mathbb{Z}[x]$ 中可约，模 $p$ 后仍给出 $\\mathbb{F}_p[x]$ 中的分解（首项系数不被 $p$ 整除保证次数不塌）。",
       "statement": "（单向！）设 $f \\in \\mathbb{Z}[x]$，素数 $p$ 不整除 $f$ 的首项系数。若 $f \\bmod p$ 在 $\\mathbb{F}_p[x]$ 中不可约，则 $f$ 在 $\\mathbb{Z}[x]$（从而在 $\\mathbb{Q}[x]$）中不可约。\n反向不成立：$x^4 + 1$ 在 $\\mathbb{Z}$ 上不可约，但在每个 $\\mathbb{F}_p$（甚至每个有限域）上可约。",
@@ -2693,8 +2694,8 @@
       "layer": 3,
       "name": "x⁴+1：ℚ 上不可约但 mod 任何 p 可约",
       "position": {
-        "x": 678,
-        "y": 1009
+        "x": 266,
+        "y": 916
       },
       "proof": "大图景解释（office hour）：其 Galois 群 = Klein 四元群，无 4 阶循环元 ⟹ 没有素数能保住 4 次不可约因子。与「不可约多项式在扩域中的分解」是同一套\"自同构作用在根上、不可约因子 ⟺ 轨道\"的理论。",
       "statement": "$x^4 + 1$ 在 $\\mathbb{Z}[x]$（$\\mathbb{Q}$）上不可约，但在每个 $\\mathbb{F}_p$（甚至每个有限域）上可约。因此它是模 $p$ 判别法\"反向不成立\"的反例。",
@@ -2711,8 +2712,8 @@
       "layer": 1,
       "name": "ℤ/pℤ 是域（p 素）",
       "position": {
-        "x": 222,
-        "y": 479
+        "x": 853,
+        "y": 1080
       },
       "proof": "证明思路：为求 $[a]$（$[a] \\ne [0]$）的唯一逆元，考虑乘法映射 $[x] \\mapsto [ax]$，它单射（课堂速记到此）。",
       "statement": "（Claim）$p$ 为素数时，$\\mathbb{Z}/p\\mathbb{Z}$ 是域。",
@@ -2728,8 +2729,8 @@
       "layer": 1,
       "name": "素元",
       "position": {
-        "x": 774,
-        "y": 1071
+        "x": -205,
+        "y": 722
       },
       "proof": "RM：素元对构造域很重要，但素元难找；不可约元容易判（\"prime is important to construct fields, but it's hard to find prime; while irreducible is easy to find\"）。",
       "statement": "环 $R$ 中 $r$ 称为素元（prime），若 $r \\notin R^\\times$ 且 $r \\ne 0$，并对任意 $a, b \\in R$：$$r \\mid ab \\implies r \\mid a \\ \\text{或}\\ r \\mid b.$$",
@@ -2744,8 +2745,8 @@
       "layer": 1,
       "name": "不可约元",
       "position": {
-        "x": 749,
-        "y": 1275
+        "x": -205,
+        "y": 543
       },
       "proof": "例（找不可约元）：(i) $\\mathbb{R}[x]$：$x^2 + 1$；(ii) $\\mathbb{F}_2[x]$：$x^2 + x + 1$；(iii) $\\mathbb{F}_3[x]$：$x^2 + 1$？（课堂标注 not sufficient——检验还需更多论证）。",
       "statement": "环 $R$ 中 $r$（非零、非单位）称为不可约元（irreducible），若它不能分解为 $r = ab$（$a, b$ 均非单位）（速记：\"irreducible, r not= ab\"）。",
@@ -2760,8 +2761,8 @@
       "layer": 1,
       "name": "整环中素元 ⟹ 不可约元",
       "position": {
-        "x": 60,
-        "y": 1275
+        "x": 180,
+        "y": 722
       },
       "proof": "",
       "statement": "（RM）在整环中，素元必是不可约元（prime $\\implies$ irreducible）。",
@@ -2776,8 +2777,8 @@
       "layer": 2,
       "name": "ℤ 与 F[x] 中素元 = 不可约元",
       "position": {
-        "x": 267,
-        "y": 700
+        "x": 404,
+        "y": 409
       },
       "proof": "不可约 ⟹ 素（Week 2 极小反例法）：设 $S = \\{\\text{不可约但非素的元}\\}$。若 $S \\ne \\emptyset$，取 $m \\in S$（最小正整数/最低次）：有 $m \\mid m_1 m_2$ 但 $m$ 不整除 $m_1, m_2$ 中任何一个。不妨 $m_1 > m_2$；由带余除法 $m_1 = mq + r$，$r > 0$（余式更小），于是可造出更小的同类反例，矛盾。\n素 ⟹ 不可约在一般整环中已成立（见「整环中素元 ⟹ 不可约元」）。\nRM：这条等价的实用价值——素元难找而不可约易判，于是\"用不可约多项式商环构造域\"可行。",
       "statement": "（fact）对 $R = \\mathbb{Z}$ 或 $F[x]$，素元与不可约元等价（prime $\\iff$ irreducible）。",
@@ -2793,8 +2794,8 @@
       "layer": 1,
       "name": "多项式环 F[x]",
       "position": {
-        "x": 272,
-        "y": 1328
+        "x": -12,
+        "y": 364
       },
       "proof": "",
       "statement": "$F[x] := \\{\\sum_i a_i x^i : a_i \\in F\\}$（有限和），域 $F$ 上的多项式环。\n首项系数 $\\operatorname{LC}(f) = a_n$；$a_n = 1$ 时称首一（monic）；$n = 0$ 时为常数多项式。\n商环记 $F[x]/(f)$（即 $F[x]/fF[x]$）。",
@@ -2810,8 +2811,8 @@
       "layer": 1,
       "name": "有限整环是域",
       "position": {
-        "x": 209,
-        "y": 472
+        "x": 949,
+        "y": 185
       },
       "proof": "笔记未展开证明；课堂对 $\\mathbb{Z}/p\\mathbb{Z}$ 用的乘法映射 $[x] \\mapsto [ax]$（单射 ⟹ 有限集上满射）正是这里的关键一步。",
       "statement": "（RM / 断言）有限整环必是域。",
@@ -2827,8 +2828,8 @@
       "layer": 2,
       "name": "代数闭包的存在性",
       "position": {
-        "x": 144,
-        "y": 22
+        "x": 785,
+        "y": 50
       },
       "proof": "构造思路（[[3042week2]] §6 注）：令 $S = \\{E \\supseteq F \\mid E \\text{ 中每个元素都是 } F[x] \\text{ 中某个多项式的根}\\}$，按包含关系成偏序集；链 $E_1 \\subseteq E_2 \\subseteq \\cdots$ 的并 $E = \\bigcup E_i$ 仍是域且 $E \\in S$；用 Zorn 引理取极大元，再验证封闭性（claim $E$ closed；claim $E' \\in S$）。\n⚠️ 注意：这条独立于\"带余除法 ⟹ …\"的链条，属于域扩张那条线。\n⚠️ Jordan 标准形要求特征多项式分裂：在 $\\mathbb{C}$ 上自动成立，在一般域上只有先取 $\\bar{F}$ 才行——这是 MAT3042 反复强调 \"vector spaces over general fields\" 的原因之一。",
       "statement": "（推论 (ii)）存在 $\\bar{F} \\supseteq F$，使得 $\\bar{F}$ 是代数闭域（algebraically closed）。含义：任何域都能嵌入一个\"所有多项式都有根\"的大域。",
@@ -2844,8 +2845,8 @@
       "layer": 1,
       "name": "代数基本定理（R̄ = ℂ）",
       "position": {
-        "x": 156,
-        "y": 9
+        "x": -205,
+        "y": 364
       },
       "proof": "",
       "statement": "$\\bar{\\mathbb{R}} = \\mathbb{C}$：复数域 $\\mathbb{C}$ 是代数闭域（代数基本定理，fundamental theorem of algebra）。",
@@ -2860,8 +2861,8 @@
       "layer": 2,
       "name": "因式定理",
       "position": {
-        "x": 339,
-        "y": 773
+        "x": 381,
+        "y": 420
       },
       "proof": "笔记未单列证明；L03(i) 根的个数上界的证明里，\"若 $\\alpha$ 是根，带余除法给出 $f(x) = (x - \\alpha)g(x)$\"正是这一步。",
       "statement": "$a$ 是 $f(x)$ 的根 $\\implies (x - a) \\mid f(x)$（Week 2 速记：\"a is root that x−a | f(x)\"）。",
@@ -2876,8 +2877,8 @@
       "layer": 3,
       "name": "唯一分解定理（ℤ 与 F[x]）",
       "position": {
-        "x": 253,
-        "y": 686
+        "x": 419,
+        "y": 421
       },
       "proof": "存在性：关键部分——若 $r$ 不可约，则 $r = r' u$（$u \\in R^\\times$）即已；否则 $r = r_1 r_2$，对 $r$（大小 / 次数 $\\deg r$）归纳即得。\n唯一性：关键是素元性质（prime property）——设 $p_i, q_i$ 给出两种分解，用整除性质比较；claim $t_1 = l_1$（留作练习），重排后即一致。",
       "statement": "（Theorem, Unique factorization）设 $R = \\mathbb{Z}$（respectively $F[x]$）。任意 $r \\in R \\setminus \\{0\\}$ 可分解为\n$$r = u \\prod_{i=1}^{s} p_i,$$\n其中 $u \\in R^\\times$ 为单位，$p_i$ 为素元（$\\mathbb{Z}$ 中取正的素数）；分解在相差单位与重排的意义下唯一。",
@@ -2894,8 +2895,8 @@
       "layer": 1,
       "name": "多项式的 gcd 与 lcm",
       "position": {
-        "x": 721,
-        "y": 1071
+        "x": 180,
+        "y": 364
       },
       "proof": "",
       "statement": "（Def）多项式的最大公因式 $\\gcd$ 与最小公倍式 $\\mathrm{lcm}$；可归纳地定义（\"inductively define the long gcd/lcm\"——辗转相除）。",
@@ -2911,8 +2912,8 @@
       "layer": 1,
       "name": "同态与同构 (homomorphism & isomorphism)",
       "position": {
-        "x": 696,
-        "y": 1275
+        "x": 949,
+        "y": 364
       },
       "proof": "",
       "statement": "设 $A_1, A_2$ 是具有同类代数结构（群、环或域）的两个集合。映射 $\\varphi: A_1 \\to A_2$ 称为**同态**，如果它保持运算：$\\varphi(a+b) = \\varphi(a) + \\varphi(b)$，$\\varphi(ab) = \\varphi(a)\\varphi(b)$。若 $\\varphi$ 是双射（此时 $\\varphi^{-1}$ 自动也是同态），称为**同构（isomorphism）**。例：$\\exp: (\\mathbb{R}, +) \\to (\\mathbb{R}_{>0}, \\cdot)$ 是群同构；$\\mathbb{C} \\cong \\dfrac{\\mathbb{R}[x]}{(x^2+1)\\,\\mathbb{R}[x]}$ 是域同构（$x \\mapsto i$）。",
@@ -2929,8 +2930,8 @@
       "layer": 4,
       "name": "有限域分类引理",
       "position": {
-        "x": 500,
-        "y": 726
+        "x": 1115,
+        "y": -221
       },
       "proof": "各条证明出处：第 1 条见 MAT3042-有限域 定理 2.2；第 2 条见定理 4.2 的证明 + 定理 5.1。⚠️ 与扩张次数的联系：$|F| = p^n \\iff [F:\\mathbb{F}_p] = n$，这里已经在用“扩张 = 线性空间”（见 L04 §5 背景）。",
       "statement": "设 $F$ 是特征 $p$ 的有限域，则：1. $|F| = p^n$ 对某个 $n \\in \\mathbb{Z}_{>0}$ 成立；2. $F$ 的每个元素都是 $x^{p^n} - x \\in \\mathbb{F}_p[x]$ 的根；且子域 $F' \\subseteq F$、$|F'| = p^m$ 存在 ⟺ $m \\mid n$；3. $F$ 的元素可用 $\\mathbb{F}_p$ 上次数 $< n$ 的多项式表示；4. 由 3，$F \\cong \\dfrac{\\mathbb{F}_p[x]}{f(x)\\,\\mathbb{F}_p[x]}$（作为域），其中 $f$ 是某个 $n$ 次不可约多项式；任意两个这样的域之间的同构由根的对应给出。",
@@ -2946,8 +2947,8 @@
       "layer": 5,
       "name": "$\\bar{\\mathbb{F}}_p$ 的构造（沿 $n!$ 取并）",
       "position": {
-        "x": 500,
-        "y": 714
+        "x": 325,
+        "y": 618
       },
       "proof": "",
       "statement": "代数闭包 $\\bar{\\mathbb{F}}_p = \\bigcup_{n \\ge 1} \\mathbb{F}_{p^{n!}}$（沿 $n!$ 取递增并，保证嵌套）。⚠️ 直接并 $\\bigcup_n \\mathbb{F}_{p^n}$ 不封闭，因为 $\\mathbb{F}_{p^m} \\subseteq \\mathbb{F}_{p^n} \\iff m \\mid n$。",
@@ -2962,8 +2963,8 @@
       "layer": 2,
       "name": "不可约多项式的根：Frobenius 共轭",
       "position": {
-        "x": 721,
-        "y": 980
+        "x": 339,
+        "y": 849
       },
       "proof": "理由：$f(\\beta) = 0 \\Rightarrow f(\\beta^p) = \\sigma(f(\\beta)) = 0$，依此类推。",
       "statement": "若 $f(x) \\in \\mathbb{F}_p[x]$ 是 $n$ 次不可约多项式，则 $f$ 在 $\\bar{\\mathbb{F}}_p$ 中的根为 $$\\beta,\\ \\beta^p,\\ \\beta^{p^2},\\ \\dots,\\ \\beta^{p^{n-1}} \\quad (\\text{某个 } \\beta)$$ ——是 **Frobenius 迭代**（$\\beta$ 的各共轭元）。⚠️ 不是普通的幂 $\\beta^2, \\beta^3$！",
@@ -2979,8 +2980,8 @@
       "layer": 2,
       "name": "$R/I$ 是域 ⟺ $I$ 极大理想",
       "position": {
-        "x": 158,
-        "y": 300
+        "x": 642,
+        "y": 351
       },
       "proof": "本笔记仅陈述（商环回顾），证明见 MAT3042-群环域速成 §3。",
       "statement": "$R/I$ 是**域** ⟺ $I$ 是**极大理想（maximal ideal）**。",
@@ -2995,8 +2996,8 @@
       "layer": 1,
       "name": "$R/I$ 是整环 ⟺ $I$ 素理想",
       "position": {
-        "x": 431,
-        "y": 1328
+        "x": -12,
+        "y": 722
       },
       "proof": "本笔记仅陈述（商环回顾），证明见 MAT3042-群环域速成 §3。",
       "statement": "$R/I$ 是**整环** ⟺ $I$ 是**素理想（prime ideal）**。",
@@ -3011,8 +3012,8 @@
       "layer": 1,
       "name": "左 $R$-模 (left $R$-module)",
       "position": {
-        "x": 184,
-        "y": 1071
+        "x": 1142,
+        "y": 722
       },
       "proof": "动机：把向量空间的标量从域 $F$ 推广到环 $R$。$R = \\mathbb{Z}$ 时得到交换群分类；$R = F[x]$ 时得到线性算子的标准形（Jordan / 有理标准形）——本课程“vector spaces over general fields”的落点。",
       "statement": "左 $R$-模 $M$ 就是“把向量空间定义里的 $F$-标量换成 $R$-标量”：交换群 $(M, +)$ 配上数乘 $R \\times M \\to M$，满足 $$1 \\cdot m = m,\\quad (r+s)m = rm + sm,\\quad r(m+n) = rm + rn,\\quad (rs)m = r(sm).$$ 备注：右 $R$-模把数乘写在右边，公理相应改为 $v \\cdot 1 = v$，$v(a+b) = va + vb$，$(v+w)a = va + wa$，$(va)b = v(ab)$；$R$ **交换**时左模 = 右模。",
@@ -3027,8 +3028,8 @@
       "layer": 1,
       "name": "$(R_1, R_2)$-双模 (bimodule)",
       "position": {
-        "x": 562,
-        "y": 1071
+        "x": 372,
+        "y": 6
       },
       "proof": "",
       "statement": "若 $M$ 同时是左 $R_1$-模和右 $R_2$-模（且两种数乘相容），称为 **$(R_1, R_2)$-双模（bimodule）**。",
@@ -3043,8 +3044,8 @@
       "layer": 1,
       "name": "$R$-模的基本例子",
       "position": {
-        "x": 643,
-        "y": 1275
+        "x": 1334,
+        "y": 722
       },
       "proof": "",
       "statement": "(i) 任何交换群都是 $\\mathbb{Z}$-模（$n \\cdot a$ = $a$ 自加 $n$ 次），反之亦然；(ii) 任何环 $R$ 是自身上的模，其子模**恰好是 $R$ 的理想**；(iii) 若 $R \\subseteq S$ 是子环，则 $S$ 是 $R$-模（如 $\\mathbb{C}$ 是 $\\mathbb{R}$-模）。",
@@ -3059,8 +3060,8 @@
       "layer": 1,
       "name": "循环模 (cyclic module)",
       "position": {
-        "x": 219,
-        "y": 1328
+        "x": 949,
+        "y": 6
       },
       "proof": "",
       "statement": "左 $R$-模 $M$ 称为**循环的（cyclic）**，若 $M = Rm$ 对某个 $m \\in M$ 成立。",
@@ -3075,8 +3076,8 @@
       "layer": 1,
       "name": "张成与 $R$-线性组合 (span)",
       "position": {
-        "x": 590,
-        "y": 1275
+        "x": -12,
+        "y": 901
       },
       "proof": "",
       "statement": "$\\operatorname{Span}_R(S)$ = $S$ 中元素的全体**有限**和 $\\sum r_i s_i$；这样的和称为 **$R$-线性组合**。例：$P_n(\\mathbb{R}) = \\operatorname{Span}_{\\mathbb{R}}\\{1, x, x^2, \\dots, x^n\\}$。",
@@ -3091,8 +3092,8 @@
       "layer": 1,
       "name": "替换引理 (replacement lemma)",
       "position": {
-        "x": 7,
-        "y": 133
+        "x": 1526,
+        "y": 722
       },
       "proof": "$w$ 的展开中 $v_1$ 系数非零，解出 $v_1$。⚠️ 注意是**集合差** $\\setminus$，不是商空间 $\\frac{V}{W}$。",
       "statement": "若 $$w \\in \\operatorname{Span}(v_1, \\dots, v_n) \\setminus \\operatorname{Span}(v_2, \\dots, v_n),$$ 则 $$v_1 \\in \\operatorname{Span}(w, v_2, \\dots, v_n) \\setminus \\operatorname{Span}(v_2, \\dots, v_n).$$",
@@ -3108,8 +3109,8 @@
       "layer": 1,
       "name": "$R$-线性无关",
       "position": {
-        "x": 113,
-        "y": 1328
+        "x": 949,
+        "y": 722
       },
       "proof": "⚠️ 一般环上的模**不能**照搬向量空间理论：模可以没有基（有基的模才叫**自由模**），替换引理和维数理论对一般模失效——这正是“自由模分类”要处理的问题。",
       "statement": "$s_1, \\dots, s_k$ 线性无关，若 $$\\sum r_i s_i = 0 \\implies r_i = 0 \\ (\\forall i).$$",
@@ -3124,8 +3125,8 @@
       "layer": 5,
       "name": "单扩张的基",
       "position": {
-        "x": 537,
-        "y": 504
+        "x": 424,
+        "y": 634
       },
       "proof": "**张成**：$m(c)=0$ 给出降幂法则 $c^n = -\\sum_{i<n} a_i c^i$，任意 $\\ge n$ 次的幂可逐步降回 $n-1$ 次以下；**无关**：若 $\\sum_{i<n} b_i c^i = 0$ 系数不全为零，则得到以 $c$ 为根、次数 $< n$ 的非零多项式，与 $m$ 极小（$m$ 整除一切以 $c$ 为根的多项式）矛盾。备注：多元添加归结为逐次单添加 $F(c_1, c_2) = \\bigl(F(c_1)\\bigr)(c_2)$——**不需要**为整个大域找单一生成元（本原元定理保证其存在，但算维数用不上）。",
       "statement": "若 $c$ 在 $F$ 上代数，极小多项式 $m(x)$ 次数为 $n$，则 $$[F(c):F] = n,\\qquad \\text{基为 } \\{1, c, c^2, \\dots, c^{n-1}\\}.$$",
@@ -3140,8 +3141,8 @@
       "layer": 1,
       "name": "限制标量：维数公式 (restriction of scalars)",
       "position": {
-        "x": 506,
-        "y": 527
+        "x": 1719,
+        "y": 722
       },
       "proof": "塔定律的同构版本，证法一字不差（$V = L$ 即塔定律）。",
       "statement": "若 $V$ 是 $K$-线性空间，$F \\subseteq K$ 是子域，则 $$\\dim_F V = \\dim_K V \\cdot \\dim_F K.$$",
@@ -3157,8 +3158,8 @@
       "layer": 6,
       "name": "$[\\mathbb{Q}(\\sqrt2,\\sqrt3):\\mathbb{Q}] = 4$",
       "position": {
-        "x": 529,
-        "y": 518
+        "x": 409,
+        "y": 635
       },
       "proof": "第二层 $= 2$ 归结为 $\\sqrt3 \\notin \\mathbb{Q}(\\sqrt2)$：设 $\\sqrt3 = a+b\\sqrt2$（$a,b \\in \\mathbb{Q}$），平方后比较系数得矛盾。",
       "statement": "$[\\mathbb{Q}(\\sqrt2,\\sqrt3):\\mathbb{Q}] = [\\mathbb{Q}(\\sqrt2):\\mathbb{Q}]\\cdot[\\mathbb{Q}(\\sqrt2,\\sqrt3):\\mathbb{Q}(\\sqrt2)] = 2 \\times 2 = 4$；基为 $\\{1,\\sqrt2\\}\\times\\{1,\\sqrt3\\} = \\{1,\\sqrt2,\\sqrt3,\\sqrt6\\}$。",
@@ -3173,8 +3174,8 @@
       "layer": 6,
       "name": "逐层添加的次数上界",
       "position": {
-        "x": 535,
-        "y": 519
+        "x": 408,
+        "y": 640
       },
       "proof": "检查“新元素是否已在旧域里”是把上界变成等号的关键。",
       "statement": "一般规律：$[F(c_1,c_2):F(c_1)] \\le [F(c_2):F]$（系数域变大，极小多项式只短不长），故**各层在 $F$ 上的次数之积是总次数的上界**。",
@@ -3189,8 +3190,8 @@
       "layer": 1,
       "name": "模的基 (basis)",
       "position": {
-        "x": 34,
-        "y": 210
+        "x": -205,
+        "y": 6
       },
       "proof": "",
       "statement": "设 $M$ 是左 $R$-模。$S \\subseteq M$ 是 $M$ 的**基（basis）**，若 $S$ 线性无关且 $\\operatorname{Span}_R(S) = M$。",
@@ -3205,8 +3206,8 @@
       "layer": 2,
       "name": "基的存在性（域或除环上）",
       "position": {
-        "x": 11,
-        "y": 146
+        "x": 754,
+        "y": 18
       },
       "proof": "**关键观察**：基 = **极大 $R$-线性无关组**（$R$ 是除环时两者等价：极大无关 ⟹ 任何 $v \\notin S$ 使 $S \\cup \\{v\\}$ 相关 ⟹ 存在关系式其中 $v$ 系数非零 ⟹ 除环里该系数**可逆**，解出 $v \\in \\operatorname{Span}(S)$，故 $S$ 张成）。**证明（Zorn 引理）**：考虑 $S$ 中的线性无关子集族，按包含关系排序。链条件：设 $\\{S_i\\}_{i\\in I}$ 是全序链，任取**有限**子集 $\\{t_1,\\dots,t_n\\} \\subseteq \\bigcup S_i$，每个 $t_j$ 落在某个 $S_{i_j}$ 里；链全序 ⟹ 这些 $S_{i_j}$ 有最大者 $S_{i_0}$，于是 $\\{t_j\\} \\subseteq S_{i_0}$ 无关。有限子集皆无关 ⟹ 并集无关。Zorn 引理给出极大无关组，由关键观察即为基。⚠️ 与“极大线性无关组”对偶的“极小生成组”路线走不通（见 ℤ 反例 minimal-spanning-set-not-basis）——这是证明必须用 Zorn 而非“从生成集往下删”的原因。",
       "statement": "设 $R$ 是域或除环，$M = \\operatorname{Span}_R(S)$ 是 $R$-模。则 $M$ 有基。",
@@ -3221,8 +3222,8 @@
       "layer": 1,
       "name": "域上：基 ⟺ 极大无关组 ⟺ 极小生成组",
       "position": {
-        "x": 7,
-        "y": 1328
+        "x": -12,
+        "y": 6
       },
       "proof": "Exercise：想清楚域上为什么三者等价。",
       "statement": "域上：基 ⟺ 极大线性无关组 ⟺ 极小生成组（三者等价）。一般环上“极小生成组 ⟹ 基”**不成立**（反例见 minimal-spanning-set-not-basis）。",
@@ -3238,8 +3239,8 @@
       "layer": 1,
       "name": "极小生成组未必是基（ℤ 反例）",
       "position": {
-        "x": 325,
-        "y": 1275
+        "x": 372,
+        "y": 543
       },
       "proof": "所以极小生成组未必是基，$\\mathbb{Z}$-模的“维数”直觉在这里已经需要小心；也说明不能用极小生成组证明基的存在性引理。",
       "statement": "$$\\mathbb{Z} = \\operatorname{Span}_{\\mathbb{Z}}\\{3,5\\} \\;\\supsetneq\\; \\operatorname{Span}_{\\mathbb{Z}}\\{3\\} = 3\\mathbb{Z}$$ $\\{3,5\\}$ 是**极小生成组**（$\\gcd(3,5)=1$ 故张成 $\\mathbb{Z}$；删掉任何一个都不再张成），但它**线性相关**：$5\\cdot 3 - 3\\cdot 5 = 0$ 是非平凡关系。",
@@ -3254,8 +3255,8 @@
       "layer": 1,
       "name": "自由模 (free module)",
       "position": {
-        "x": 60,
-        "y": 1328
+        "x": 1334,
+        "y": 185
       },
       "proof": "",
       "statement": "$R$-模 $M$ 称为**自由的**，若存在基。",
@@ -3270,8 +3271,8 @@
       "layer": 1,
       "name": "自由模的子模未必自由",
       "position": {
-        "x": 802,
-        "y": 1275
+        "x": 757,
+        "y": 901
       },
       "proof": "对照：$R$ 是 PID 时自由模的子模仍自由——这是后面 PID 上模分类的入口。",
       "statement": "例：$R = \\mathbb{Z}/6\\mathbb{Z}$，$M = R$ 自由（基 $\\{1\\}$），子模 $N = \\{0,2,4\\} = 2R$ 不自由——$N$ 的每个元素都被 $3 \\neq 0$ 零化，而自由模的基元素零化子必须为 $0$。",
@@ -3286,8 +3287,8 @@
       "layer": 4,
       "name": "不变基数定理 (invariant basis number, IBN)",
       "position": {
-        "x": 40,
-        "y": 179
+        "x": 1888,
+        "y": 434
       },
       "proof": "**Step 1（$R$ = 域或除环，基交换 + Zorn）**：不妨 $|S_1| \\le |S_2|$。考虑“部分交换”结构 $$\\Sigma := \\left\\{\\ \\varphi_A(f) := A \\cup \\bigl(S_2 \\setminus f(A)\\bigr)\\ \\middle|\\ f: A \\xrightarrow{\\text{inj}} S_2,\\ A \\subseteq S_1,\\ \\varphi_A(f)\\ \\text{线性无关}\\ \\right\\}$$（把 $S_1$ 的子集 $A$ 换进 $S_2$，用像 $f(A)$ 替换被占位置，要求换完仍无关）；$\\Sigma \\neq \\varnothing$（$\\varphi_\\varnothing = S_2$）。偏序为延拓关系：$\\varphi_{A_1}(f_1) \\le \\varphi_{A_2}(f_2)$ ⟺ $A_1 \\subseteq A_2$ 且 $f_2|_{A_1} = f_1$。链条件：全序链取 $A := \\bigcup_i A_i$，$f$ 由各 $f_i$ 拼接（链中各 $f_i$ 在重叠处一致，良定义）；$\\varphi_A(f)$ 的任一有限子集落在某个 $\\varphi_{A_N}(f_N)$（指标最大者）中，故无关。Zorn 给出极大元 $\\varphi_{A_0}(f_0)$。Case (i)：$A_0 = S_1$——$S_1$ 已是基（张成 $M$），$S_2 \\setminus f_0(S_1)$ 中任何元素加进去必相关，故 $S_2 \\setminus f_0(S_1) = \\varnothing$，$f_0$ 是双射，$|S_1| = |S_2|$。Case (ii)：$A_0 \\subsetneq S_1$ 时用除环的除法把 $f_0$ 再延拓一个元素（取 $s \\in S_1 \\setminus A_0$，用 $S_2$ 表出并调整），与极大性矛盾（细节留作练习）。**Step 2（$R$ 交换，商模约化到域上）**：取极大理想 $\\mathfrak{m}$（Krull 定理），$\\mathbb{F} := R/\\mathfrak{m}$ 是域；由商模约化 Claim，$[S_1], [S_2]$ 是 $\\mathbb{F}$-线性空间 $M/\\mathfrak{m}M$ 的两组基，且 $s \\mapsto [s]$ 单射给出 $|S_i| = |[S_i]|$。由 Step 1：$|S_1| = |[S_1]| = \\dim_{\\mathbb{F}} M/\\mathfrak{m}M = |[S_2]| = |S_2|$。**证明思想一句话**：交换环上没有除法，直接比基无从下手——商掉一个极大理想，把模压成域上的线性空间，让 Step 1 的线性代数接手。⚠️ 非交换环不行：同样的商约化失效（$M_n(F)$ 是单环，见 matrix-ring-simple）；IBN 真的失败（存在 $R \\cong R^2$，见 ibn-fails-noncommutative）。",
       "statement": "设 $R$ 是**交换环或除环**，$M$ 是自由 $R$-模，$S_1, S_2$ 是两组基。则 $|S_1| = |S_2|$。",
@@ -3302,8 +3303,8 @@
       "layer": 2,
       "name": "交换环存在极大理想 (Krull)",
       "position": {
-        "x": 14,
-        "y": 181
+        "x": 783,
+        "y": 22
       },
       "proof": "本笔记作为 Fact 引用；“商极大理想得域”即 $R/I$ 是域 ⟺ $I$ 极大理想（见 MAT3042-群环域速成 §3）。",
       "statement": "交换环 $R$ 存在极大理想 $\\mathfrak{m} \\subsetneq R$（Krull 定理，依赖选择公理），且 $\\mathbb{F} := R/\\mathfrak{m}$ 是域。",
@@ -3318,8 +3319,8 @@
       "layer": 3,
       "name": "商模约化：$M/\\mathfrak{m}M$ 是 $\\mathbb{F}$-线性空间",
       "position": {
-        "x": 27,
-        "y": 193
+        "x": 706,
+        "y": 170
       },
       "proof": "(i) 良定义：$r - r' \\in \\mathfrak{m}$ 时 $(r-r')v \\in \\mathfrak{m}M$；$v - v' \\in \\mathfrak{m}M$ 时 $r(v-v') \\in \\mathfrak{m}M$。(ii) **张成**：$\\operatorname{Span}_R(S) = M$ ⟹ 任意 $m = \\sum r_i s_i$ 给出 $[m] = \\sum [r_i][s_i]$。**线性无关**：设 $\\sum_j [r_j][s_j] = 0$，则 $\\sum_j r_j s_j \\in \\mathfrak{m}M$，即存在 $m_i \\in \\mathfrak{m}$、$t_i \\in S$ 使 $\\sum_i m_i t_i = \\sum_j r_j s_j$；合并相同的基元素（rearrangement of index），由 $S$ 是基（**表达唯一**）逐项比较系数：每个 $r_j$ 都等于某个 $m_i$，故 $r_j \\in \\mathfrak{m}\\ (\\forall j)$，即 $[r_j] = 0$。",
       "statement": "设 $\\mathfrak{m} \\subsetneq R$ 是交换环的极大理想，$\\mathbb{F} := R/\\mathfrak{m}$，$M$ 是 $R$-模。定义 $\\mathfrak{m}M := \\left\\{\\sum_{i=1}^n r_i v_i \\,\\middle|\\, r_i \\in \\mathfrak{m},\\ v_i \\in M\\right\\}$（$M$ 的子模），$M/\\mathfrak{m}M := M/{\\sim}$，$v_1 \\sim v_2 \\iff v_1 - v_2 \\in \\mathfrak{m}M$。则：(i) $M/\\mathfrak{m}M$ 是 $\\mathbb{F}$-线性空间，数乘 $[r]\\cdot[v] := [rv]$ 良定义；(ii) 若 $S$ 是 $M$ 的基，则 $[S] := \\{[s] : s \\in S\\}$ 仍是 $M/\\mathfrak{m}M$ 的 $\\mathbb{F}$-基（且 $s \\mapsto [s]$ 在 $S$ 上是单射）。",
@@ -3334,8 +3335,8 @@
       "layer": 1,
       "name": "$M_n(F)$ 是单环",
       "position": {
-        "x": 166,
-        "y": 1328
+        "x": 180,
+        "y": 543
       },
       "proof": "Exercise，提示：用矩阵单位 $E_{ij}$ 从任一非零矩阵生成一切。意义：非交换环的极大（左）理想商 $R/\\mathfrak{m}$ 未必是域/除环——没有非平凡双边理想可商，IBN 证明中的商约化无从谈起。",
       "statement": "$R = M_n(F)$（$n \\ge 2$）是**单环**：$M_n(F)$ 的双边理想只有 $0$ 和 $R$。",
@@ -3351,8 +3352,8 @@
       "layer": 1,
       "name": "非交换环上 IBN 失败：$R \\cong R^2$",
       "position": {
-        "x": 166,
-        "y": 1275
+        "x": 1142,
+        "y": 364
       },
       "proof": "构造 idea：取 $r_1, r_2, t_1, t_2 \\in R$ 满足 $$r_1 t_1 = 1,\\quad r_2 t_2 = 1,\\quad r_1 t_2 = r_2 t_1 = 0,\\quad t_1 r_1 + t_2 r_2 = 1,$$ 则 $R r_i \\cong R$（$r_i t_i = 1$ 给出分裂），$\\{r_1, r_2\\}$ $R$-线性无关（$r_1 t_2 = r_2 t_1 = 0$），且 $R r_1 + R r_2 = R$（$t_1 r_1 + t_2 r_2 = 1$）——合起来 $R \\cong R r_1 \\oplus R r_2 \\cong R^2$。实例：无穷维线性空间的自同态环 $\\operatorname{End}_F(V)$（课上仅口头提及）。",
       "statement": "存在非交换环 $R$ 使 $R \\cong R^2$（作为左 $R$-模），即 $S_1 = \\{1\\}$ 和 $S_2 = \\{r_1, r_2\\}$ 是两组**不同基数**的基。",
@@ -3367,8 +3368,8 @@
       "layer": 1,
       "name": "模同态 (module homomorphism)",
       "position": {
-        "x": 219,
-        "y": 1275
+        "x": 949,
+        "y": 543
       },
       "proof": "",
       "statement": "左 $R$-模同态 $f: M_1 \\to M_2$：保持加法与数乘的映射（$f(x+y) = f(x)+f(y)$，$f(rx) = rf(x)$）。双射同态 = **同构（isomorphism）**。",
@@ -3383,8 +3384,8 @@
       "layer": 2,
       "name": "线性延拓引理 (linear extension)",
       "position": {
-        "x": 48,
-        "y": 221
+        "x": 708,
+        "y": 199
       },
       "proof": "自由 ⟹ 每个 $m \\in M_1$ 有**唯一表达** $m = \\sum r_i e_i$（有限和），定义 $\\tilde f(m) := \\sum r_i f(e_i)$。唯一表达保证良定义；同态性由定义即得；唯一性：任何延拓在 $m$ 上的值都被 $f|_B$ 强制。（这就是“自由”二字的含义：基上的值可以**自由指定**，自动延拓。对照线性代数：线性映射由基上的像唯一决定。）",
       "statement": "设 $M_1$ 是自由 $R$-模，基 $B = \\{e_i\\}_{i\\in I}$，$M_2$ 任意 $R$-模。任意给定映射 $f: B \\to M_2$，存在**唯一**同态 $\\tilde f: M_1 \\to M_2$ 使 $\\tilde f|_B = f$。",
@@ -3399,8 +3400,8 @@
       "layer": 3,
       "name": "自由模 $\\cong R^I$",
       "position": {
-        "x": 48,
-        "y": 234
+        "x": 697,
+        "y": 211
       },
       "proof": "由线性延拓，$e_i \\mapsto (\\text{第 } i \\text{ 个标准向量})$ 给出同态 $M \\to R^I$；唯一表达 ⟹ 双射。",
       "statement": "若 $M$ 是自由 $R$-模，基 $B = \\{e_i\\}_{i\\in I}$，则 $$M \\cong R^I := \\bigoplus_{i\\in I} R = \\{\\text{有限支撑函数 } I \\to R\\}.$$",
@@ -3415,8 +3416,8 @@
       "layer": 5,
       "name": "自由模的秩 (rank)",
       "position": {
-        "x": 53,
-        "y": 163
+        "x": 736,
+        "y": 164
       },
       "proof": "",
       "statement": "$M$ 自由时的**秩** $\\operatorname{rank}(M) := |B|$（$B$ 为任一基）。由 IBN 定理，$R$ 交换或除环时良定义，与基的选取无关。",
@@ -3431,8 +3432,8 @@
       "layer": 5,
       "name": "不变秩引理 (invariant rank)",
       "position": {
-        "x": 57,
-        "y": 195
+        "x": 737,
+        "y": 193
       },
       "proof": "**Key point：同构把基映成基**（$f$ 保持线性关系与生成性，$f^{-1}$ 同理），于是 $M_2$ 有了两组基 $S_2$ 与 $f(S_1)$，由 IBN：$|S_1| = |f(S_1)| = |S_2|$。",
       "statement": "设 $R$ 交换或除环，$M_1, M_2$ 自由，$f: M_1 \\to M_2$ 是同构。则 $\\operatorname{rank}(M_1) = \\operatorname{rank}(M_2)$。",
@@ -3447,8 +3448,8 @@
       "layer": 6,
       "name": "自由模按秩分类",
       "position": {
-        "x": 60,
-        "y": 207
+        "x": 723,
+        "y": 200
       },
       "proof": "“$\\Leftarrow$”由线性延拓引理（双射 $I \\to J$ 诱导同构）；“$\\Rightarrow$”由不变秩引理。所以交换环/除环上的自由模完全由一个基数（rank）分类——这是“域上维数分类线性空间”的推广，也是课程目标“分类定理”的自由模部分。",
       "statement": "设 $R$ 交换或除环，则 $$R^I \\cong R^J \\iff |I| = |J|.$$",
@@ -3463,8 +3464,8 @@
       "layer": 1,
       "name": "Zorn 引理",
       "position": {
-        "x": 19,
-        "y": 168
+        "x": 661,
+        "y": 1080
       },
       "proof": "",
       "statement": "设 $(P, \\le)$ 为非空偏序集。若 $P$ 中每条链（全序子集）都在 $P$ 中有上界，则 $P$ 含有极大元。（笔记未展开，列为工具）",
@@ -3503,6 +3504,16 @@
       "source": "ai",
       "targetId": "repeated-root-criterion",
       "targetType": "node"
+    },
+    {
+      "id": "q-20260922-002",
+      "targetType": "node",
+      "targetId": "root-count-bound",
+      "question": "这个的证明是什么",
+      "answer": "**证明要点（为何需要消去律）**\n\n原论证的归纳步骤依赖：\n$$f(\\beta) = (\\beta - \\alpha)g(\\beta) = 0 \\ \\overset{?}{\\Longrightarrow}\\ \\beta - \\alpha = 0\\ \\text{或}\\ g(\\beta) = 0,$$\n即「乘积为零必有一因子为零」。域中每个非零元可逆：若 $\\beta - \\alpha \\ne 0$，两边乘 $(\\beta - \\alpha)^{-1}$ 得 $g(\\beta) = 0$。一般环无此逆元，推理失效。\n\n**反例验证：$\\mathbb{Z}/8\\mathbb{Z}$ 上 $x^2 - 1$**\n\n$\\mathbb{Z}/8\\mathbb{Z}$ 有零因子：$2 \\cdot 4 = 8 \\equiv 0$，但 $2, 4 \\ne 0$。于是\n$$3^2 - 1 = 8 \\equiv 0,\\quad 5^2 - 1 = 24 \\equiv 0,\\quad 7^2 - 1 = 48 \\equiv 0 \\pmod 8,$$\n加上 $1$，共 $\\{1, 3, 5, 7\\}$ 四个根，超过次数 $2$。\n\n实质：$x^2 - 1 = (x-1)(x+1)$，在 $x = 3$ 处为 $2 \\cdot 4 \\equiv 0$，两因子都非零——正是零因子使「剥因子」的归纳无法进行。",
+      "source": "ai",
+      "model": null,
+      "createdAt": "2026-09-22T03:03:55"
     }
   ]
 }

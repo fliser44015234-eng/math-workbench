@@ -159,15 +159,17 @@ const CY_STYLE = [
   {
     selector: 'edge',
     style: {
-      'width': 1.6,
-      'curve-style': 'bezier',
-      'label': 'data(label)',
-      'font-size': 8,
-      'color': '#718096',
-      'text-rotation': 'autorotate',
-      'text-margin-y': -6,
+      'width': 1.2,
+      'curve-style': 'taxi',        // 直角布线（cytoscape 3.5+ 内置）
+      'taxi-direction': 'auto',
+      'taxi-turn': '20px',
+      'taxi-radius': 6,             // 圆角转弯（3.30+）
+      'line-cap': 'round',
+      'line-opacity': 0.85,         // 线色整体调柔，五种 relation 以色相区分
+      'arrow-scale': 0.8,
     },
   },
+  { selector: 'edge:selected', style: { 'width': 2.2 } },
   {
     selector: 'edge[relation="depends_on"]',
     style: { 'line-color': '#2b6cb0', 'target-arrow-color': '#2b6cb0', 'target-arrow-shape': 'triangle' },
@@ -333,7 +335,7 @@ function refreshViewStyles() {
       const lt = (findNode(e.target().id()) || {}).layer || 1;
       if (ls !== focusLayer && lt !== focusLayer) opacity = 0.1;  // 完全在下层之间的边仅隐约可见
     }
-    e.style({ display: visible ? 'element' : 'none', opacity, 'text-opacity': opacity });
+    e.style({ display: visible ? 'element' : 'none', opacity });
   });
 }
 
@@ -376,8 +378,47 @@ function toggleViewMode() {
   $('#btn-viewmode').textContent = viewMode === 'layered' ? '视图：分层' : '视图：自由';
   $('#btn-relayout').classList.toggle('hidden', viewMode !== 'free');  // 力导向重排只对自由视图有意义
   $('#btn-spread-layer').classList.toggle('hidden', viewMode !== 'layered');
+  $('#btn-tidy-edges').classList.toggle('hidden', viewMode !== 'layered');
   renderRail();
   applyLayout(true);
+}
+
+// 理顺连线：对焦点层节点做 barycenter（重心）排序减少边交叉。
+// 只动焦点层节点的 x（均布到原 x 区间），y 与其他层一律不动。
+async function tidyEdges() {
+  if (viewMode !== 'layered' || state.radial) return;
+  const visEdges = cy.edges().filter(e => e.style('display') !== 'none');
+  const adj = {};
+  visEdges.forEach(e => {
+    const s = e.source().id(), t = e.target().id();
+    (adj[s] = adj[s] || []).push(t);
+    (adj[t] = adj[t] || []).push(s);
+  });
+  const layerNodes = graph.nodes.filter(gn => (gn.layer || 1) === focusLayer && gn.position);
+  if (layerNodes.length < 2) { toast('本层节点太少，无需理顺'); return; }
+  for (let round = 0; round < 2; round++) {   // 第 2 轮用新位置重算均值
+    const items = layerNodes
+      .map(gn => {
+        const xs = (adj[gn.id] || [])
+          .map(nb => (findNode(nb) || {}).position)
+          .filter(Boolean)
+          .map(p => p.x);
+        return xs.length ? { gn, mean: xs.reduce((a, b) => a + b, 0) / xs.length } : null;
+      })
+      .filter(Boolean);
+    if (items.length < 2) break;
+    items.sort((a, b) => a.mean - b.mean);
+    const xs0 = items.map(it => it.gn.position.x);
+    const minX = Math.min(...xs0), maxX = Math.max(...xs0);
+    const step = items.length > 1 ? (maxX - minX) / (items.length - 1) : 0;
+    items.forEach((it, i) => { it.gn.position = { x: Math.round(minX + i * step), y: it.gn.position.y }; });
+  }
+  layerNodes.forEach(gn => {
+    const n = cy.getElementById(gn.id);
+    if (n.nonempty()) n.animate({ position: { x: gn.position.x, y: gn.position.y } }, { duration: 350 });
+  });
+  if (!readOnly) await saveGraph();
+  toast('已理顺本层连线');
 }
 
 // 铺开本层：把焦点层节点在当前可视画布区域内排成宽松网格（其他层不动）并保存
@@ -1103,6 +1144,8 @@ function bindToolbar() {
   $('#btn-relayout').classList.toggle('hidden', viewMode !== 'free');
   $('#btn-spread-layer').classList.toggle('hidden', viewMode !== 'layered');
   $('#btn-spread-layer').onclick = spreadCurrentLayer;
+  $('#btn-tidy-edges').classList.toggle('hidden', viewMode !== 'layered');
+  $('#btn-tidy-edges').onclick = tidyEdges;
   $('#btn-relayout').onclick = () => {
     exitRadial();
     runCose(true).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); });
