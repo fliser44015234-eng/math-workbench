@@ -22,28 +22,40 @@
 <body>
 
 <header id="toolbar">
-  <span id="app-title" class="title">数学知识网络</span>
-  <span id="graph-name" class="graph-name"></span>
-  <a id="link-template" href="?graph=graph.template" target="_blank" rel="noopener">空白模板</a>
-  <input id="search" type="search" placeholder="搜索节点名…" autocomplete="off">
-  <select id="tag-filter"><option value="">全部标签</option></select>
-  <button id="btn-add" class="edit-only">添加节点</button>
-  <button id="btn-import" class="edit-only ai-only">导入笔记</button>
-  <button id="btn-viewmode">视图：分层</button>
-  <button id="btn-spread-layer" class="hidden edit-only">铺开本层</button>
-  <button id="btn-tidy-edges" class="hidden edit-only">理顺连线</button>
-  <button id="btn-relayout" class="hidden">力导向重排</button>
-  <button id="btn-export">导出 JSON</button>
-  <button id="btn-import-json" class="hidden">导入 JSON</button>
-  <button id="btn-restore-published" class="hidden">恢复发布版</button>
-  <button id="btn-ai-settings" class="hidden">AI 设置</button>
+  <div class="tb-brand">
+    <span id="app-title" class="title">数学知识网络</span>
+    <span id="graph-name" class="graph-name"></span>
+  </div>
+  <div class="tb-group">
+    <input id="search" type="search" placeholder="搜索节点名…（/）" autocomplete="off" title="按名称或 id 搜索；回车跳到下一个匹配；快捷键 /">
+    <select id="tag-filter" title="按标签过滤节点"><option value="">全部标签</option></select>
+  </div>
+  <div class="tb-group">
+    <button id="btn-add" class="edit-only primary" title="在当前视野中心新建一个节点">添加节点</button>
+    <button id="btn-import" class="edit-only ai-only" title="上传或粘贴笔记，让 AI 提取知识点与关系">导入笔记</button>
+  </div>
+  <div class="tb-group">
+    <button id="btn-viewmode" title="切换分层高楼视图 / 自由力导向视图">视图：分层</button>
+    <button id="btn-spread-layer" class="hidden edit-only" title="把焦点层节点在当前视野内排成宽松网格">铺开本层</button>
+    <button id="btn-tidy-edges" class="hidden edit-only" title="重排焦点层节点的横向顺序以减少连线交叉">理顺连线</button>
+    <button id="btn-relayout" class="hidden" title="对全图重新做力导向布局">力导向重排</button>
+  </div>
+  <div class="tb-group">
+    <button id="btn-export" title="下载当前图数据（JSON）">导出 JSON</button>
+    <button id="btn-export-png" title="把当前视野导出为 PNG 图片">导出图片</button>
+    <button id="btn-import-json" class="hidden" title="把一份 graph JSON 载入浏览器">导入 JSON</button>
+    <button id="btn-restore-published" class="hidden" title="丢弃浏览器里的本地改动，回到线上发布版">恢复发布版</button>
+    <button id="btn-ai-settings" class="hidden" title="网页版自带 API Key 直连厂商">AI 设置</button>
+    <a id="link-template" href="?graph=graph.template" target="_blank" rel="noopener" title="新标签页打开空白演示图">空白模板</a>
+  </div>
   <input type="file" id="file-import-json" accept=".json,application/json" class="hidden">
   <span id="mode-badge" class="badge badge-edit">本地可编辑</span>
 </header>
 
 <main id="main">
   <div id="cy"></div>
-  <div id="floor-rail" class="hidden"></div>
+  <div id="cy-tip" class="hidden"></div>
+  <div id="floor-rail" class="hidden" title="楼层：点击切换焦点层（快捷键 [ ]）"></div>
 
   <aside id="sidebar" class="hidden">
     <div id="sidebar-head">
@@ -51,7 +63,7 @@
     </div>
     <div id="sidebar-body"></div>
     <div id="sidebar-foot">
-      <button id="btn-radial" class="hidden">辐射视图</button>
+      <button id="btn-radial" class="hidden" title="以当前节点为中心，只看 1–2 跳邻域">辐射视图</button>
       <button id="btn-overview" class="hidden">返回总图</button>
       <select id="radial-depth" class="hidden">
         <option value="1">1 跳</option>
@@ -62,7 +74,7 @@
 </main>
 
 <div id="legend">
-  <div class="legend-title">图例</div>
+  <div class="legend-title" title="点击折叠 / 展开">图例</div>
   <div id="legend-nodes" class="legend-grid"></div>
   <div id="legend-edges"></div>
 </div>

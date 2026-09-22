@@ -165,10 +165,10 @@ def main():
     names = {n["id"]: n["name"] for n in graph["nodes"]}
     for n in graph["nodes"]:
         by_layer.setdefault(n["layer"], []).append(n["id"])
-    max_layer = max(by_layer)
+    max_layer = max(by_layer, default=0)   # 空图时 max() 会抛异常
     print(f"共 {max_layer} 层；本次计算写入 {assigned} 个节点，保留人工 layer {kept} 个。")
     for layer in range(1, max_layer + 1):
-        members = sorted(by_layer[layer])
+        members = sorted(by_layer.get(layer, []))
         print(f"\nL{layer}（{len(members)} 个）：")
         for nid in members:
             print(f"  {nid}（{names[nid]}）")

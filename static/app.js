@@ -36,7 +36,7 @@ const REL_COLOR = {
 let graph = null;        // 内存中的图数据（唯一事实来源）
 let cy = null;           // Cytoscape 实例
 let readOnly = false;    // 无后端模式（静态托管或 ?readonly=1）：编辑照常，保存走 localStorage
-let state = { selected: null, radial: null };  // radial: {centerId, depth}
+let state = { selected: null, radial: null, highlight: null };  // radial: {centerId, depth}; highlight: {nodes:Set, edges:Set}
 let viewMode = 'layered';  // 'layered' 分层高楼（默认）| 'free' 自由力导向
 let focusLayer = 1;      // 当前焦点层（初始化时设为最高层）
 let saveTimer = null;
@@ -65,14 +65,83 @@ function toast(msg, ms = 2600) {
   toastTimer = setTimeout(() => t.classList.add('hidden'), ms);
 }
 
-function nowIso() {
-  return new Date().toISOString().slice(0, 19);
+function copyText(text, okMsg) {
+  const done = () => toast(okMsg || '已复制');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, () => toast('复制失败：浏览器未授权剪贴板'));
+    return;
+  }
+  const ta = document.createElement('textarea');
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch { toast('复制失败'); }
+  ta.remove();
 }
 
+// 本地时间的 ISO 串（不带时区），与服务端 datetime.now().isoformat() 一致
+function nowIso() {
+  const d = new Date();
+  const p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+
+// MathJax 是异步启动的：先等 startup.promise，再排版，避免首次点击时公式不渲染
 function typeset(el) {
-  if (window.MathJax && MathJax.typesetPromise) {
-    MathJax.typesetPromise(el ? [el] : undefined).catch(() => {});
-  }
+  const mj = window.MathJax;
+  if (!mj || !mj.startup) return;
+  const run = () => mj.typesetPromise && mj.typesetPromise(el ? [el] : undefined);
+  (mj.startup.promise || Promise.resolve()).then(run).catch(() => {});
+}
+
+// 把纯文本（含 LaTeX）塞进元素并重新排版：用于编辑器实时预览，先清掉旧的排版状态
+function retypeset(el, text) {
+  const mj = window.MathJax;
+  if (mj && mj.typesetClear) mj.typesetClear([el]);
+  el.textContent = text;
+  typeset(el);
+}
+
+// Markdown 渲染：先把 $...$ / $$...$$ / \(...\) / \[...\] 挖出来，避免 marked 把
+// 公式里的 \\、\{、*、_ 当成 Markdown 语法吃掉；渲染完再原样（HTML 转义后）放回去，交给 MathJax。
+const MATH_RE = /\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$(?!\s)(?:\\.|[^$\n])+?(?<!\s)\$/g;
+function renderMarkdown(text) {
+  const slots = [];
+  const protectedText = String(text ?? '').replace(MATH_RE, m => {
+    slots.push(m);
+    return `\uE000${slots.length - 1}\uE001`;   // 私用区字符，marked 不会动它
+  });
+  const html = marked.parse(protectedText);
+  return html.replace(/\uE000(\d+)\uE001/g, (_, i) => escapeHtml(slots[+i]));
+}
+
+// 画布标签是纯文本，不能渲染 LaTeX：去掉 $ 并把常见宏换成 Unicode，避免出现原始 \mathbb{F}_p
+const LABEL_MACROS = [
+  [/\\(?:mathbb|mathbf|mathcal|mathfrak|mathrm|operatorname|text|bar|overline|hat|tilde|vec)\{([^{}]*)\}/g, '$1'],
+  [/\\sqrt\s*\{([^{}]*)\}/g, '√($1)'], [/\\sqrt\s*(\w)/g, '√$1'],
+  [/\\(?:cong|simeq)\b/g, '≅'], [/\\(?:to|rightarrow)\b/g, '→'], [/\\(?:Longrightarrow|Rightarrow|implies)\b/g, '⟹'],
+  [/\\(?:Leftrightarrow|iff)\b/g, '⟺'], [/\\(?:le|leq)\b/g, '≤'], [/\\(?:ge|geq)\b/g, '≥'], [/\\(?:ne|neq)\b/g, '≠'],
+  [/\\in\b/g, '∈'], [/\\subset(?:eq)?\b/g, '⊆'], [/\\times\b/g, '×'], [/\\cdot\b/g, '·'], [/\\infty\b/g, '∞'],
+  [/\\(?:mid|vert)\b/g, '|'], [/\\oplus\b/g, '⊕'], [/\\otimes\b/g, '⊗'], [/\\circ\b/g, '∘'],
+  [/\\alpha\b/g, 'α'], [/\\beta\b/g, 'β'], [/\\gamma\b/g, 'γ'], [/\\delta\b/g, 'δ'], [/\\epsilon\b/g, 'ε'],
+  [/\\lambda\b/g, 'λ'], [/\\mu\b/g, 'μ'], [/\\pi\b/g, 'π'], [/\\sigma\b/g, 'σ'], [/\\phi\b/g, 'φ'], [/\\varphi\b/g, 'φ'],
+  [/\\psi\b/g, 'ψ'], [/\\omega\b/g, 'ω'], [/\\zeta\b/g, 'ζ'], [/\\Gamma\b/g, 'Γ'], [/\\Phi\b/g, 'Φ'],
+  [/\\[,;:!]/g, ' '], [/\\([{}])/g, '$1'],
+];
+function plainLabel(name) {
+  let s = String(name ?? '');
+  if (!s.includes('$') && !s.includes('\\')) return s;
+  s = s.replace(/\$\$?/g, '');
+  for (let pass = 0; pass < 2; pass++) LABEL_MACROS.forEach(([re, to]) => { s = s.replace(re, to); });
+  return s.replace(/[{}]/g, '').replace(/\s{2,}/g, ' ').trim();
+}
+
+// 发布文件 / 导入文件可能缺 meta 或 questions，统一补齐，避免后续 graph.meta.xxx 抛错
+function normalizeGraph(data) {
+  if (!data.meta || typeof data.meta !== 'object') data.meta = {};
+  if (!Array.isArray(data.nodes)) data.nodes = [];
+  if (!Array.isArray(data.edges)) data.edges = [];
+  if (!Array.isArray(data.questions)) data.questions = [];
+  data.nodes.forEach(n => { if (!Array.isArray(n.tags)) n.tags = []; });
+  return data;
 }
 
 function findNode(id) { return graph.nodes.find(n => n.id === id) || null; }
@@ -108,7 +177,9 @@ const GRAPH_NAME = (() => {
   const p = new URLSearchParams(location.search).get('graph') || 'graph';
   return (/^[a-z0-9][a-z0-9.-]{0,39}$/.test(p) && !p.includes('..')) ? p : 'graph';
 })();
-const GRAPH_API = `/api/graph?name=${encodeURIComponent(GRAPH_NAME)}`;
+// 所有 /api/* 都带 ?name=，多图模式下 AI 上下文才是当前这张图
+const apiUrl = path => `${path}?name=${encodeURIComponent(GRAPH_NAME)}`;
+const GRAPH_API = apiUrl('/api/graph');
 // ?readonly=1 强制走静态（无后端）代码路径，用于本地预览 GitHub Pages 行为
 const FORCE_READONLY = new URLSearchParams(location.search).get('readonly') === '1';
 // 无后端时的本地编辑持久化键
@@ -142,15 +213,17 @@ async function loadGraph() {
       }
     }
   } catch { /* 本地数据损坏则忽略，回退发布版 */ }
+  normalizeGraph(published.data);
   return published;
 }
 
-async function saveGraph() {
+// quiet：拖动保存坐标这类高频操作不弹 toast
+async function saveGraph({ quiet = false } = {}) {
   if (readOnly) {
     // 无后端：改动存 localStorage（本机可见），导入/导出/恢复发布版兜底
     try {
       localStorage.setItem(LS_KEY, JSON.stringify(graph));
-      toast('已保存到浏览器（本机可见）');
+      if (!quiet) toast('已保存到浏览器（本机可见）');
       const restoreBtn = document.getElementById('btn-restore-published');
       if (restoreBtn) restoreBtn.classList.remove('hidden');
       return true;
@@ -184,7 +257,7 @@ const CY_STYLE = [
     selector: 'node',
     style: {
       'background-color': 'data(color)',
-      'label': 'data(name)',
+      'label': 'data(label)',
       'color': '#2d3748',
       'font-size': 11,
       'text-wrap': 'wrap',
@@ -197,7 +270,7 @@ const CY_STYLE = [
     },
   },
   { selector: 'node[kind="theorem"]', style: { 'width': 17, 'height': 17, 'font-size': 12 } },
-  { selector: 'node:selected', style: { 'border-width': 3, 'border-color': '#1a202c' } },
+  { selector: 'node:selected', style: { 'border-width': 3, 'border-color': '#1a202c', 'z-index': 10 } },
   {
     selector: 'edge',
     style: {
@@ -243,7 +316,7 @@ const CY_STYLE = [
 
 function toCyElements() {
   const nodes = graph.nodes.map(n => ({
-    data: { id: n.id, name: n.name, kind: n.kind, color: KIND_COLOR[n.kind] || '#718096' },
+    data: { id: n.id, name: n.name, label: plainLabel(n.name), kind: n.kind, color: KIND_COLOR[n.kind] || '#718096' },
     position: n.position ? { x: n.position.x, y: n.position.y } : undefined,
   }));
   const edges = graph.edges.map(e => ({
@@ -252,14 +325,14 @@ function toCyElements() {
   return [...nodes, ...edges];
 }
 
-function presetLayout() {
+function presetLayout(fit = true) {
   cy.layout({
     name: 'preset',
     positions: n => {
       const gn = findNode(n.id());
       return gn && gn.position ? { x: gn.position.x, y: gn.position.y } : n.position();
     },
-    fit: true,
+    fit,
     padding: 40,
   }).run();
 }
@@ -300,7 +373,7 @@ function layerCounts() {
 
 // 分层布局 = preset + 节点已存 position（未布局的放到当前视野中心附近）。
 // meta.layoutVersion < 2 时先做一次性的全图 cose 迁移（zone 时代坐标作废）。
-function layeredLayout(animate) {
+function layeredLayout(animate, fit = true) {
   const lv = (graph.meta && graph.meta.layoutVersion) || 0;
   if (lv < 2) {
     runCose(true).then(() => {
@@ -314,19 +387,24 @@ function layeredLayout(animate) {
   }
   const ext = cy.extent();
   const cx = (ext.x1 + ext.x2) / 2, cyy = (ext.y1 + ext.y2) / 2;
+  let placed = 0;
   cy.layout({
     name: 'preset',
     positions: n => {
       const gn = findNode(n.id());
       if (!gn) return n.position();
       if (gn.position) return { x: gn.position.x, y: gn.position.y };
-      return { x: Math.round(cx + (Math.random() * 160 - 80)), y: Math.round(cyy + (Math.random() * 160 - 80)) };
+      // 未布局的节点放到当前视野中心附近，并把坐标写回数据，避免每次重建都随机跳位
+      gn.position = { x: Math.round(cx + (Math.random() * 160 - 80)), y: Math.round(cyy + (Math.random() * 160 - 80)) };
+      placed++;
+      return gn.position;
     },
     fit: false,
     animate: false,
   }).run();
+  if (placed) saveGraph({ quiet: true });
   refreshViewStyles();
-  fitVisible(animate);
+  if (fit) fitVisible(animate);
 }
 
 function fitVisible(animate) {
@@ -340,6 +418,8 @@ function fitVisible(animate) {
 function refreshViewStyles() {
   if (!cy) return;
   const radial = state.radial;
+  const hl = state.highlight;
+  const selId = state.selected && state.selected.type === 'node' ? state.selected.id : null;
   const centerL = radial ? ((findNode(radial.centerId) || {}).layer || 1) : null;
   cy.nodes().forEach(n => {
     const gn = findNode(n.id());
@@ -349,14 +429,14 @@ function refreshViewStyles() {
     let opacity = 1, blacken = 0, textOp = 1;
     if (radial) {
       // 辐射视图：平面同心圆 + 层次提示（标签带层号，低于中心层的调暗）
-      n.style('label', `${gn.name} ·L${l}`);
+      n.style('label', `${n.data('label')} ·L${l}`);
       if (l < centerL) {
         const d = centerL - l;
         opacity = Math.max(0.35, 1 - 0.15 * d);
         blacken = Math.min(0.5, 0.12 * d);
       }
     } else {
-      n.style('label', gn.name);
+      n.style('label', n.data('label'));
       if (viewMode === 'layered') {
         if (l > focusLayer) visible = false;                    // 高于焦点层：完全隐藏
         else if (l < focusLayer) {                              // 下层：按深度差渐暗
@@ -367,9 +447,15 @@ function refreshViewStyles() {
         }
       }
     }
+    // 依赖链高亮：链上节点无视层深全彩显示，链外节点压成淡影
+    const onChain = hl ? hl.nodes.has(n.id()) : false;
+    if (hl) {
+      if (onChain) { opacity = 1; blacken = 0; textOp = 1; }
+      else { opacity = Math.min(opacity, 0.12); textOp = Math.min(textOp, 0.15); }
+    }
     const style = { display: visible ? 'element' : 'none', opacity, 'background-blacken': blacken, 'text-opacity': textOp };
-    // 焦点层标签加圆角底衬：按节点类型取极浅本色（与白色混合），压过下层淡影文字
-    if (!radial && viewMode === 'layered' && l === focusLayer) {
+    // 焦点层（或高亮链上）标签加圆角底衬：按节点类型取极浅本色（与白色混合），压过下层淡影文字
+    if (onChain || (!radial && viewMode === 'layered' && l === focusLayer)) {
       const hex = KIND_COLOR[gn.kind] || '#718096';
       const mix = i => Math.round(255 + (parseInt(hex.substr(i, 2), 16) - 255) * 0.14);
       style['text-background-color'] = `rgb(${mix(1)}, ${mix(3)}, ${mix(5)})`;
@@ -383,14 +469,77 @@ function refreshViewStyles() {
   });
   cy.edges().forEach(e => {
     const visible = e.source().style('display') !== 'none' && e.target().style('display') !== 'none';
-    let opacity = 1;
+    let opacity = 1, width = e.selected() ? 2.2 : 1.2;
     if (visible && viewMode === 'layered' && !radial) {
       const ls = (findNode(e.source().id()) || {}).layer || 1;
       const lt = (findNode(e.target().id()) || {}).layer || 1;
       if (ls !== focusLayer && lt !== focusLayer) opacity = 0.1;  // 完全在下层之间的边仅隐约可见
     }
-    e.style({ display: visible ? 'element' : 'none', opacity });
+    if (hl) {
+      // 依赖链高亮：链上的边加粗全亮，其余几乎隐去
+      if (hl.edges.has(e.id())) { opacity = 1; width = 2.2; } else opacity = Math.min(opacity, 0.05);
+    } else if (selId) {
+      // 选中节点：与之相连的边加粗，其余边退后，一眼看清它的直接依据与推论
+      const touches = e.source().id() === selId || e.target().id() === selId;
+      if (touches) { opacity = 1; width = 2.2; } else opacity = Math.min(opacity, 0.35);
+    }
+    e.style({ display: visible ? 'element' : 'none', opacity, width });
   });
+}
+
+/* ---------- 证明依赖链 ----------
+ * 前置（up）：沿 depends_on / implies 逆向、equivalent 双向，找出证明本节点需要的全部知识；
+ * 后继（down）：正向，找出本节点支撑/推出的全部结论。
+ */
+const SUPPORT_REL = new Set(['depends_on', 'implies']);
+
+function proofChain(id, dir) {
+  const seen = new Set([id]);
+  const queue = [id];
+  const edges = new Set();
+  while (queue.length) {
+    const cur = queue.shift();
+    graph.edges.forEach(e => {
+      let next = null;
+      if (e.relation === 'equivalent') next = e.source === cur ? e.target : (e.target === cur ? e.source : null);
+      else if (SUPPORT_REL.has(e.relation)) {
+        if (dir === 'up' && e.target === cur) next = e.source;
+        else if (dir === 'down' && e.source === cur) next = e.target;
+      }
+      if (!next || !findNode(next)) return;
+      edges.add(e.id);
+      if (!seen.has(next)) { seen.add(next); queue.push(next); }
+    });
+  }
+  seen.delete(id);
+  return { nodes: [...seen].map(findNode).filter(Boolean), edges };
+}
+
+function chainListHTML(list) {
+  if (!list.length) return '<div class="detail-meta">无</div>';
+  // 按层从高到低分组，同层按名称排序
+  const byLayer = {};
+  list.forEach(n => { (byLayer[n.layer || 1] = byLayer[n.layer || 1] || []).push(n); });
+  return Object.keys(byLayer).map(Number).sort((a, b) => b - a).map(l => `
+    <div class="chain-layer"><span class="chain-layer-tag">L${l}</span>${byLayer[l]
+      .sort((a, b) => a.name.localeCompare(b.name, 'zh'))
+      .map(n => `<span class="chain-item" data-node="${escapeHtml(n.id)}" title="${escapeHtml(KIND_ZH[n.kind] || n.kind)}">
+        <span class="legend-dot" style="background:${KIND_COLOR[n.kind] || '#718096'}"></span>${escapeHtml(n.name)}</span>`).join('')}
+    </div>`).join('');
+}
+
+function setHighlight(chain, centerId) {
+  if (!chain) { state.highlight = null; refreshViewStyles(); return; }
+  const nodes = new Set([centerId, ...chain.nodes.map(n => n.id)]);
+  state.highlight = { nodes, edges: chain.edges };
+  // 链上有高于焦点层的节点（后继结论）时抬升焦点层，否则看不见
+  if (viewMode === 'layered' && !state.radial) {
+    const top = Math.max(focusLayer, ...chain.nodes.map(n => n.layer || 1));
+    if (top > focusLayer) { focusLayer = top; renderRail(); }
+  }
+  refreshViewStyles();
+  const eles = cy.nodes().filter(n => nodes.has(n.id()) && n.style('display') !== 'none');
+  if (eles.nonempty()) cy.animate({ fit: { eles, padding: 70 } }, { duration: 350 });
 }
 
 /* ---------- 楼层 rail ---------- */
@@ -398,8 +547,7 @@ function refreshViewStyles() {
 function renderRail() {
   const rail = $('#floor-rail');
   const maxL = maxLayer();
-  const counts = {};
-  graph.nodes.forEach(n => { const l = n.layer || 1; counts[l] = (counts[l] || 0) + 1; });
+  const counts = layerCounts();
   let html = '';
   for (let l = maxL; l >= 1; l--) {   // 高楼在上，L1 地基在底部
     const active = viewMode === 'layered' && l === focusLayer ? ' active' : '';
@@ -421,10 +569,10 @@ function setFocusLayer(l) {
 }
 
 // 按当前模式布局并刷新样式（辐射模式下布局由辐射逻辑自己负责）
-function applyLayout(animate) {
+function applyLayout(animate, fit = true) {
   if (state.radial) { refreshViewStyles(); return; }
-  if (viewMode === 'layered') layeredLayout(animate);
-  else { presetLayout(); refreshViewStyles(); }
+  if (viewMode === 'layered') layeredLayout(animate, fit);
+  else { presetLayout(fit); refreshViewStyles(); }
 }
 
 function toggleViewMode() {
@@ -516,31 +664,84 @@ function syncPositions() {
 function debounceSavePositions() {
   if (state.radial) return;
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => { syncPositions(); await saveGraph(); }, 1000);
+  saveTimer = setTimeout(async () => { syncPositions(); await saveGraph({ quiet: true }); }, 1000);
 }
 
-function layoutInitial() {
-  if (viewMode === 'layered') { layeredLayout(false); return; }
+function layoutInitial(fit = true) {
+  if (viewMode === 'layered') { layeredLayout(false, fit); return; }
   if (graph.nodes.some(n => !n.position)) {
-    runCose(false).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); refreshViewStyles(); });
+    runCose(false).then(() => { syncPositions(); saveGraph({ quiet: true }); cy.fit(undefined, 40); refreshViewStyles(); });
   } else {
-    presetLayout();
+    presetLayout(fit);
     refreshViewStyles();
   }
 }
 
-function rebuildGraph() {
+// 数据变更后整体重建画布。默认保留当前视野（编辑/加边/删除后不再跳回全图），
+// 并重新套用标签过滤（重建出的元素没有 hidden-filter 类，否则过滤会静默失效）。
+function rebuildGraph({ keepViewport = true } = {}) {
+  const wasRadial = state.radial;
+  state.radial = null;   // 元素全部重建，辐射布局的临时坐标已失效
+  state.highlight = null;
   cy.elements().remove();
   cy.add(toCyElements());
   initTagFilter();
   renderRail();
-  layoutInitial();
+  layoutInitial(!keepViewport);
+  if (wasRadial) {
+    $('#btn-overview').classList.add('hidden');
+    $('#radial-depth').classList.add('hidden');
+    if (state.selected && state.selected.type === 'node') $('#btn-radial').classList.remove('hidden');
+  }
+  if ($('#tag-filter').value) applyTagFilter();
 }
 
 function bindCyEvents() {
   cy.on('tap', 'node', evt => { evt.target.select(); showNodeDetail(evt.target.id()); });
   cy.on('tap', 'edge', evt => { evt.target.select(); showEdgeDetail(evt.target.id()); });
+  // 点空白处：收起侧栏（问答框里有未提交的文字时不收，避免误触丢稿）
+  cy.on('tap', evt => {
+    if (evt.target !== cy) return;
+    const draft = $('#qa-q');
+    if (draft && draft.value.trim()) return;
+    hideSidebar();
+  });
   cy.on('dragend', 'node', debounceSavePositions);
+  // 悬停：指针 + 浮动提示（节点：类型/层/命题摘要；边：关系/标签/两端）
+  const tip = $('#cy-tip');
+  const container = $('#cy');
+  const showTip = (evt, html) => {
+    tip.innerHTML = html;
+    tip.classList.remove('hidden');
+    moveTip(evt);
+  };
+  const moveTip = evt => {
+    const pos = evt.renderedPosition || (evt.originalEvent && { x: evt.originalEvent.offsetX, y: evt.originalEvent.offsetY });
+    if (!pos) return;
+    const rect = container.getBoundingClientRect();
+    const x = Math.min(pos.x + 14, rect.width - tip.offsetWidth - 8);
+    const y = Math.min(pos.y + 14, rect.height - tip.offsetHeight - 8);
+    tip.style.transform = `translate(${Math.max(0, x)}px, ${Math.max(0, y)}px)`;
+  };
+  cy.on('mouseover', 'node', evt => {
+    container.style.cursor = 'pointer';
+    const gn = findNode(evt.target.id());
+    if (!gn) return;
+    const preview = plainLabel(gn.statement || '').replace(/\s+/g, ' ').slice(0, 90);
+    showTip(evt, `<b>${escapeHtml(gn.name)}</b><span class="tip-meta">${KIND_ZH[gn.kind] || gn.kind} · L${gn.layer || 1}${gn.chapter ? ' · ' + escapeHtml(gn.chapter) : ''}</span>` +
+      (preview ? `<div class="tip-body">${escapeHtml(preview)}${(gn.statement || '').length > 90 ? '…' : ''}</div>` : ''));
+  });
+  cy.on('mouseover', 'edge', evt => {
+    container.style.cursor = 'pointer';
+    const e = findEdge(evt.target.id());
+    if (!e) return;
+    const s = findNode(e.source), t = findNode(e.target);
+    showTip(evt, `<b style="color:${REL_COLOR[e.relation]}">${REL_ZH[e.relation] || e.relation}</b>${e.label ? `<span class="tip-meta">${escapeHtml(e.label)}</span>` : ''}` +
+      `<div class="tip-body">${escapeHtml(s ? s.name : e.source)} → ${escapeHtml(t ? t.name : e.target)}</div>`);
+  });
+  cy.on('mousemove', 'node, edge', moveTip);
+  cy.on('mouseout', 'node, edge', () => { container.style.cursor = ''; tip.classList.add('hidden'); });
+  cy.on('grab', () => tip.classList.add('hidden'));
 }
 
 /* ---------- 图例 ---------- */
@@ -557,6 +758,7 @@ function legendEdgeSvg(rel) {
 }
 
 function initLegend() {
+  if (window.matchMedia('(max-width: 720px)').matches) $('#legend').classList.add('collapsed');
   $('#legend-nodes').innerHTML = Object.keys(KIND_ZH).map(k =>
     `<span class="legend-item"><span class="legend-dot" style="background:${KIND_COLOR[k]}"></span>${KIND_ZH[k]}</span>`
   ).join('');
@@ -571,7 +773,8 @@ function showSidebar() { $('#sidebar').classList.remove('hidden'); }
 function hideSidebar() {
   $('#sidebar').classList.add('hidden');
   state.selected = null;
-  if (cy) cy.elements().unselect();
+  state.highlight = null;
+  if (cy) { cy.elements().unselect(); refreshViewStyles(); }
 }
 
 function relListHTML(nodeId) {
@@ -580,8 +783,9 @@ function relListHTML(nodeId) {
     const nb = findNode(nbId);
     if (!nb) return '';
     const arrow = isOut ? '→' : '←';
-    return `<div class="rel-item" data-node="${escapeHtml(nbId)}">
-      <span class="rel-tag" style="background:${REL_COLOR[e.relation]}">${REL_ZH[e.relation]}</span>${arrow} ${escapeHtml(nb.name)}
+    return `<div class="rel-item" data-node="${escapeHtml(nbId)}" title="${escapeHtml(KIND_ZH[nb.kind] || nb.kind)} · L${nb.layer || 1}">
+      <span class="rel-tag" style="background:${REL_COLOR[e.relation]}">${REL_ZH[e.relation]}</span>${arrow}
+      <span class="legend-dot" style="background:${KIND_COLOR[nb.kind] || '#718096'}"></span>${escapeHtml(nb.name)}${e.label ? `<span class="rel-label">${escapeHtml(e.label)}</span>` : ''}
     </div>`;
   }).join('');
   const out = graph.edges.filter(e => e.source === nodeId);
@@ -595,19 +799,33 @@ function relListHTML(nodeId) {
 function showNodeDetail(id) {
   const n = findNode(id);
   if (!n) return;
+  if (!state.selected || state.selected.id !== id) state.highlight = null;   // 换节点时清掉旧高亮
   state.selected = { type: 'node', id };
+  const up = proofChain(id, 'up'), down = proofChain(id, 'down');
+  const hlActive = state.highlight ? state.highlight.dir : null;
   const tags = (n.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
   const color = KIND_COLOR[n.kind] || '#718096';
   $('#sidebar-body').innerHTML = `
     <span class="kind-badge" style="background:${color}">${KIND_ZH[n.kind] || n.kind}</span>
     <div class="detail-name">${escapeHtml(n.name)}</div>
-    <div class="detail-meta">层：L${n.layer || 1} · ${n.chapter ? '章节：' + escapeHtml(n.chapter) + ' · ' : ''}${tags}<span class="detail-meta">id: ${escapeHtml(n.id)}</span></div>
-    <div class="section-title">命题</div>
+    <div class="detail-meta">层：L${n.layer || 1} · ${n.chapter ? '章节：' + escapeHtml(n.chapter) + ' · ' : ''}${tags}<span class="detail-id">id: ${escapeHtml(n.id)}</span></div>
+    <div class="section-title">命题<button class="mini-btn" id="copy-statement" title="复制命题的 LaTeX 源码">复制 LaTeX</button></div>
     <div class="math-block">${escapeHtml(n.statement || '')}</div>
     <button class="proof-toggle" id="proof-toggle">显示证明</button>
     <div class="math-block proof-body hidden" id="proof-body">${escapeHtml(n.proof || '（暂无证明）')}</div>
     <div class="section-title">关系</div>
     ${relListHTML(id)}
+    <div class="section-title">证明依赖链
+      <span class="section-sub">前置 ${up.nodes.length} · 后继 ${down.nodes.length}</span>
+      <button class="mini-btn ${hlActive === 'up' ? 'active' : ''}" id="hl-up" ${up.nodes.length ? '' : 'disabled'}>高亮前置</button>
+      <button class="mini-btn ${hlActive === 'down' ? 'active' : ''}" id="hl-down" ${down.nodes.length ? '' : 'disabled'}>高亮后继</button>
+    </div>
+    <details class="chain-group" ${up.nodes.length && up.nodes.length <= 12 ? 'open' : ''}>
+      <summary>前置知识（证明它需要的全部内容，${up.nodes.length} 个）</summary>${chainListHTML(up.nodes)}
+    </details>
+    <details class="chain-group">
+      <summary>后继结论（它支撑或推出的全部内容，${down.nodes.length} 个）</summary>${chainListHTML(down.nodes)}
+    </details>
     <div class="action-row edit-only">
       <button id="act-edit">编辑</button>
       <button id="act-add-edge">添加边</button>
@@ -623,9 +841,18 @@ function showNodeDetail(id) {
     $('#proof-toggle').textContent = open ? '显示证明' : '收起证明';
     if (!open) typeset(body);
   };
-  $('#sidebar-body').querySelectorAll('.rel-item').forEach(el => {
+  $('#sidebar-body').querySelectorAll('.rel-item, .chain-item').forEach(el => {
     el.onclick = () => jumpToNode(el.dataset.node);
   });
+  $('#copy-statement').onclick = () => copyText(n.statement || '', '命题 LaTeX 已复制');
+  const toggleHl = dir => () => {
+    if (state.highlight && state.highlight.dir === dir) setHighlight(null);
+    else { setHighlight(dir === 'up' ? up : down, id); state.highlight.dir = dir; }
+    $('#hl-up').classList.toggle('active', !!state.highlight && state.highlight.dir === 'up');
+    $('#hl-down').classList.toggle('active', !!state.highlight && state.highlight.dir === 'down');
+  };
+  $('#hl-up').onclick = toggleHl('up');
+  $('#hl-down').onclick = toggleHl('down');
   $('#act-edit').onclick = () => openNodeModal(n);
   $('#act-add-edge').onclick = () => openEdgeModal(n.id);
   $('#act-move-layer').onclick = () => openMoveLayerModal(n);
@@ -635,6 +862,10 @@ function showNodeDetail(id) {
   $('#btn-radial').classList.remove('hidden');
   $('#btn-overview').classList.toggle('hidden', !state.radial);
   $('#radial-depth').classList.toggle('hidden', !state.radial);
+  // 画布重建后选中态会丢失，这里补上，保证侧栏与画布高亮一致
+  const el = cy && cy.getElementById(id);
+  if (el && el.nonempty() && !el.selected()) { cy.elements().unselect(); el.select(); }
+  refreshViewStyles();   // 相连边加粗
   showSidebar();
   typeset($('#sidebar-body'));
 }
@@ -663,6 +894,7 @@ function showEdgeDetail(id) {
   const e = findEdge(id);
   if (!e) return;
   state.selected = { type: 'edge', id };
+  state.highlight = null;
   const s = findNode(e.source), t = findNode(e.target);
   const color = REL_COLOR[e.relation] || '#718096';
   $('#sidebar-body').innerHTML = `
@@ -688,6 +920,9 @@ function showEdgeDetail(id) {
   $('#act-delete-edge').onclick = () => deleteEdge(e.id);
   bindQaSection('edge', id);
 
+  const el = cy && cy.getElementById(id);
+  if (el && el.nonempty() && !el.selected()) { cy.elements().unselect(); el.select(); }
+  refreshViewStyles();
   $('#btn-radial').classList.add('hidden');
   $('#btn-overview').classList.toggle('hidden', !state.radial);
   $('#radial-depth').classList.toggle('hidden', !state.radial);
@@ -1038,7 +1273,7 @@ function qaSectionHTML(targetType, targetId) {
   const items = list.map(q => `
     <div class="qa-item">
       <div class="qa-q">Q：${escapeHtml(q.question)}</div>
-      <div class="qa-a">${marked.parse(q.answer || '（暂无回答）')}</div>
+      <div class="qa-a">${renderMarkdown(q.answer || '（暂无回答）')}</div>
       <div class="qa-meta">
         <span class="qa-src ${q.source === 'ai' ? 'qa-src-ai' : 'qa-src-manual'}">${q.source === 'ai' ? 'AI' : '手动'}</span>${escapeHtml(q.createdAt || '')}
       </div>
@@ -1097,7 +1332,7 @@ function bindQaSection(targetType, targetId) {
         addQA(targetType, targetId, question, answer, 'ai', (loadAIConfig() || {}).model || null);
         return;
       }
-      const res = await fetch('/api/ask', {
+      const res = await fetch(apiUrl('/api/ask'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ targetType, targetId, question }),
@@ -1157,6 +1392,8 @@ function enterRadial() {
   const centerId = state.selected.id;
   const depth = parseInt($('#radial-depth').value, 10) || 1;
   state.radial = { centerId, depth };
+  state.highlight = null;   // 辐射视图看的是邻域，不与依赖链高亮叠加
+  ['#hl-up', '#hl-down'].forEach(sel => { const b = $(sel); if (b) b.classList.remove('active'); });
   const level = bfsLevels(centerId, depth);
 
   cy.elements().addClass('hidden-el');
@@ -1230,7 +1467,7 @@ async function suggestLayerAndEdges(btn) {
         return;
       }
     } else {
-      const res = await fetch('/api/suggest-node', {
+      const res = await fetch(apiUrl('/api/suggest-node'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(fields),
@@ -1269,6 +1506,17 @@ async function suggestLayerAndEdges(btn) {
   }
 }
 
+function bindLivePreview(inputSel, previewSel) {
+  const input = $(inputSel), preview = $(previewSel);
+  const render = () => {
+    const v = input.value.trim();
+    preview.classList.toggle('hidden', !v);
+    if (v) retypeset(preview, v);
+  };
+  input.addEventListener('input', debounce(render, 350));
+  render();
+}
+
 function openNodeModal(existing) {
   const isEdit = !!existing;
   const n = existing || { name: '', kind: 'theorem', statement: '', proof: '', tags: [], chapter: '' };
@@ -1284,8 +1532,10 @@ function openNodeModal(existing) {
       <div class="form-error hidden" id="f-ai-error"></div>
       <div id="f-ai-result"></div>
     </div>`}
-    <div class="form-row"><label>命题（支持 LaTeX：$...$、$$...$$）</label><textarea id="f-statement">${escapeHtml(n.statement)}</textarea></div>
-    <div class="form-row"><label>证明</label><textarea id="f-proof" style="min-height:100px">${escapeHtml(n.proof)}</textarea></div>
+    <div class="form-row"><label>命题（支持 LaTeX：$...$、$$...$$）</label><textarea id="f-statement">${escapeHtml(n.statement)}</textarea>
+      <div class="latex-preview" id="prev-statement"></div></div>
+    <div class="form-row"><label>证明</label><textarea id="f-proof" style="min-height:100px">${escapeHtml(n.proof)}</textarea>
+      <div class="latex-preview" id="prev-proof"></div></div>
     <div class="form-row"><label>标签（逗号分隔）</label><input id="f-tags" value="${escapeHtml((n.tags || []).join(', '))}"></div>
     <div class="form-row"><label>章节</label><input id="f-chapter" value="${escapeHtml(n.chapter || '')}" placeholder="如 L03 / Week 2"></div>
     <div class="form-error hidden" id="f-error"></div>
@@ -1297,6 +1547,9 @@ function openNodeModal(existing) {
   $('#f-cancel').onclick = closeModal;
   const btnAI = $('#f-ai-suggest');
   if (btnAI) btnAI.onclick = () => suggestLayerAndEdges(btnAI);
+  // 实时 LaTeX 预览：边写边看渲染效果，免得存了才发现公式写错
+  bindLivePreview('#f-statement', '#prev-statement');
+  bindLivePreview('#f-proof', '#prev-proof');
   $('#f-ok').onclick = async () => {
     const name = $('#f-name').value.trim();
     if (!name) { $('#f-error').textContent = '名称不能为空'; $('#f-error').classList.remove('hidden'); return; }
@@ -1381,12 +1634,18 @@ function openEdgeModal(sourceId) {
   $('#f-cancel').onclick = closeModal;
   $('#f-ok').onclick = async () => {
     const target = $('#f-target').value;
-    if (!target || !findNode(target)) { $('#f-error').textContent = '请选择目标节点'; $('#f-error').classList.remove('hidden'); return; }
+    const relation = $('#f-relation').value;
+    const showErr = msg => { $('#f-error').textContent = msg; $('#f-error').classList.remove('hidden'); };
+    if (!target || !findNode(target)) { showErr('请选择目标节点'); return; }
+    const dup = graph.edges.find(e => e.relation === relation &&
+      ((e.source === sourceId && e.target === target) ||
+       (['equivalent', 'analogy'].includes(relation) && e.source === target && e.target === sourceId)));
+    if (dup) { showErr(`已存在同样的「${REL_ZH[relation]}」边（${dup.id}），无需重复添加`); return; }
     graph.edges.push({
       id: genEdgeId(),
       source: sourceId,
       target,
-      relation: $('#f-relation').value,
+      relation,
       label: $('#f-label').value.trim(),
       note: $('#f-note').value.trim(),
     });
@@ -1422,7 +1681,7 @@ function openEdgeEditModal(e) {
   };
 }
 
-// 移动到别的层：唯一的跨层移动方式（画布上节点被钳制在本层分带内）
+// 移动到别的层：唯一的跨层移动方式（画布拖动只改平面坐标，不改层号）
 function openMoveLayerModal(n) {
   const maxL = maxLayer();
   const cur = n.layer || 1;
@@ -1518,7 +1777,7 @@ async function runImportExtract() {
       }
       return;
     }
-    const res = await fetch('/api/import-notes', {
+    const res = await fetch(apiUrl('/api/import-notes'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content, chapter_hint: chapterHint }),
@@ -1614,6 +1873,7 @@ async function joinImport(data) {
 
 async function deleteNode(id) {
   const n = findNode(id);
+  if (!n) return;
   if (!confirm(`确定删除节点「${n.name}」？\n将级联删除与它相连的边和相关问答。`)) return;
   const removedEdgeIds = new Set(
     graph.edges.filter(e => e.source === id || e.target === id).map(e => e.id)
@@ -1667,31 +1927,66 @@ function applyTagFilter() {
   refreshViewStyles();
 }
 
-const doSearch = debounce(() => {
-  const q = $('#search').value.trim();
+// 搜索：不区分大小写，名称/id 都匹配，前缀匹配优先；命中高层节点时自动抬升焦点层；
+// 回车在多个匹配之间循环跳转
+const searchState = { q: '', idx: 0 };
+function runSearch(advance = false) {
+  const q = $('#search').value.trim().toLowerCase();
   if (!q) return;
-  const n = cy.nodes().find(x => x.data('name').includes(q));
-  if (!n) { toast('未找到匹配节点'); return; }
+  const hit = name => name.toLowerCase();
+  const all = cy.nodes().filter(x => hit(x.data('name')).includes(q) || hit(x.data('label')).includes(q) || x.id().includes(q));
+  if (!all.nonempty()) { toast('未找到匹配节点'); return; }
+  // 前缀匹配排前面，然后按名称稳定排序，保证循环顺序可预期
+  const ordered = all.sort((a, b) => {
+    const pa = hit(a.data('name')).startsWith(q) ? 0 : 1, pb = hit(b.data('name')).startsWith(q) ? 0 : 1;
+    return pa - pb || a.data('name').localeCompare(b.data('name'), 'zh');
+  });
+  if (searchState.q !== q) { searchState.q = q; searchState.idx = 0; }
+  else if (advance) searchState.idx = (searchState.idx + 1) % ordered.length;
+  const n = ordered[searchState.idx];
+  const gn = findNode(n.id());
+  if (gn && viewMode === 'layered' && !state.radial && (gn.layer || 1) > focusLayer) setFocusLayer(gn.layer || 1);
   if (n.style('display') === 'none') {
-    toast('匹配节点当前被过滤、隐藏或高于焦点层');
+    toast('匹配节点当前被标签过滤或处于辐射视图外');
     return;
   }
+  cy.elements().unselect();
   n.select();
   cy.animate({ center: { eles: n }, zoom: Math.max(cy.zoom(), 1.25) }, { duration: 350 });
   n.flashClass('flash', 900);
-}, 250);
+  if (ordered.length > 1) toast(`${searchState.idx + 1} / ${ordered.length} 个匹配（回车跳到下一个）`, 1600);
+}
+const doSearch = debounce(() => runSearch(false), 250);
 
 function exportJSON() {
   const blob = new Blob([JSON.stringify(graph, null, 2) + '\n'], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'graph.json';
+  a.download = `${GRAPH_NAME}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
 }
 
+// 导出当前视野为 PNG（2 倍清晰度，带纸色背景），方便贴进笔记
+function exportPNG() {
+  try {
+    const blob = cy.png({ output: 'blob', bg: '#f7fafc', scale: 2, full: false });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = viewMode === 'layered' && !state.radial ? `${GRAPH_NAME}-L${focusLayer}.png` : `${GRAPH_NAME}.png`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch (e) {
+    toast('导出图片失败：' + e.message);
+  }
+}
+
 function bindToolbar() {
   $('#search').addEventListener('input', doSearch);
+  $('#search').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); runSearch(true); }
+  });
+  $('#btn-export-png').onclick = exportPNG;
   $('#tag-filter').addEventListener('change', applyTagFilter);
   $('#btn-export').onclick = exportJSON;
   $('#btn-viewmode').onclick = toggleViewMode;
@@ -1702,7 +1997,7 @@ function bindToolbar() {
   $('#btn-tidy-edges').onclick = tidyEdges;
   $('#btn-relayout').onclick = () => {
     exitRadial();
-    runCose(true).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); });
+    runCose(true).then(() => { syncPositions(); saveGraph({ quiet: true }); cy.fit(undefined, 40); });
   };
   $('#btn-add').onclick = () => openNodeModal(null);
   $('#btn-import').onclick = openImportModal;
@@ -1738,9 +2033,27 @@ function bindToolbar() {
   $('#modal-overlay').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeModal();
   });
+  // 快捷键：Esc 关闭对话框/侧栏；/ 聚焦搜索；[ ] 下/上一层（分层视图）；0 适配可见节点
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeModal(); }
+    const modalOpen = !$('#modal-overlay').classList.contains('hidden');
+    if (e.key === 'Escape') {
+      if (modalOpen) closeModal();
+      else if (document.activeElement && document.activeElement.id === 'search') document.activeElement.blur();
+      else if (!$('#sidebar').classList.contains('hidden')) hideSidebar();
+      return;
+    }
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (modalOpen || ['input', 'textarea', 'select'].includes(tag) || e.target.isContentEditable) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === '/') { e.preventDefault(); $('#search').focus(); $('#search').select(); }
+    else if (e.key === '[' || e.key === ']') {
+      if (viewMode !== 'layered' || state.radial) return;
+      const next = e.key === '[' ? focusLayer - 1 : focusLayer + 1;
+      if (next >= 1 && next <= maxLayer()) setFocusLayer(next);
+    } else if (e.key === '0') fitVisible(true);
   });
+  // 图例可折叠（小屏幕上遮画布）
+  $('#legend .legend-title').onclick = () => $('#legend').classList.toggle('collapsed');
 }
 
 /* ---------- 初始化 ---------- */
@@ -1779,6 +2092,8 @@ function bindToolbar() {
     elements: toCyElements(),
     style: CY_STYLE,
     wheelSensitivity: 0.3,
+    minZoom: 0.08,
+    maxZoom: 2.2,   // 辐射视图只有十来个节点时 fit 会放到夸张的倍率，这里封顶
   });
   bindCyEvents();
   bindToolbar();

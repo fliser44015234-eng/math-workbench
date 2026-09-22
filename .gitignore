@@ -2,4 +2,4 @@
 __pycache__/
 config.local.json
 .DS_Store
-data/graph.json.bak
+data/*.json.bak
