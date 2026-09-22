@@ -2,7 +2,7 @@
 
 一个"神经网络式"的数学知识构建器：每个节点是一个引理/定理/推论……节点之间用不同颜色与线型的有向边表示逻辑关系（依据、推论、等价、推广、类比）；点击节点查看命题与证明（LaTeX 渲染）；任何节点或边上都能挂载学习时的问答记录（AI 回答或手动粘贴）。
 
-**架构核心：数据即文件。** 全部内容就是一个 pretty-printed JSON（`data/graph.json`），前端是纯静态页面，本地只用一个极小的 Flask 服务器提供"保存"和"AI 问答"两个 API。同一份文件以后可以直接扔到 GitHub Pages 上变成公开只读网站。
+**架构核心：数据即文件。** 全部内容就是一个 pretty-printed JSON（`data/graph.json`），前端是纯静态页面，本地只用一个极小的 Flask 服务器提供"保存"和"AI 问答"两个 API。同一份文件以后可以直接扔到 GitHub Pages 上变成公开网站（访客改动存各自浏览器）。
 
 <!-- 截图占位：![总图](docs/screenshot-overview.png) -->
 <!-- 截图占位：![详情与问答](docs/screenshot-detail.png) -->
@@ -57,13 +57,19 @@ cp config.example.json config.local.json   # 然后编辑填入 sk-...
 - **开新图**：`cp data/graph.template.json data/新名.json`，然后访问 `http://localhost:8421/?graph=新名`（名字限小写字母/数字/点/连字符，≤40 字符；API 只允许读写 data/ 下已存在的文件，不能用它创建）。
 - **空白模板**：工具栏"空白模板"链接新标签页打开 `?graph=graph.template`；线上地址同理——`https://<用户名>.github.io/<仓库名>/?graph=graph.template` 就是一个公开只读的空白演示页。
 
-## 部署到 GitHub Pages（公开只读）
+## 部署到 GitHub Pages（公网站点：展示 + 访客本地编辑）
 
 1. 把本目录推到 GitHub 仓库（确认 `config.local.json` 不在其中）。
 2. 仓库 Settings → Pages → Source 选 `main` 分支根目录。
 3. 稍等片刻访问 `https://<用户名>.github.io/<仓库名>/`。
 
-静态托管没有 `/api/graph`，前端会自动降级为**只读展示模式**：直接 fetch `data/graph.json`，隐藏所有编辑按钮，顶部显示"只读展示"徽标。更新内容 = 改 `data/graph.json` 并 push。
+静态托管没有 `/api/graph`，前端直接 fetch `data/*.json`，进入"本地编辑版（存于浏览器）"模式：
+
+- **对访客可编辑**：增删改节点/边/问答、拖拽、铺开、理顺全部可用，改动保存在访客自己浏览器的 localStorage（`mw-edit-图名`）里，与发布版互不影响；顶部徽标会标明。
+- **导入 / 导出 / 恢复**：工具栏"导出 JSON"下载当前数据；"导入 JSON"把一份合法 graph JSON 写入浏览器并加载；"恢复发布版"清掉本地改动回到线上数据。
+- **AI 功能不可用**（没有后端）：问 AI、AI 建议、导入笔记自动隐藏。想要完整功能（保存进仓库文件、AI 问答/提取）需本地运行 `run.command` 或自部署 `server.py`。
+- 更新发布内容 = 改 `data/graph.json` 并 push。
+- 调试参数：任何环境加 `?readonly=1` 可强制进入无后端路径，方便本地预览 Pages 行为。
 
 ## 别人如何从零开始
 

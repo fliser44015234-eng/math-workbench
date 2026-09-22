@@ -35,7 +35,7 @@ const REL_COLOR = {
 
 let graph = null;        // 内存中的图数据（唯一事实来源）
 let cy = null;           // Cytoscape 实例
-let readOnly = false;    // 只读展示模式（无本地服务器时）
+let readOnly = false;    // 无后端模式（静态托管或 ?readonly=1）：编辑照常，保存走 localStorage
 let state = { selected: null, radial: null };  // radial: {centerId, depth}
 let viewMode = 'layered';  // 'layered' 分层高楼（默认）| 'free' 自由力导向
 let focusLayer = 1;      // 当前焦点层（初始化时设为最高层）
@@ -109,21 +109,54 @@ const GRAPH_NAME = (() => {
   return (/^[a-z0-9][a-z0-9.-]{0,39}$/.test(p) && !p.includes('..')) ? p : 'graph';
 })();
 const GRAPH_API = `/api/graph?name=${encodeURIComponent(GRAPH_NAME)}`;
+// ?readonly=1 强制走静态（无后端）代码路径，用于本地预览 GitHub Pages 行为
+const FORCE_READONLY = new URLSearchParams(location.search).get('readonly') === '1';
+// 无后端时的本地编辑持久化键
+const LS_KEY = `mw-edit-${GRAPH_NAME}`;
 
 async function loadGraph() {
-  try {
-    const res = await fetch(GRAPH_API);
-    if (!res.ok) throw new Error(String(res.status));
-    return { data: await res.json(), readOnly: false };
-  } catch {
+  let published;
+  if (FORCE_READONLY) {
     const res = await fetch(`data/${GRAPH_NAME}.json`);
     if (!res.ok) throw new Error(`无法加载 data/${GRAPH_NAME}.json`);
-    return { data: await res.json(), readOnly: true };
+    published = { data: await res.json(), readOnly: true };
+  } else {
+    try {
+      const res = await fetch(GRAPH_API);
+      if (!res.ok) throw new Error(String(res.status));
+      published = { data: await res.json(), readOnly: false };
+    } catch {
+      const res = await fetch(`data/${GRAPH_NAME}.json`);
+      if (!res.ok) throw new Error(`无法加载 data/${GRAPH_NAME}.json`);
+      published = { data: await res.json(), readOnly: true };
+    }
   }
+  // 浏览器里的本地编辑版优先于发布版
+  try {
+    const saved = localStorage.getItem(LS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && Array.isArray(parsed.nodes) && Array.isArray(parsed.edges)) {
+        published.data = parsed;
+        published.readOnly = true;
+      }
+    }
+  } catch { /* 本地数据损坏则忽略，回退发布版 */ }
+  return published;
 }
 
 async function saveGraph() {
-  if (readOnly) return true;
+  if (readOnly) {
+    // 无后端：改动存 localStorage（本机可见），导入/导出/恢复发布版兜底
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(graph));
+      toast('已保存到浏览器（本机可见）');
+      return true;
+    } catch (e) {
+      toast('保存失败：' + e.message);
+      return false;
+    }
+  }
   try {
     const res = await fetch(GRAPH_API, {
       method: 'PUT',
@@ -271,7 +304,7 @@ function layeredLayout(animate) {
     runCose(true).then(() => {
       graph.meta.layoutVersion = 2;
       syncPositions();
-      if (!readOnly) saveGraph();   // 只读（静态托管）跳过保存
+      saveGraph();   // 无后端时写入 localStorage
       layeredLayout(false);         // 此时 lv 已是 2，走正常 preset 进场
       toast('分层平面布局已初始化');
     });
@@ -436,7 +469,7 @@ async function tidyEdges() {
     const n = cy.getElementById(gn.id);
     if (n.nonempty()) n.animate({ position: { x: gn.position.x, y: gn.position.y } }, { duration: 350 });
   });
-  if (!readOnly) await saveGraph();
+  await saveGraph();
   toast('已理顺本层连线');
 }
 
@@ -464,7 +497,7 @@ async function spreadCurrentLayer() {
     };
   });
   layeredLayout(false);
-  if (!readOnly) await saveGraph();
+  await saveGraph();
   toast(`第 L${focusLayer} 层已在可视区域铺开`);
 }
 
@@ -479,7 +512,7 @@ function syncPositions() {
 }
 
 function debounceSavePositions() {
-  if (state.radial || readOnly) return;
+  if (state.radial) return;
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => { syncPositions(); await saveGraph(); }, 1000);
 }
@@ -591,12 +624,10 @@ function showNodeDetail(id) {
   $('#sidebar-body').querySelectorAll('.rel-item').forEach(el => {
     el.onclick = () => jumpToNode(el.dataset.node);
   });
-  if (!readOnly) {
-    $('#act-edit').onclick = () => openNodeModal(n);
-    $('#act-add-edge').onclick = () => openEdgeModal(n.id);
-    $('#act-move-layer').onclick = () => openMoveLayerModal(n);
-    $('#act-delete').onclick = () => deleteNode(n.id);
-  }
+  $('#act-edit').onclick = () => openNodeModal(n);
+  $('#act-add-edge').onclick = () => openEdgeModal(n.id);
+  $('#act-move-layer').onclick = () => openMoveLayerModal(n);
+  $('#act-delete').onclick = () => deleteNode(n.id);
   bindQaSection('node', id);
 
   $('#btn-radial').classList.remove('hidden');
@@ -651,10 +682,8 @@ function showEdgeDetail(id) {
   $('#sidebar-body').querySelectorAll('.edge-endpoint a').forEach(el => {
     el.onclick = () => jumpToNode(el.dataset.node);
   });
-  if (!readOnly) {
-    $('#act-edit-edge').onclick = () => openEdgeEditModal(e);
-    $('#act-delete-edge').onclick = () => deleteEdge(e.id);
-  }
+  $('#act-edit-edge').onclick = () => openEdgeEditModal(e);
+  $('#act-delete-edge').onclick = () => deleteEdge(e.id);
   bindQaSection('edge', id);
 
   $('#btn-radial').classList.add('hidden');
@@ -688,7 +717,7 @@ function qaSectionHTML(targetType, targetId) {
     <div class="qa-input edit-only">
       <textarea id="qa-q" placeholder="围绕这个${targetType === 'node' ? '节点' : '关系'}提问…"></textarea>
       <div class="qa-btns">
-        <button class="primary" id="qa-ai">问 AI</button>
+        <button class="primary ai-only" id="qa-ai">问 AI</button>
         <button id="qa-manual">手动存档</button>
       </div>
       <div class="qa-hint hidden" id="qa-hint"></div>
@@ -700,7 +729,6 @@ function qaSectionHTML(targetType, targetId) {
 }
 
 function bindQaSection(targetType, targetId) {
-  if (readOnly) return;
   const qInput = $('#qa-q');
   const hint = $('#qa-hint');
   const showHint = msg => { hint.textContent = msg; hint.classList.remove('hidden'); };
@@ -895,7 +923,7 @@ function openNodeModal(existing) {
     <div class="form-row"><label>类型</label><select id="f-kind">${KIND_OPTIONS(n.kind)}</select></div>
     <div class="form-row"><label>层（整数 ≥1，1=地基；当前焦点层 L${focusLayer}）</label><input id="f-layer" type="number" min="1" step="1" value="${isEdit ? (n.layer || 1) : focusLayer}"></div>
     ${isEdit ? '' : `
-    <div class="form-row">
+    <div class="form-row ai-only">
       <button type="button" id="f-ai-suggest">AI 建议层与关系</button>
       <span class="form-hint">填好名称与命题后可用，AI 建议层号和强相关边（可勾选）。</span>
       <div class="form-error hidden" id="f-ai-error"></div>
@@ -1294,10 +1322,32 @@ function bindToolbar() {
     exitRadial();
     runCose(true).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); });
   };
-  if (!readOnly) {
-    $('#btn-add').onclick = () => openNodeModal(null);
-    $('#btn-import').onclick = openImportModal;
-  }
+  $('#btn-add').onclick = () => openNodeModal(null);
+  $('#btn-import').onclick = openImportModal;
+  // 无后端模式：导入/恢复 JSON
+  $('#btn-import-json').onclick = () => $('#file-import-json').click();
+  $('#file-import-json').onchange = async e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    try {
+      const data = JSON.parse(await f.text());
+      if (!data || typeof data !== 'object' || !Array.isArray(data.nodes) || !Array.isArray(data.edges)) {
+        toast('文件结构不对：需要含 nodes/edges 数组的 JSON 对象');
+        return;
+      }
+      if (!Array.isArray(data.questions)) data.questions = [];
+      if (!data.meta || typeof data.meta !== 'object') data.meta = {};
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+      location.reload();
+    } catch (err) {
+      toast('导入失败：' + err.message);
+    }
+  };
+  $('#btn-restore-published').onclick = () => {
+    if (!confirm('确定放弃浏览器里的本地编辑，恢复线上发布版？')) return;
+    localStorage.removeItem(LS_KEY);
+    location.reload();
+  };
   $('#sidebar-close').onclick = hideSidebar;
   $('#btn-radial').onclick = enterRadial;
   $('#btn-overview').onclick = exitRadial;
@@ -1328,10 +1378,13 @@ function bindToolbar() {
   $('#app-title').textContent = graph.meta.title || '数学知识网络';
   $('#graph-name').textContent = `图：${GRAPH_NAME}`;
   if (readOnly) {
+    // 无后端（静态托管/readonly=1）：本地编辑模式——控件全开，AI 按钮由 CSS 隐藏
     document.body.classList.add('readonly');
     const badge = $('#mode-badge');
-    badge.textContent = '只读展示';
-    badge.className = 'badge badge-readonly';
+    badge.textContent = '本地编辑版（存于浏览器）';
+    badge.className = 'badge badge-localedit';
+    $('#btn-import-json').classList.remove('hidden');
+    if (localStorage.getItem(LS_KEY)) $('#btn-restore-published').classList.remove('hidden');
   }
 
   initLegend();

@@ -82,6 +82,7 @@ html, body {
 }
 .badge-edit { background: #c6f6d5; color: #22543d; }
 .badge-readonly { background: #e2e8f0; color: #4a5568; }
+.badge-localedit { background: #feebc8; color: #7b341e; }
 
 /* ---- 主区域 ---- */
 #main {
@@ -463,5 +464,5 @@ html, body {
   opacity: 0.95;
 }
 
-/* ---- 只读模式：隐藏编辑类控件 ---- */
-body.readonly .edit-only { display: none !important; }
+/* ---- 无后端（静态托管）模式：编辑控件保留，只隐藏 AI 相关入口 ---- */
+body.readonly .ai-only { display: none !important; }
