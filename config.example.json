@@ -1,4 +1,6 @@
 {
-  "moonshot_api_key": "sk-填你的Key",
-  "model": "kimi-k3"
+  "base_url": "https://api.moonshot.cn/v1",
+  "api_key": "sk-填你的Key",
+  "model": "kimi-k3",
+  "_说明": "任意 OpenAI 兼容接口均可。DeepSeek 示例：base_url=https://api.deepseek.com/v1, model=deepseek-chat。旧字段 moonshot_api_key 仍兼容。reasoning_effort 仅 Moonshot 会自动附带。"
 }

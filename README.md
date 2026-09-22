@@ -40,15 +40,22 @@ python3 -m venv .venv
 - **让 Kimi Code 帮忙写**：直接说"把 XX 定理加入工作台"。代理会按 `AGENTS.md` 的流程改 `data/graph.json` 并跑校验。数据格式的精确规范见 `SCHEMA.md`。
 - 命令行校验数据：`./.venv/bin/python validate.py data/graph.json`。
 
-## 配置 AI 问答（可选）
+## 配置 AI 问答（可选，多厂商）
 
-复制配置模板并填入 Moonshot API Key：
+复制配置模板并填入 Key：
 
 ```bash
 cp config.example.json config.local.json   # 然后编辑填入 sk-...
 ```
 
-也可以用环境变量 `MOONSHOT_API_KEY`。未配置时"问 AI"会提示改用手动存档，其余功能不受影响。`config.local.json` 已被 `.gitignore` 忽略，且服务器不提供对它的 HTTP 访问，不会泄露。
+支持任意 OpenAI 兼容接口，三个字段：`base_url`、`api_key`、`model`（旧字段 `moonshot_api_key` 仍兼容；环境变量 `MOONSHOT_API_KEY` 可覆盖 key）。常用厂商：
+
+| 厂商 | base_url | model |
+| --- | --- | --- |
+| Kimi（Moonshot） | `https://api.moonshot.cn/v1` | `kimi-k3` |
+| DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
+
+`reasoning_effort` 参数仅 Moonshot 会自动附带（其他厂商收到会报错）。未配置时"问 AI"会提示改用手动存档，其余功能不受影响。`config.local.json` 已被 `.gitignore` 忽略，且服务器不提供对它的 HTTP 访问，不会泄露。
 
 ## 多图支持与空白模板
 
@@ -70,6 +77,18 @@ cp config.example.json config.local.json   # 然后编辑填入 sk-...
 - **AI 功能不可用**（没有后端）：问 AI、AI 建议、导入笔记自动隐藏。想要完整功能（保存进仓库文件、AI 问答/提取）需本地运行 `run.command` 或自部署 `server.py`。
 - 更新发布内容 = 改 `data/graph.json` 并 push。
 - 调试参数：任何环境加 `?readonly=1` 可强制进入无后端路径，方便本地预览 Pages 行为。
+
+## 公网访客如何使用 AI（自带 Key / BYOK）
+
+公网站点没有后端，AI 功能靠访客自带 Key 直连厂商接口：
+
+1. 顶部工具栏点"**AI 设置**"（仅网页版显示）。
+2. 选厂商预设（Kimi / DeepSeek）或自定义任意 OpenAI 兼容接口，粘贴自己的 API Key，保存。
+3. 之后"问 AI"、"AI 建议层与关系"、"导入笔记"全部可用——请求**从访客浏览器直连厂商**，不经过任何服务器。
+
+- Key 只存在访客自己浏览器的 localStorage（`mw-ai-config`），除所选厂商接口外不发往任何地方；随时可在 AI 设置里"清除配置"。
+- 实测 CORS：api.moonshot.cn 与 api.deepseek.com 允许网页直连；**api.openai.com 返回 403 不可用**。其他厂商若浏览器拦截会提示"该厂商可能不允许网页直连"。
+- 本地部署想换厂商：编辑 `config.local.json` 的 `base_url` / `api_key` / `model`（见 `config.example.json` 与上文"配置 AI 问答"）。
 
 ## 别人如何从零开始
 

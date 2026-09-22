@@ -30,7 +30,7 @@ GRAPH_PATH = DATA_DIR / "graph.json"
 BACKUP_PATH = DATA_DIR / "graph.json.bak"
 CONFIG_PATH = BASE_DIR / "config.local.json"
 
-MOONSHOT_URL = "https://api.moonshot.cn/v1/chat/completions"
+DEFAULT_BASE_URL = "https://api.moonshot.cn/v1"
 DEFAULT_MODEL = "kimi-k3"
 
 KIND_ZH = {
@@ -141,17 +141,39 @@ def put_graph():
 # ---------- AI 问答 ----------
 
 def load_ai_config():
-    """返回 (api_key, model)；两者来源：环境变量优先，其次 config.local.json。"""
+    """返回 (base_url, api_key, model)。
+
+    来源：config.local.json 的 base_url / api_key（向后兼容旧字段 moonshot_api_key）/ model；
+    环境变量 MOONSHOT_API_KEY 仍可覆盖 key。
+    """
     key = os.environ.get("MOONSHOT_API_KEY")
+    base_url = DEFAULT_BASE_URL
     model = DEFAULT_MODEL
     if CONFIG_PATH.exists():
         try:
             cfg = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             cfg = {}
-        key = key or cfg.get("moonshot_api_key")
+        key = key or cfg.get("api_key") or cfg.get("moonshot_api_key")
+        base_url = cfg.get("base_url") or base_url
         model = cfg.get("model") or model
-    return key, model
+    return base_url, key, model
+
+
+def ai_chat_completions(base_url, key, model, messages, timeout, low_effort=False):
+    """统一的 OpenAI 兼容 /chat/completions 调用。
+
+    reasoning_effort 仅 Moonshot 支持（DeepSeek 等收到会 400），只在 base_url 含 moonshot 时发送。
+    """
+    payload = {"model": model, "messages": messages}
+    if low_effort and "moonshot" in base_url:
+        payload["reasoning_effort"] = "low"
+    return _http.post(
+        f"{base_url.rstrip('/')}/chat/completions",
+        headers={"Authorization": f"Bearer {key}"},
+        json=payload,
+        timeout=timeout,
+    )
 
 
 def find_node(g, nid):
@@ -242,10 +264,10 @@ def ask():
         return jsonify({"error": "bad_request",
                         "message": "需要 targetType(node|edge)、targetId、question"}), 400
 
-    key, model = load_ai_config()
+    base_url, key, model = load_ai_config()
     if not key:
         return jsonify({"error": "not_configured",
-                        "message": "未配置 Moonshot API Key"}), 501
+                        "message": "未配置 API Key"}), 501
 
     g = load_graph()
     context = build_context(g, target_type, target_id)
@@ -259,22 +281,17 @@ def ask():
     messages.append({"role": "user", "content": question})
 
     try:
-        resp = _http.post(
-            MOONSHOT_URL,
-            headers={"Authorization": f"Bearer {key}"},
-            json={"model": model, "messages": messages},
-            timeout=60,
-        )
+        resp = ai_chat_completions(base_url, key, model, messages, timeout=60)
         if resp.status_code != 200:
             return jsonify({"error": "upstream",
-                            "message": f"Moonshot API 返回 {resp.status_code}：{resp.text[:300]}"}), 502
+                            "message": f"AI 接口返回 {resp.status_code}：{resp.text[:300]}"}), 502
         answer = resp.json()["choices"][0]["message"]["content"]
     except requests.RequestException as exc:
-        return jsonify({"error": "upstream", "message": f"调用 Moonshot API 失败：{exc}"}), 502
+        return jsonify({"error": "upstream", "message": f"调用 AI 接口失败：{exc}"}), 502
     except (KeyError, IndexError, ValueError) as exc:
-        return jsonify({"error": "upstream", "message": f"解析 Moonshot 响应失败：{exc}"}), 502
+        return jsonify({"error": "upstream", "message": f"解析 AI 响应失败：{exc}"}), 502
 
-    return jsonify({"answer": answer})
+    return jsonify({"answer": answer, "model": model})
 
 
 # ---------- AI 建议新节点的层与强相关边 ----------
@@ -310,10 +327,10 @@ def suggest_node():
     if not name or not statement:
         return jsonify({"error": "bad_request", "message": "需要 name 与 statement"}), 400
 
-    key, model = load_ai_config()
+    base_url, key, model = load_ai_config()
     if not key:
         return jsonify({"error": "not_configured",
-                        "message": "未配置 Moonshot API Key"}), 501
+                        "message": "未配置 API Key"}), 501
 
     g = load_graph()
     summary, max_layer = graph_summary_by_layer(g)
@@ -333,23 +350,21 @@ def suggest_node():
     )
 
     try:
-        resp = _http.post(
-            MOONSHOT_URL,
-            headers={"Authorization": f"Bearer {key}"},
-            json={"model": model, "messages": [
-                {"role": "system", "content": SUGGEST_SYSTEM},
-                {"role": "user", "content": user_prompt},
-            ], "reasoning_effort": "low"},   # 结构化抽取任务不需要深推理，显著降延迟
+        resp = ai_chat_completions(
+            base_url, key, model,
+            [{"role": "system", "content": SUGGEST_SYSTEM},
+             {"role": "user", "content": user_prompt}],
             timeout=300,   # kimi-k3 是推理模型，实测该 prompt 推理约 3 分钟
+            low_effort=True,   # 结构化抽取任务不需要深推理，显著降延迟
         )
         if resp.status_code != 200:
             return jsonify({"error": "upstream",
-                            "message": f"Moonshot API 返回 {resp.status_code}：{resp.text[:300]}"}), 502
+                            "message": f"AI 接口返回 {resp.status_code}：{resp.text[:300]}"}), 502
         text = resp.json()["choices"][0]["message"]["content"]
     except requests.RequestException as exc:
-        return jsonify({"error": "upstream", "message": f"调用 Moonshot API 失败：{exc}"}), 502
+        return jsonify({"error": "upstream", "message": f"调用 AI 接口失败：{exc}"}), 502
     except (KeyError, IndexError, ValueError) as exc:
-        return jsonify({"error": "upstream", "message": f"解析 Moonshot 响应失败：{exc}"}), 502
+        return jsonify({"error": "upstream", "message": f"解析 AI 响应失败：{exc}"}), 502
 
     # 防御性解析：剥离可能的 ```json 围栏，非法条目丢弃不报错
     raw = text.strip()
@@ -413,10 +428,10 @@ def import_notes():
         return jsonify({"error": "bad_request", "message": "需要 content"}), 400
     content = content[:60000]  # 防超长
 
-    key, model = load_ai_config()
+    base_url, key, model = load_ai_config()
     if not key:
         return jsonify({"error": "not_configured",
-                        "message": "未配置 Moonshot API Key"}), 501
+                        "message": "未配置 API Key"}), 501
 
     g = load_graph()
     summary, _ = graph_summary_by_layer(g)
@@ -435,21 +450,18 @@ def import_notes():
     )
 
     try:
-        resp = _http.post(
-            MOONSHOT_URL,
-            headers={"Authorization": f"Bearer {key}"},
-            json={"model": model, "messages": [
-                {"role": "system", "content": IMPORT_SYSTEM},
-                {"role": "user", "content": user_prompt},
-            ], "reasoning_effort": "low"},
-            timeout=300,
+        resp = ai_chat_completions(
+            base_url, key, model,
+            [{"role": "system", "content": IMPORT_SYSTEM},
+             {"role": "user", "content": user_prompt}],
+            timeout=300, low_effort=True,
         )
         if resp.status_code != 200:
             return jsonify({"error": "upstream",
-                            "message": f"Moonshot API 返回 {resp.status_code}：{resp.text[:300]}"}), 502
+                            "message": f"AI 接口返回 {resp.status_code}：{resp.text[:300]}"}), 502
         text = resp.json()["choices"][0]["message"]["content"]
     except requests.RequestException as exc:
-        return jsonify({"error": "upstream", "message": f"调用 Moonshot API 失败：{exc}"}), 502
+        return jsonify({"error": "upstream", "message": f"调用 AI 接口失败：{exc}"}), 502
     except (KeyError, IndexError, ValueError) as exc:
         return jsonify({"error": "upstream", "message": f"解析 Moonshot 响应失败：{exc}"}), 502
 

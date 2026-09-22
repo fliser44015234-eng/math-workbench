@@ -464,5 +464,5 @@ html, body {
   opacity: 0.95;
 }
 
-/* ---- 无后端（静态托管）模式：编辑控件保留，只隐藏 AI 相关入口 ---- */
-body.readonly .ai-only { display: none !important; }
+/* ---- 无后端（静态托管）模式：编辑控件保留；AI 入口仅未配置 BYOK 时隐藏 ---- */
+body.readonly:not(.byok) .ai-only { display: none !important; }
