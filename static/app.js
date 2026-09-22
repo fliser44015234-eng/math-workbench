@@ -236,13 +236,14 @@ function runCose(animate) {
   });
 }
 
-/* ---------- 分层高楼视图（俯视楼层平面：自适应高 zone） ---------- */
+/* ---------- 分层高楼视图（俯视共面模型） ----------
+ * 所有层共享同一个 2D 平面（从塔顶垂直往下看，各层投影叠在一起）。
+ * 节点位置 = 保存的 x,y，平面内自由拖动（无钳制）；
+ * 分层感只通过透明度/饱和度表达（焦点层全彩、下层渐暗、上层隐藏）。
+ */
 
-const ZONE_GAP = 60;   // zone 之间的间隔（浅灰分隔带）
-const ZONE_PAD = 20;   // zone 内拖动 padding
-const GRID_COLS = 8;   // 层内铺开时每行节点数
-const GRID_DX = 130;   // 水平间距（≥120，容纳下方中文标签）
-const GRID_DY = 90;    // 行距（≥80）
+const GRID_DX = 130;   // 铺开网格的最小水平间距（容纳下方中文标签）
+const GRID_DY = 80;    // 铺开网格的最小垂直间距
 
 function maxLayer() {
   return Math.max(1, ...graph.nodes.map(n => n.layer || 1));
@@ -252,81 +253,36 @@ function layerCounts() {
   graph.nodes.forEach(n => { const l = n.layer || 1; counts[l] = (counts[l] || 0) + 1; });
   return counts;
 }
-// zone 高度按该层节点数自适应，夹在 300–900
-function zoneH(count) {
-  const rows = Math.ceil(Math.max(1, count) / GRID_COLS);
-  return Math.min(900, Math.max(300, rows * 90 + 160));
-}
-// layer 1 在最底部；Cytoscape 的 y 向下增长，从最高层往下堆叠
-function zoneTop(layer, counts) {
-  counts = counts || layerCounts();
-  let y = 0;
-  for (let l = maxLayer(); l > layer; l--) y += zoneH(counts[l] || 0) + ZONE_GAP;
-  return y;
-}
-function zoneClampY(layer, y, counts) {
-  counts = counts || layerCounts();
-  const top = zoneTop(layer, counts);
-  return Math.min(Math.max(y, top + ZONE_PAD), top + zoneH(counts[layer] || 0) - ZONE_PAD);
-}
-function inZone(gn, counts) {
-  if (!gn.position) return false;
-  const top = zoneTop(gn.layer || 1, counts);
-  return gn.position.y >= top && gn.position.y <= top + zoneH(counts[gn.layer || 1] || 0);
-}
 
-// 层内网格排列：每行 GRID_COLS 个、在 zone 内居中（以 anchor 节点的平均 x 为基准）
-function gridArrange(list, layer, counts, anchorXs) {
-  const top = zoneTop(layer, counts);
-  const baseX = anchorXs.length ? anchorXs.reduce((s, x) => s + x, 0) / anchorXs.length : 400;
-  const rows = Math.ceil(list.length / GRID_COLS);
-  const startY = top + Math.max(50, (zoneH(counts[layer] || 0) - (rows - 1) * GRID_DY) / 2);
-  const pos = {};
-  [...list].sort((a, b) => a.id.localeCompare(b.id)).forEach((gn, i) => {
-    const r = Math.floor(i / GRID_COLS), c = i % GRID_COLS;
-    const colsThisRow = Math.min(GRID_COLS, list.length - r * GRID_COLS);
-    pos[gn.id] = {
-      x: Math.round(baseX - ((colsThisRow - 1) * GRID_DX) / 2 + c * GRID_DX),
-      y: Math.round(startY + r * GRID_DY),
-    };
-  });
-  return pos;
-}
-
-// 分层布局：y 落在本层 zone 内；无已存位置或 y 不在自己 zone 的节点做层内网格排列。
-// spreadLayer 传入层号时，强制把该层全部节点重新铺开（忽略旧坐标）。返回网格安排的节点数。
-function layeredLayout(animate, spreadLayer) {
-  const counts = layerCounts();
-  const byLayer = {};
-  graph.nodes.forEach(gn => { (byLayer[gn.layer || 1] = byLayer[gn.layer || 1] || []).push(gn); });
-  const gridPos = {};
-  Object.entries(byLayer).forEach(([l, list]) => {
-    const layer = parseInt(l, 10);
-    let arrange, anchorXs;
-    if (spreadLayer === layer) {
-      arrange = list;            // 一键铺开本层：全部重排
-      anchorXs = list.filter(gn => gn.position).map(gn => gn.position.x);
-    } else {
-      arrange = list.filter(gn => !inZone(gn, counts));   // 只动未布局/越界的
-      anchorXs = list.filter(gn => inZone(gn, counts)).map(gn => gn.position.x);
-    }
-    if (arrange.length) Object.assign(gridPos, gridArrange(arrange, layer, counts, anchorXs));
-  });
-
+// 分层布局 = preset + 节点已存 position（未布局的放到当前视野中心附近）。
+// meta.layoutVersion < 2 时先做一次性的全图 cose 迁移（zone 时代坐标作废）。
+function layeredLayout(animate) {
+  const lv = (graph.meta && graph.meta.layoutVersion) || 0;
+  if (lv < 2) {
+    runCose(true).then(() => {
+      graph.meta.layoutVersion = 2;
+      syncPositions();
+      if (!readOnly) saveGraph();   // 只读（静态托管）跳过保存
+      layeredLayout(false);         // 此时 lv 已是 2，走正常 preset 进场
+      toast('分层平面布局已初始化');
+    });
+    return;
+  }
+  const ext = cy.extent();
+  const cx = (ext.x1 + ext.x2) / 2, cyy = (ext.y1 + ext.y2) / 2;
   cy.layout({
     name: 'preset',
     positions: n => {
       const gn = findNode(n.id());
       if (!gn) return n.position();
-      if (gridPos[gn.id]) return gridPos[gn.id];
-      return { x: gn.position.x, y: zoneClampY(gn.layer || 1, gn.position.y, counts) };
+      if (gn.position) return { x: gn.position.x, y: gn.position.y };
+      return { x: Math.round(cx + (Math.random() * 160 - 80)), y: Math.round(cyy + (Math.random() * 160 - 80)) };
     },
     fit: false,
     animate: false,
   }).run();
   refreshViewStyles();
   fitVisible(animate);
-  return Object.keys(gridPos).length;
 }
 
 function fitVisible(animate) {
@@ -334,25 +290,6 @@ function fitVisible(animate) {
   if (!vis.nonempty()) return;
   if (animate) cy.animate({ fit: { eles: vis, padding: 60 } }, { duration: 300 });
   else cy.fit(vis, 60);
-  updateZoneLines();
-}
-
-// zone 分隔带：跟随 pan/zoom 的 HTML overlay（浅灰带 + 虚线），只画不交互
-function updateZoneLines() {
-  const box = $('#zone-lines');
-  if (!box) return;
-  if (viewMode !== 'layered' || state.radial) { box.classList.add('hidden'); return; }
-  box.classList.remove('hidden');
-  const zoom = cy.zoom(), pan = cy.pan();
-  const counts = layerCounts(), maxL = maxLayer();
-  let html = '';
-  for (let l = maxL; l >= 1; l--) {
-    const top = zoneTop(l, counts), bottom = top + zoneH(counts[l] || 0);
-    if (l > 1) {
-      html += `<div class="zone-gap" style="top:${bottom * zoom + pan.y}px;height:${ZONE_GAP * zoom}px"></div>`;
-    }
-  }
-  box.innerHTML = html;
 }
 
 // 按视图模式逐元素设置 显示/透明度/压暗/标签（显示状态的唯一写入处）
@@ -441,18 +378,34 @@ function toggleViewMode() {
   $('#btn-spread-layer').classList.toggle('hidden', viewMode !== 'layered');
   renderRail();
   applyLayout(true);
-  updateZoneLines();
 }
 
-// 铺开本层：把焦点层全部节点按网格重排（忽略旧坐标）并保存
+// 铺开本层：把焦点层节点在当前可视画布区域内排成宽松网格（其他层不动）并保存
 async function spreadCurrentLayer() {
   if (viewMode !== 'layered' || state.radial) return;
-  layeredLayout(true, focusLayer);
-  if (!readOnly) {
-    syncPositions();
-    await saveGraph();
-  }
-  toast(`第 L${focusLayer} 层已铺开`);
+  const list = graph.nodes.filter(gn => (gn.layer || 1) === focusLayer)
+    .sort((a, b) => a.id.localeCompare(b.id));
+  if (!list.length) { toast(`L${focusLayer} 没有节点`); return; }
+  const ext = cy.extent();   // 当前可视区域（模型坐标）
+  const cx = (ext.x1 + ext.x2) / 2, cyy = (ext.y1 + ext.y2) / 2;
+  const availW = Math.max(300, ext.x2 - ext.x1 - 160);
+  const availH = Math.max(240, ext.y2 - ext.y1 - 160);
+  // 列数按节点数与画布宽高比自适应
+  const cols = Math.max(1, Math.min(list.length, Math.round(Math.sqrt(list.length * (availW / availH)))));
+  const rows = Math.ceil(list.length / cols);
+  const dx = cols > 1 ? Math.max(GRID_DX, availW / (cols - 1)) : 0;
+  const dy = rows > 1 ? Math.max(GRID_DY, availH / (rows - 1)) : 0;
+  list.forEach((gn, i) => {
+    const r = Math.floor(i / cols), c = i % cols;
+    const colsThisRow = Math.min(cols, list.length - r * cols);
+    gn.position = {
+      x: Math.round(cx - ((colsThisRow - 1) * dx) / 2 + c * dx),
+      y: Math.round(cyy - ((rows - 1) * dy) / 2 + r * dy),
+    };
+  });
+  layeredLayout(false);
+  if (!readOnly) await saveGraph();
+  toast(`第 L${focusLayer} 层已在可视区域铺开`);
 }
 
 function syncPositions() {
@@ -472,12 +425,7 @@ function debounceSavePositions() {
 }
 
 function layoutInitial() {
-  if (viewMode === 'layered') {
-    const placed = layeredLayout(false);
-    // 有节点被网格重排（首次进入新版分层 / 新节点未布局）→ 落盘保存
-    if (placed > 0 && !readOnly) { syncPositions(); saveGraph(); }
-    return;
-  }
+  if (viewMode === 'layered') { layeredLayout(false); return; }
   if (graph.nodes.some(n => !n.position)) {
     runCose(false).then(() => { syncPositions(); saveGraph(); cy.fit(undefined, 40); refreshViewStyles(); });
   } else {
@@ -497,14 +445,6 @@ function rebuildGraph() {
 function bindCyEvents() {
   cy.on('tap', 'node', evt => { evt.target.select(); showNodeDetail(evt.target.id()); });
   cy.on('tap', 'edge', evt => { evt.target.select(); showEdgeDetail(evt.target.id()); });
-  // 分层模式下拖动节点：y 钳制在本层 zone 内（留 padding），x 自由
-  cy.on('drag', 'node', evt => {
-    if (viewMode !== 'layered' || state.radial) return;
-    const gn = findNode(evt.target.id());
-    if (!gn) return;
-    const p = evt.target.position();
-    evt.target.position({ x: p.x, y: zoneClampY(gn.layer || 1, p.y) });
-  });
   cy.on('dragend', 'node', debounceSavePositions);
 }
 
@@ -805,7 +745,6 @@ function enterRadial() {
   }).run();
   refreshViewStyles();   // 标签加 ·L{n} 后缀、低于中心层的调暗
   renderRail();          // 辐射模式下隐藏楼层 rail
-  updateZoneLines();     // 辐射模式下隐藏 zone 分隔带
 
   $('#btn-radial').classList.add('hidden');
   $('#btn-overview').classList.remove('hidden');
@@ -1216,9 +1155,6 @@ function bindToolbar() {
   });
   bindCyEvents();
   bindToolbar();
-  // zone 分隔带 overlay（绝对定位在画布上，pointer-events:none，跟随 pan/zoom 重绘）
-  $('#cy').insertAdjacentHTML('beforeend', '<div id="zone-lines" class="hidden"></div>');
-  cy.on('pan zoom resize', () => requestAnimationFrame(updateZoneLines));
   renderRail();
   layoutInitial();
 })();

@@ -76,22 +76,6 @@ html, body {
 #cy {
   flex: 1;
   min-width: 0;
-  position: relative;
-}
-
-/* zone 分隔带 overlay（只画不交互，跟随 pan/zoom） */
-#zone-lines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.zone-gap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: rgba(45, 55, 72, 0.045);
-  border-top: 1px dashed #cbd5e0;
 }
 
 /* ---- 右侧详情栏 ---- */
