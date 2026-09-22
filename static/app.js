@@ -328,7 +328,7 @@ function refreshViewStyles() {
     const style = { display: visible ? 'element' : 'none', opacity, 'background-blacken': blacken, 'text-opacity': textOp };
     // 焦点层标签加浅色背景，压过下层淡影文字，避免层间文字糊在一起
     if (!radial && viewMode === 'layered' && l === focusLayer) {
-      style['text-background-color'] = '#ffffff';
+      style['text-background-color'] = '#dbeafe';
       style['text-background-opacity'] = 0.85;
       style['text-background-shape'] = 'roundrectangle';
       style['text-background-padding'] = '2px';
